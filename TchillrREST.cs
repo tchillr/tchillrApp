@@ -58,8 +58,8 @@ namespace TchillrREST
             {
                 Data.Activity dumb = new Data.Activity();
 
-                dumb.Adresse ="dumb addr";
-                dumb.City = "dumb city";
+                dumb.Adresse = exp.Message;
+                dumb.City = exp.Source;
                 dumb.Description = "dumb desc";
                 dumb.Idactivites = 1;
 
