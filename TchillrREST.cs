@@ -102,25 +102,32 @@ namespace TchillrREST
 
             try
             {
-                FileStream file = new FileStream("static/staticActivy.json", FileMode.Open, FileAccess.Read);
+                WebRequest req = WebRequest.Create("http://"+HttpContext.Current.Request.Url.Authority+"/static/staticActivy.json");
 
-                // Create a new stream to read from a file
-                StreamReader sr = new StreamReader(file);
+                req.Method = "GET";
 
-                // Read contents of file into a string
-                string staticActivities = sr.ReadToEnd();
-                JObject jsonActivities = JObject.Parse(staticActivities);
-                foreach (JObject activity in jsonActivities["data"])
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
                 {
-                    Data.Activity act = new Data.Activity();
-                    act.Adresse = activity["adresse"].ToString();
-                    act.City = activity["city"].ToString();
-                    act.Description = activity["description"].ToString();
-                    act.Idactivites = (int)activity["idactivites"];
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
 
-                    activities.Add(act);
+                        foreach (JObject activity in jsonActivities["data"])
+                        {
+                            Data.Activity act = new Data.Activity();
+                            act.Adresse = activity["adresse"].ToString();
+                            act.City = activity["city"].ToString();
+                            act.Description = activity["description"].ToString();
+                            act.Idactivites = (int)activity["idactivites"];
+
+                            activities.Add(act);
+                        }
+
+
+                    }
                 }
-
             }
             catch (Exception exp)
             {
