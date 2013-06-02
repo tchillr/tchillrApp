@@ -102,7 +102,7 @@ namespace TchillrREST
 
             try
             {
-                WebRequest req = WebRequest.Create("http://"+HttpContext.Current.Request.Url.Authority+"/static/staticActivy.json");
+                WebRequest req = WebRequest.Create("http://"+HttpContext.Current.Request.Url.Authority+"/staticActivy.txt");
 
                 req.Method = "GET";
 
@@ -135,7 +135,7 @@ namespace TchillrREST
 
                 dumb.Adresse = exp.Message;
                 dumb.City = exp.Source;
-                dumb.Description = "dumb desc";
+                dumb.Description = HttpContext.Current.Request.Url.Authority;
                 dumb.Idactivites = 1;
 
                 activities.Add(dumb);
