@@ -7,3 +7,4 @@ C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Ne
 C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Newtonsoft.Json.pdb
 C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Newtonsoft.Json.xml
 C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\static\staticActivy.json
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\staticActivy.txt

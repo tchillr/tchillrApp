@@ -96,9 +96,9 @@ namespace TchillrREST
         }
 
 
-        public List<Data.Activity> GetStaticAllActivities()
+        public string GetStaticAllActivities()
         {
-            List<Data.Activity> activities = new List<Data.Activity>();
+            string result = string.Empty;
 
             try
             {
@@ -112,36 +112,17 @@ namespace TchillrREST
                     using (Stream respStream = resp.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
-                        JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
-
-                        foreach (JObject activity in jsonActivities["data"])
-                        {
-                            Data.Activity act = new Data.Activity();
-                            act.Adresse = activity["adresse"].ToString();
-                            act.City = activity["city"].ToString();
-                            act.Description = activity["description"].ToString();
-                            act.Idactivites = (int)activity["idactivites"];
-
-                            activities.Add(act);
-                        }
-
+                        result = reader.ReadToEnd();
 
                     }
                 }
             }
             catch (Exception exp)
             {
-                Data.Activity dumb = new Data.Activity();
-
-                dumb.Adresse = exp.Message;
-                dumb.City = exp.Source;
-                dumb.Description = HttpContext.Current.Request.Url.Authority;
-                dumb.Idactivites = 1;
-
-                activities.Add(dumb);
+               
             }
 
-            return activities;
+            return result;
         }
     }
 }

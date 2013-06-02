@@ -21,7 +21,7 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
                   ResponseFormat = WebMessageFormat.Json,
                   UriTemplate = "StaticActivities")]
-        List<Activity> GetStaticAllActivities();
+        string GetStaticAllActivities();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
