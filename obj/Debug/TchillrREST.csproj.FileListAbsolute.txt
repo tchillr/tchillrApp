@@ -1,0 +1,8 @@
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\TchillrREST.dll
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\TchillrREST.pdb
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\obj\Debug\TchillrREST.dll
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\obj\Debug\TchillrREST.pdb
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Newtonsoft.Json.dll
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Newtonsoft.Json.pdb
+C:\Users\faf113\Documents\Visual Studio 2010\Projects\Tchillr\TchillrREST\bin\Newtonsoft.Json.xml
