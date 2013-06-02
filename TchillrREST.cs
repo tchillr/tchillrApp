@@ -25,10 +25,10 @@ namespace TchillrREST
 
             try
             {
-                WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&offset=0&limit=100");
+                //WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&offset=0&limit=100");
+                WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/");
 
                 req.Method = "GET";
-
 
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
                 if (resp.StatusCode == HttpStatusCode.OK)
