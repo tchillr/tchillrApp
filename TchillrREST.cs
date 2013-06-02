@@ -48,9 +48,9 @@ namespace TchillrREST
             }
             else
             {
-                Console.WriteLine(string.Format("Status Code: {0}, Status Description: {1}", resp.StatusCode, resp.StatusDescription));
+                
             }
-            Console.Read();
+           
 
             return activities;
         }
