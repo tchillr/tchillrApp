@@ -16,5 +16,11 @@ namespace TchillrREST
                   ResponseFormat = WebMessageFormat.Json,
                   UriTemplate = "Activities")]
         List<Activity> GetAllActivities();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+                  ResponseFormat = WebMessageFormat.Json,
+                  UriTemplate = "VLibStations")]
+        string GetAllVLibStations();
     }
 }
