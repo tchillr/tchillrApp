@@ -26,22 +26,15 @@ namespace TchillrREST
             try
             {
                 //WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&offset=0&limit=100");
-                //WebRequest req = WebRequest.Create(@"https://api.carepass.com/hhs-directory-api/drugs/search?name=Cymbalta&apikey=xxx");
+                WebRequest req = WebRequest.Create(@"https://search.twitter.com/search.atom?q=deviantart");
+                req.Method = "GET";
 
-                //req.Method = "GET";
-
-                Uri address = new Uri(@"https://api.carepass.com/hhs-directory-api/drugs/search?name=Cymbalta&apikey=t8bnhyvu9hj7eh4c8tg97jgb");
-                HttpWebRequest request = WebRequest.Create(address) as HttpWebRequest;
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-
-                HttpWebResponse resp = request.GetResponse() as HttpWebResponse;
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
                 if (resp.StatusCode == HttpStatusCode.OK)
                 {
                     using (Stream respStream = resp.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
-                        /*
                         JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
                         foreach (JObject activity in jsonActivities["data"])
                         {
@@ -53,12 +46,6 @@ namespace TchillrREST
 
                             activities.Add(act);
                         }
-                         * */
-                        Data.Activity act = new Data.Activity();
-                        act.Adresse = "test";
-                        act.City = "test";
-                        
-                        activities.Add(act);
                     }
                 }
                 else
