@@ -9,6 +9,7 @@ using System.Net;
 using System.IO;
 using System.Web;
 using System.ServiceModel.Activation;
+using Newtonsoft.Json.Linq;
 
 namespace TchillrREST
 {
@@ -25,9 +26,9 @@ namespace TchillrREST
               (inputString, HTML_TAG_PATTERN, string.Empty);
         }
 
-        public string GetStaticAllActivities()
+        public List<Data.Activity> GetStaticAllActivities()
         {
-            string result = string.Empty;
+            List<Data.Activity> activities = new List<Data.Activity>();
 
             try
             {
@@ -41,17 +42,33 @@ namespace TchillrREST
                     using (Stream respStream = resp.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
-                        result = reader.ReadToEnd();
-                        StripHTML(HttpUtility.HtmlDecode(result));
+                        JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+                        foreach (JObject activity in jsonActivities["data"])
+                        {
+                            Data.Activity act = new Data.Activity();
+                            act.Adresse = activity["adresse"].ToString();
+                            act.City = activity["city"].ToString();
+                            act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
+                            act.Idactivites = (int)activity["idactivites"];
+
+                            activities.Add(act);
+                        }
                     }
                 }
             }
             catch (Exception exp)
             {
+                Data.Activity dumb = new Data.Activity();
 
+                dumb.Adresse = exp.Message;
+                dumb.City = exp.Source;
+                dumb.Description = "dumb desc";
+                dumb.Idactivites = 1;
+
+                activities.Add(dumb);
             }
 
-            return result;
+            return activities;
         }
     }
 }

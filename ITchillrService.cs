@@ -17,8 +17,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "StaticActivities")]
-        string GetStaticAllActivities();
-
+        List<Data.Activity> GetStaticAllActivities();
 
     }
 }
