@@ -75,7 +75,7 @@ namespace TchillrREST
         {
             try
             {
-                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/categories.json");
+                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/categories.txt");
 
                 req.Method = "GET";
 
@@ -86,7 +86,6 @@ namespace TchillrREST
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
                         return HttpUtility.HtmlDecode(reader.ReadToEnd());
-                        
                     }
                 }
             }
