@@ -1,0 +1,520 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "idcategories": 22,
+      "name": "Ambassades"
+    },
+    {
+      "idcategories": 25,
+      "name": "Antennes Caisse d'allocations familiales"
+    },
+    {
+      "idcategories": 93,
+      "name": "Antennes CPAM"
+    },
+    {
+      "idcategories": 306,
+      "name": "Associations"
+    },
+    {
+      "idcategories": 47,
+      "name": "Ateliers Beaux-Arts"
+    },
+    {
+      "idcategories": 238,
+      "name": "Autres bibliothèques généralistes"
+    },
+    {
+      "idcategories": 239,
+      "name": "Autres bibliothèques spécialisées"
+    },
+    {
+      "idcategories": 304,
+      "name": "Autres espaces verts (activités) "
+    },
+    {
+      "idcategories": 266,
+      "name": "Autres établissements du 2nd degré"
+    },
+    {
+      "idcategories": 57,
+      "name": "Autres lycées spécialisés"
+    },
+    {
+      "idcategories": 12,
+      "name": "Autres musées"
+    },
+    {
+      "idcategories": 313,
+      "name": "Autres sources d'activités"
+    },
+    {
+      "idcategories": 74,
+      "name": "Autres théâtres parisiens"
+    },
+    {
+      "idcategories": 9,
+      "name": "Bassins écoles"
+    },
+    {
+      "idcategories": 315,
+      "name": "Bibliothèques adultes"
+    },
+    {
+      "idcategories": 38,
+      "name": "Bibliothèques étrangères"
+    },
+    {
+      "idcategories": 316,
+      "name": "Bibliothèques jeunesse"
+    },
+    {
+      "idcategories": 318,
+      "name": "Bibliothèques langues étrangères"
+    },
+    {
+      "idcategories": 235,
+      "name": "Bibliothèques municipales de prêt et spécialisées"
+    },
+    {
+      "idcategories": 237,
+      "name": "Bibliothèques municipales spécialisées"
+    },
+    {
+      "idcategories": 240,
+      "name": "Bibliothèques universitaires"
+    },
+    {
+      "idcategories": 177,
+      "name": "Boulodromes"
+    },
+    {
+      "idcategories": 86,
+      "name": "Cabarets & music halls"
+    },
+    {
+      "idcategories": 245,
+      "name": "Cafés théâtres"
+    },
+    {
+      "idcategories": 15,
+      "name": "Casernes de pompiers"
+    },
+    {
+      "idcategories": 28,
+      "name": "Centres administratifs municipaux"
+    },
+    {
+      "idcategories": 83,
+      "name": "Centres culturels étrangers"
+    },
+    {
+      "idcategories": 64,
+      "name": "Centres d'hébergement"
+    },
+    {
+      "idcategories": 309,
+      "name": "Centres d'hébergement et de réinsertion sociale (CHRS)"
+    },
+    {
+      "idcategories": 290,
+      "name": "Centres de dépistage"
+    },
+    {
+      "idcategories": 61,
+      "name": "Centres de planification et d'éducation familiale"
+    },
+    {
+      "idcategories": 295,
+      "name": "Centres de PMI"
+    },
+    {
+      "idcategories": 62,
+      "name": "Centres de santé"
+    },
+    {
+      "idcategories": 63,
+      "name": "Centres de sécurité sociale"
+    },
+    {
+      "idcategories": 21,
+      "name": "Centres des impôts"
+    },
+    {
+      "idcategories": 60,
+      "name": "Centres d\\'animation"
+    },
+    {
+      "idcategories": 311,
+      "name": "Centres d\\'hébergement d\\'urgence (CHU)"
+    },
+    {
+      "idcategories": 17,
+      "name": "Centres spécialisés"
+    },
+    {
+      "idcategories": 40,
+      "name": "Cimetières"
+    },
+    {
+      "idcategories": 34,
+      "name": "Cinémas parisiens"
+    },
+    {
+      "idcategories": 248,
+      "name": "Cinémathèques / Photothèques"
+    },
+    {
+      "idcategories": 3,
+      "name": "Classes prepas et BTS"
+    },
+    {
+      "idcategories": 319,
+      "name": "Clics Paris Emeraude"
+    },
+    {
+      "idcategories": 43,
+      "name": "Collèges"
+    },
+    {
+      "idcategories": 291,
+      "name": "Commissariats"
+    },
+    {
+      "idcategories": 71,
+      "name": "Conservatoires municipaux"
+    },
+    {
+      "idcategories": 24,
+      "name": "Consulats"
+    },
+    {
+      "idcategories": 36,
+      "name": "Crèches collectives"
+    },
+    {
+      "idcategories": 76,
+      "name": "Crèches familliales"
+    },
+    {
+      "idcategories": 32,
+      "name": "Crèches parentales"
+    },
+    {
+      "idcategories": 267,
+      "name": "Déchèteries"
+    },
+    {
+      "idcategories": 317,
+      "name": "Discothèques"
+    },
+    {
+      "idcategories": 301,
+      "name": "Ecoles d'art"
+    },
+    {
+      "idcategories": 41,
+      "name": "Ecoles élèmentaires"
+    },
+    {
+      "idcategories": 39,
+      "name": "Ecoles maternelles"
+    },
+    {
+      "idcategories": 5,
+      "name": "Ecoles superieures Ville de Paris"
+    },
+    {
+      "idcategories": 33,
+      "name": "Equipements de haut niveau"
+    },
+    {
+      "idcategories": 310,
+      "name": "Etablissements d'hébergement pour personnes âgées dépendantes (EHPAD)"
+    },
+    {
+      "idcategories": 26,
+      "name": "Fontaines Wallace (à boire)"
+    },
+    {
+      "idcategories": 155,
+      "name": "Gares SNCF"
+    },
+    {
+      "idcategories": 19,
+      "name": "Gouvernement / ministères"
+    },
+    {
+      "idcategories": 299,
+      "name": "Grandes ecoles"
+    },
+    {
+      "idcategories": 253,
+      "name": "Grands monuments parisiens"
+    },
+    {
+      "idcategories": 181,
+      "name": "Gymnases"
+    },
+    {
+      "idcategories": 16,
+      "name": "Haltes-garderies"
+    },
+    {
+      "idcategories": 10,
+      "name": "Hôpitaux"
+    },
+    {
+      "idcategories": 288,
+      "name": "Hôtel de Ville"
+    },
+    {
+      "idcategories": 65,
+      "name": "Jardins d'enfant"
+    },
+    {
+      "idcategories": 14,
+      "name": "Jardins, mails, promenades"
+    },
+    {
+      "idcategories": 293,
+      "name": "Kiosques"
+    },
+    {
+      "idcategories": 48,
+      "name": "Les fontaines ornementales"
+    },
+    {
+      "idcategories": 52,
+      "name": "Lieux d'exposition"
+    },
+    {
+      "idcategories": 297,
+      "name": "Lieux de culte remarquables"
+    },
+    {
+      "idcategories": 30,
+      "name": "Lieux de découverte et d'initiation"
+    },
+    {
+      "idcategories": 44,
+      "name": "Lycées polyvalents"
+    },
+    {
+      "idcategories": 55,
+      "name": "Lycées professionnels"
+    },
+    {
+      "idcategories": 56,
+      "name": "Lycées techniques"
+    },
+    {
+      "idcategories": 100,
+      "name": "Mairies d'arrondissement"
+    },
+    {
+      "idcategories": 303,
+      "name": "Maison des entreprises et de l'emploi"
+    },
+    {
+      "idcategories": 84,
+      "name": "Maisons de la justice et du droit (MJD)"
+    },
+    {
+      "idcategories": 87,
+      "name": "Maisons des associations"
+    },
+    {
+      "idcategories": 289,
+      "name": "Marchés alimentaires et spécialisés"
+    },
+    {
+      "idcategories": 300,
+      "name": "Marchés spécialisés"
+    },
+    {
+      "idcategories": 236,
+      "name": "Médiathèques et ludothèques"
+    },
+    {
+      "idcategories": 67,
+      "name": "Musées municipaux"
+    },
+    {
+      "idcategories": 68,
+      "name": "Musées nationaux"
+    },
+    {
+      "idcategories": 302,
+      "name": "non official content"
+    },
+    {
+      "idcategories": 18,
+      "name": "Parlement"
+    },
+    {
+      "idcategories": 29,
+      "name": "Piscines concédées"
+    },
+    {
+      "idcategories": 27,
+      "name": "Piscines municipales"
+    },
+    {
+      "idcategories": 82,
+      "name": "Points d\\\\\\'information et de médiations multiservices (PIMMS)"
+    },
+    {
+      "idcategories": 80,
+      "name": "Points d’accès au droit (PAD)"
+    },
+    {
+      "idcategories": 7,
+      "name": "Principaux parcs, jardins et squares"
+    },
+    {
+      "idcategories": 81,
+      "name": "Relais d\\'accès au droit"
+    },
+    {
+      "idcategories": 312,
+      "name": "Résidences personnes âgées"
+    },
+    {
+      "idcategories": 69,
+      "name": "Résidences pour personnes âgées / handicapées"
+    },
+    {
+      "idcategories": 54,
+      "name": "Résidences universitaires"
+    },
+    {
+      "idcategories": 51,
+      "name": "Restaurants universitaires"
+    },
+    {
+      "idcategories": 287,
+      "name": "Rollers parcs & skate parcs"
+    },
+    {
+      "idcategories": 254,
+      "name": "Salles arts et essais"
+    },
+    {
+      "idcategories": 296,
+      "name": "Salles de concert classique"
+    },
+    {
+      "idcategories": 75,
+      "name": "Salles de concert ou de spectacle"
+    },
+    {
+      "idcategories": 182,
+      "name": "Salles de sports"
+    },
+    {
+      "idcategories": 37,
+      "name": "Sanisettes"
+    },
+    {
+      "idcategories": 35,
+      "name": "Sections d'arrondissement du CASVP"
+    },
+    {
+      "idcategories": 8,
+      "name": "Services de justice"
+    },
+    {
+      "idcategories": 13,
+      "name": "Services de police"
+    },
+    {
+      "idcategories": 2,
+      "name": "Services PMI"
+    },
+    {
+      "idcategories": 23,
+      "name": "Services sociaux polyvalents"
+    },
+    {
+      "idcategories": 91,
+      "name": "Squares"
+    },
+    {
+      "idcategories": 6,
+      "name": "Stades"
+    },
+    {
+      "idcategories": 277,
+      "name": "Structures d'insertion"
+    },
+    {
+      "idcategories": 66,
+      "name": "Structures de logement"
+    },
+    {
+      "idcategories": 49,
+      "name": "Structures dédiées aux handicapés"
+    },
+    {
+      "idcategories": 46,
+      "name": "Structures dédiées aux jeunes"
+    },
+    {
+      "idcategories": 11,
+      "name": "Structures d\\'aide à l\\'emploi"
+    },
+    {
+      "idcategories": 45,
+      "name": "Structures d\\'aide à l\\'emploi"
+    },
+    {
+      "idcategories": 72,
+      "name": "Structures familles"
+    },
+    {
+      "idcategories": 77,
+      "name": "Structures personnes âgées"
+    },
+    {
+      "idcategories": 78,
+      "name": "Structures personnes en difficulté"
+    },
+    {
+      "idcategories": 79,
+      "name": "Structures personnes handicapées"
+    },
+    {
+      "idcategories": 280,
+      "name": "Tennis"
+    },
+    {
+      "idcategories": 175,
+      "name": "Terrains de sports"
+    },
+    {
+      "idcategories": 70,
+      "name": "Théâtres municipaux"
+    },
+    {
+      "idcategories": 85,
+      "name": "Théâtres pour enfants"
+    },
+    {
+      "idcategories": 20,
+      "name": "Trésorerie"
+    },
+    {
+      "idcategories": 50,
+      "name": "Universités"
+    },
+    {
+      "idcategories": 314,
+      "name": "Vidéothèques"
+    }
+  ],
+  "message": null,
+  "requestTime": "0.34284",
+  "api-version": "1.0"
+}

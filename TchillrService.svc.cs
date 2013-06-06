@@ -33,7 +33,7 @@ namespace TchillrREST
             try
             {
                 WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/staticActivy.txt");
-                string s = "zal";
+
                 req.Method = "GET";
 
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
@@ -70,5 +70,33 @@ namespace TchillrREST
 
             return activities;
         }
+
+        public string GetStaticCategories()
+        {
+            try
+            {
+                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/categories.json");
+
+                req.Method = "GET";
+
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        return HttpUtility.HtmlDecode(reader.ReadToEnd());
+                        
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                return exp.Message + exp.Source;
+            }
+
+            return string.Empty;
+        }
+
     }
 }

@@ -95,6 +95,7 @@
     <Content Include="staticActivy.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="categories.json" />
     <None Include="static\staticActivy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
