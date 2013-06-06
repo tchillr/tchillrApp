@@ -9,34 +9,37 @@ namespace TchillrREST.Data
     [DataContract]
     public class Activity
     {
-        [DataMember]
+        [DataMember(Name = "identifier")]
         public int Idactivites { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "name")]
         public string Nom { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "description")]
         public string Description { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "shortDescription")]
+        public string ShortDescription { get; set; }
+
+        [DataMember(Name = "place")]
         public string Lieu { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "adress")]
         public string Adresse { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "zipcode")]
         public string Zipcode { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "city")]
         public string City { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "latitude")]
         public float Lat { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "longitude")]
         public float Lon { get; set; }
 
-        [DataMember]
+        [DataMember(Name = "occurences")]
         public List<DateTime> Occurences { get; set; }
     }
 }
