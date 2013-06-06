@@ -51,7 +51,7 @@ namespace TchillrREST
                             act.Nom = activity["nom"].ToString();
                             act.Adresse = activity["adresse"].ToString();
                             act.City = activity["city"].ToString();
-                            act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
+                            act.Description = HttpUtility.HtmlEncode(StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString())));
                             act.Idactivites = (int)activity["idactivites"];
                             act.Zipcode = activity["zipcode"].ToString();
                             
