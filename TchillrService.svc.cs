@@ -109,7 +109,9 @@ namespace TchillrREST
                     using (Stream respStream = resp.GetResponseStream())
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
-                        return HttpUtility.HtmlDecode(reader.ReadToEnd());
+                        JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+                        return jsonActivities["data"].ToString();
+                        //return HttpUtility.HtmlDecode(reader.ReadToEnd());
                     }
                 }
             }

@@ -47,6 +47,8 @@ namespace TchillrREST.Data
 
         public Dictionary<string, int> GetKeywords()
         {
+            const int MAX_KEYWORDS_RETURNED = 8;
+
             Dictionary<string, int> wordCount = new Dictionary<string, int>();
             const int NAME_WEIGHT = 5;
             const int SHORT_DESCRIPTION_WEIGHT = 3;
@@ -56,8 +58,7 @@ namespace TchillrREST.Data
             GetWordsOccurences(this.ShortDescription, SHORT_DESCRIPTION_WEIGHT, wordCount);
             GetWordsOccurences(this.Description, DESCRIPTION_WEIGHT,wordCount);
 
-            var sortedDict = (from entry in wordCount orderby entry.Value descending select entry)
-     .ToDictionary(pair => pair.Key, pair => pair.Value);
+            var sortedDict = (from entry in wordCount orderby entry.Value descending select entry).Take(MAX_KEYWORDS_RETURNED).ToDictionary(pair => pair.Key, pair => pair.Value);
 
             //wordCount.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
