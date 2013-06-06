@@ -54,7 +54,8 @@ namespace TchillrREST
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
                             act.Idactivites = (int)activity["idactivites"];
                             act.Zipcode = activity["zipcode"].ToString();
-                            
+                            act.ShortDescription = string.Empty;
+
                             float temp = 0;
                             if (float.TryParse(activity["lat"].ToString(), out temp))
                                 act.Lat = temp;
@@ -71,6 +72,8 @@ namespace TchillrREST
                                 occurence.EndTime = occ["hour_end"].ToString();
                                 act.Occurences.Add(occurence);
                             }
+
+                            act.Keywords = act.GetKeywords();
 
                             activities.Add(act);
                         }

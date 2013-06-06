@@ -41,5 +41,44 @@ namespace TchillrREST.Data
 
         [DataMember(Name = "occurences")]
         public List<Occurence> Occurences { get; set; }
+
+        [DataMember(Name = "keywords")]
+        public Dictionary<string, int> Keywords { get; set; }
+
+        public Dictionary<string, int> GetKeywords()
+        {
+            Dictionary<string, int> wordCount = new Dictionary<string, int>();
+            const int NAME_WEIGHT = 5;
+            const int SHORT_DESCRIPTION_WEIGHT = 3;
+            const int DESCRIPTION_WEIGHT = 1;
+            
+            GetWordsOccurences(this.Nom, NAME_WEIGHT,wordCount);
+            GetWordsOccurences(this.ShortDescription, SHORT_DESCRIPTION_WEIGHT, wordCount);
+            GetWordsOccurences(this.Description, DESCRIPTION_WEIGHT,wordCount);
+
+            var sortedDict = (from entry in wordCount orderby entry.Value descending select entry)
+     .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            //wordCount.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            return sortedDict;
+        }
+
+        private Dictionary<string, int> GetWordsOccurences(string text, int weight, Dictionary<string, int> wordCount)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                List<string> words = text.Split(' ').ToList<string>();
+                foreach (string word in words)
+                {
+                    if (wordCount.ContainsKey(word))
+                        wordCount[word] += weight;
+                    else
+                        wordCount.Add(word, weight);
+                }
+            }
+            return wordCount;
+        }
+
     }
 }
