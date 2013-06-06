@@ -24,7 +24,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "StaticCategories")]
-        string GetStaticCategories();
+        List<Data.Categorie> GetStaticCategories();
 
     }
 }

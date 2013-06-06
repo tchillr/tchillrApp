@@ -95,8 +95,9 @@ namespace TchillrREST
             return activities;
         }
 
-        public string GetStaticCategories()
+        public List<Data.Categorie> GetStaticCategories()
         {
+            List<Data.Categorie> categories = new List<Categorie>();
             try
             {
                 WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/categories.txt");
@@ -110,17 +111,24 @@ namespace TchillrREST
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
                         JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
-                        return jsonActivities["data"].ToString();
+                        foreach (JObject categorie in jsonActivities["data"])
+                        {
+                            Categorie cat = new Categorie();
+                            cat.Idcategorie = (int)categorie["idcategories"];
+                            cat.Nom = WebUtility.HtmlDecode(categorie["name"].ToString());
+
+                            categories.Add(cat);
+                        }
                         //return HttpUtility.HtmlDecode(reader.ReadToEnd());
                     }
                 }
             }
             catch (Exception exp)
             {
-                return exp.Message + exp.Source;
+               
             }
 
-            return string.Empty;
+            return categories;
         }
 
     }
