@@ -48,9 +48,9 @@ namespace TchillrREST
                         {
                             Data.Activity act = new Data.Activity();
                             act.Occurences = new List<Occurence>();
-                            act.Nom = activity["nom"].ToString();
-                            act.Adresse = activity["adresse"].ToString();
-                            act.City = activity["city"].ToString();
+                            act.Nom = WebUtility.HtmlDecode(activity["nom"].ToString());
+                            act.Adresse = WebUtility.HtmlDecode(activity["adresse"].ToString());
+                            act.City = WebUtility.HtmlDecode(activity["city"].ToString());
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
                             act.Idactivites = (int)activity["idactivites"];
                             act.Zipcode = activity["zipcode"].ToString();
