@@ -68,11 +68,13 @@ namespace TchillrREST.Data
         private Dictionary<string, int> GetWordsOccurences(string text, int weight, Dictionary<string, int> wordCount)
         {
             List<string> bannedWords = new List<string>();
-            bannedWords.AddRange(new string[] { "le", "la", "les", "l'", "un", "une", "des", "d'", "du", "de", "au", "aux", "ce", "cet", "cette", "ces", "ses", "mon", "ton", "son", "ma", "ta", "sa", "mes", "tes", "notre", "votre", "leur", "vötre", "nötre", "leurs", "quel", "quelle", "quels", "quelles", "et" });
+            bannedWords.AddRange(new string[] { "le", "la", "les", "l'", "un", "une", "des", "d'", "du", "de", "au", "aux", "ce", "cet", "cette", "ces", "ses", "mon", "ton", "son", "ma", "ta", "sa", "mes", "tes", "notre", "votre", "leur", "vötre", "nötre", "leurs", "quel", "quelle", "quels", "quelles", "et", "je","tu","il","elle","ils","elles","nous","vous","et","se"
+                                                ,"avec","en","à","&",""
+                                                });
 
             if (!string.IsNullOrEmpty(text))
             {
-                List<string> words = text.Split(' ').ToList<string>();
+                List<string> words = text.Split(' ').ToList<string>().Select(x=> x.ToLower()).ToList<string>();
                 foreach (string word in words)
                 {
                     if (bannedWords.Contains(word))
