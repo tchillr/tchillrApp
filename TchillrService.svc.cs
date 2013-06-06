@@ -161,7 +161,12 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                Categorie cat = new Categorie();
 
+                cat.Nom = exp.Message + " " +exp.Source;
+                cat.Idcategorie = 1;
+
+                categories.Add(cat);
             }
 
             return categories;
