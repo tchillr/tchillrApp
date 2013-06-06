@@ -10,6 +10,7 @@ using System.IO;
 using System.Web;
 using System.ServiceModel.Activation;
 using Newtonsoft.Json.Linq;
+using TchillrREST.Data;
 
 namespace TchillrREST
 {
@@ -46,10 +47,30 @@ namespace TchillrREST
                         foreach (JObject activity in jsonActivities["data"])
                         {
                             Data.Activity act = new Data.Activity();
+                            act.Occurences = new List<Occurence>();
+                            act.Nom = activity["nom"].ToString();
                             act.Adresse = activity["adresse"].ToString();
                             act.City = activity["city"].ToString();
                             act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
                             act.Idactivites = (int)activity["idactivites"];
+                            act.Zipcode = activity["zipcode"].ToString();
+                            
+                            float temp = 0;
+                            if (float.TryParse(activity["lat"].ToString(), out temp))
+                                act.Lat = temp;
+                            temp = 0;
+                            if (float.TryParse(activity["lon"].ToString(), out temp))
+                                act.Lon = temp;
+
+                            foreach (JObject occ in activity["occurences"])
+                            {
+#warning convertir en start date end date
+                                Occurence occurence = new Occurence();
+                                occurence.Day = occ["jour"].ToString();
+                                occurence.StartTime = occ["hour_start"].ToString();
+                                occurence.EndTime = occ["hour_end"].ToString();
+                                act.Occurences.Add(occurence);
+                            }
 
                             activities.Add(act);
                         }

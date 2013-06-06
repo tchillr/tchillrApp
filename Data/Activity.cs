@@ -40,6 +40,6 @@ namespace TchillrREST.Data
         public float Lon { get; set; }
 
         [DataMember(Name = "occurences")]
-        public List<DateTime> Occurences { get; set; }
+        public List<Occurence> Occurences { get; set; }
     }
 }
