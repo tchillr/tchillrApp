@@ -131,6 +131,42 @@ namespace TchillrREST
             return categories;
         }
 
+        public List<Data.Categorie> GetCategories()
+        {
+            List<Data.Categorie> categories = new List<Categorie>();
+            try
+            {
+                WebRequest req = WebRequest.Create("https://api.paris.fr:3000/data/1.0/Equipements/get_categories/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d");
+
+                req.Method = "GET";
+
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+                        foreach (JObject categorie in jsonActivities["data"])
+                        {
+                            Categorie cat = new Categorie();
+                            cat.Idcategorie = (int)categorie["idcategories"];
+                            cat.Nom = WebUtility.HtmlDecode(categorie["name"].ToString());
+
+                            categories.Add(cat);
+                        }
+                        //return HttpUtility.HtmlDecode(reader.ReadToEnd());
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+
+            }
+
+            return categories;
+        }
+
         public List<Data.Activity> GetAllActivities()
         {
 

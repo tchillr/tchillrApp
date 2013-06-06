@@ -29,6 +29,13 @@ namespace TchillrREST
 
         [OperationContract]
         [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "Categories")]
+        List<Data.Categorie> GetCategories();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
                   ResponseFormat = WebMessageFormat.Json,
                   UriTemplate = "Activities")]
         List<Activity> GetAllActivities();
