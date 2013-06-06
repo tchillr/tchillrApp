@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.ServiceModel.Web;
+using TchillrREST.Data;
 
 namespace TchillrREST
 {
@@ -25,6 +26,12 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "StaticCategories")]
         List<Data.Categorie> GetStaticCategories();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+                  ResponseFormat = WebMessageFormat.Json,
+                  UriTemplate = "Activities")]
+        List<Activity> GetAllActivities();
 
     }
 }
