@@ -9,6 +9,10 @@ using Newtonsoft.Json.Linq;
 using System.ServiceModel.Activation;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Web.Services;
+using System.Web.Script.Services;
+using System.Web.Script.Serialization;
+using System.Text.RegularExpressions;
 
 namespace TchillrREST
 {
@@ -18,6 +22,14 @@ namespace TchillrREST
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class TchillrREST : ITchillrREST
     {
+        const string HTML_TAG_PATTERN = @"<[^>]*>";
+
+        static string StripHTML(string inputString)
+        {
+            return Regex.Replace
+              (inputString, HTML_TAG_PATTERN, string.Empty);
+        }
+
         public List<Data.Activity> GetAllActivities()
         {
 
@@ -41,7 +53,7 @@ namespace TchillrREST
                             Data.Activity act = new Data.Activity();
                             act.Adresse = activity["adresse"].ToString();
                             act.City = activity["city"].ToString();
-                            act.Description = activity["description"].ToString();
+                            act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
                             act.Idactivites = (int)activity["idactivites"];
 
                             activities.Add(act);
@@ -98,6 +110,7 @@ namespace TchillrREST
 
         public string GetStaticAllActivities()
         {
+            WebOperationContext.Current.OutgoingResponse.ContentType = "application/json; charset=utf-8";
             string result = string.Empty;
 
             try
@@ -113,7 +126,7 @@ namespace TchillrREST
                     {
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
                         result = reader.ReadToEnd();
-
+                        StripHTML(HttpUtility.HtmlDecode(result));
                     }
                 }
             }

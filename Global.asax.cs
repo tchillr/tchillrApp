@@ -14,7 +14,7 @@ namespace TchillrREST
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            RouteTable.Routes.Add(new ServiceRoute("TchillrREST", new WebServiceHostFactory(), typeof(TchillrREST)));
+            //RouteTable.Routes.Add(new ServiceRoute("TchillrREST", new WebServiceHostFactory(), typeof(TchillrREST)));
         }
 
         protected void Session_Start(object sender, EventArgs e)

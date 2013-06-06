@@ -59,6 +59,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="TchillrService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -80,8 +81,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ITchillrREST.cs" />
+    <Compile Include="ITchillrService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TchillrREST.cs" />
+    <Compile Include="TchillrService.svc.cs">
+      <DependentUpon>TchillrService.svc</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
