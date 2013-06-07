@@ -79,7 +79,7 @@ namespace TchillrREST.Data
                 List<string> words = text.Split(' ').ToList<string>().Select(x=> x.ToLower()).ToList<string>();
                 foreach (string word in words)
                 {
-                    if (bannedWords.Contains(word))
+                    if (bannedWords.Contains(word) || word.Length <= 2)
                         continue;
 
                     if (wordCount.ContainsKey(word))
