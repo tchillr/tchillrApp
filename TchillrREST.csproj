@@ -64,6 +64,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="staticActivy2.txt" />
     <Content Include="TchillrService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

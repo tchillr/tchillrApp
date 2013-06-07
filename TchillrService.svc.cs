@@ -33,7 +33,7 @@ namespace TchillrREST
 
             try
             {
-                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/staticActivy.txt");
+                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/staticActivy2.txt");
 
                 req.Method = "GET";
 
@@ -48,19 +48,20 @@ namespace TchillrREST
                         {
                             Data.Activity act = new Data.Activity();
                             act.Occurences = new List<Occurence>();
-                            act.Nom = WebUtility.HtmlDecode(activity["nom"].ToString());
-                            act.Adresse = WebUtility.HtmlDecode(activity["adresse"].ToString());
-                            act.City = WebUtility.HtmlDecode(activity["city"].ToString());
+                            act.Nom = WebUtility.HtmlDecode(activity["name"].ToString());
+                            act.Adresse = WebUtility.HtmlDecode(activity["adress"].ToString());
+                            act.City = WebUtility.HtmlDecode(activity["city"] == null ?"":activity["city"].ToString());
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
-                            act.Idactivites = (int)activity["idactivites"];
+                            act.Idactivites = (int)activity["identifier"];
                             act.Zipcode = activity["zipcode"].ToString();
-                            act.ShortDescription = string.Empty;
+                            act.ShortDescription = activity["shortDescription"].ToString();
+                            act.Lieu = activity["place"].ToString();
 
                             float temp = 0;
-                            if (float.TryParse(activity["lat"].ToString(), out temp))
+                            if (float.TryParse(activity["latitude"].ToString(), out temp))
                                 act.Lat = temp;
                             temp = 0;
-                            if (float.TryParse(activity["lon"].ToString(), out temp))
+                            if (float.TryParse(activity["longitude"].ToString(), out temp))
                                 act.Lon = temp;
 
                             foreach (JObject occ in activity["occurences"])
