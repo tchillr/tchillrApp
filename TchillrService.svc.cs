@@ -54,7 +54,7 @@ namespace TchillrREST
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
                             act.Idactivites = (int)activity["identifier"];
                             act.Zipcode = activity["zipcode"].ToString();
-                            //act.ShortDescription = activity["shortDescription"].ToString();
+                            act.ShortDescription = activity["shortDescription"].ToString();
                             act.Lieu = activity["place"].ToString();
 
                             float temp = 0;
