@@ -30,7 +30,7 @@ namespace TchillrREST
         public List<Data.Activity> GetStaticAllActivities()
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
-            
+
             //List<Data.Activity> activities = new List<Data.Activity>();
 
             try
@@ -58,7 +58,7 @@ namespace TchillrREST
                             }
                             act.Nom = WebUtility.HtmlDecode(activity["name"].ToString());
                             act.Adresse = WebUtility.HtmlDecode(activity["adress"].ToString());
-                            act.City = WebUtility.HtmlDecode(activity["city"] == null ?"":activity["city"].ToString());
+                            act.City = WebUtility.HtmlDecode(activity["city"] == null ? "" : activity["city"].ToString());
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
                             act.ID = (int)activity["identifier"];
                             act.Zipcode = activity["zipcode"].ToString();
@@ -77,7 +77,7 @@ namespace TchillrREST
 #warning convertir en start date end date
 
                                 // we found that some activity have multiple equal occurences
-                                if(act.Occurences.Exists(o => o.ActivityID == act.ID && o.Day == occ["jour"].ToString() && o.StartTime == occ["hour_start"].ToString() && o.EndTime == occ["hour_end"].ToString()))
+                                if (act.Occurences.Exists(o => o.ActivityID == act.ID && o.Day == occ["jour"].ToString() && o.StartTime == occ["hour_start"].ToString() && o.EndTime == occ["hour_end"].ToString()))
                                     continue;
                                 Occurence occurence = new Occurence();
                                 occurence.Day = occ["jour"].ToString();
@@ -89,7 +89,7 @@ namespace TchillrREST
 
                             act.Keywords = act.GetKeywords();
 
-              //              activities.Add(act);
+                            //              activities.Add(act);
 
                         }
                     }
@@ -150,7 +150,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
-               
+
             }
 
             return categories;
@@ -188,7 +188,7 @@ namespace TchillrREST
             {
                 Categorie cat = new Categorie();
 
-                cat.Nom = exp.Message + " " +exp.Source;
+                cat.Nom = exp.Message + " " + exp.Source;
                 cat.Idcategorie = 1;
 
                 categories.Add(cat);
@@ -247,13 +247,15 @@ namespace TchillrREST
             return activities;
         }
 
-        public List<Tag> GetTags(string theme)
+        public List<Tag> GetTags()
         {
-            using (TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;"))
-            {
-                List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
-                return tags;
-            }
+            string theme = "Musique";
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            //List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
+            //return tags;
+            List<Tag> tags = context.Tags.ToList<Tag>();
+            return tags;
         }
     }
 }

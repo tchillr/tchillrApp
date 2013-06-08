@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TchillrREST.Data
 {
+    [DataContract]
     public class Tag
     {
         [DataMember(Name = "identifier")]
