@@ -29,7 +29,9 @@ namespace TchillrREST
 
         public List<Data.Activity> GetStaticAllActivities()
         {
-            List<Data.Activity> activities = new List<Data.Activity>();
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            
+            //List<Data.Activity> activities = new List<Data.Activity>();
 
             try
             {
@@ -46,13 +48,19 @@ namespace TchillrREST
                         JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
                         foreach (JObject activity in jsonActivities["data"])
                         {
-                            Data.Activity act = new Data.Activity();
-                            act.Occurences = new List<Occurence>();
+                            int identifier = (int)activity["identifier"];
+                            Data.Activity act = context.Activities.Include("Occurences").FirstOrDefault(acti => acti.ID == identifier);
+                            if (act == null)
+                            {
+                                act = new Activity();
+                                act.Occurences = new List<Occurence>();
+                                context.Activities.Add(act);
+                            }
                             act.Nom = WebUtility.HtmlDecode(activity["name"].ToString());
                             act.Adresse = WebUtility.HtmlDecode(activity["adress"].ToString());
                             act.City = WebUtility.HtmlDecode(activity["city"] == null ?"":activity["city"].ToString());
                             act.Description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
-                            act.Idactivites = (int)activity["identifier"];
+                            act.ID = (int)activity["identifier"];
                             act.Zipcode = activity["zipcode"].ToString();
                             act.ShortDescription = activity["shortDescription"].ToString();
                             act.Lieu = activity["place"].ToString();
@@ -67,16 +75,22 @@ namespace TchillrREST
                             foreach (JObject occ in activity["occurences"])
                             {
 #warning convertir en start date end date
+
+                                // we found that some activity have multiple equal occurences
+                                if(act.Occurences.Exists(o => o.ActivityID == act.ID && o.Day == occ["jour"].ToString() && o.StartTime == occ["hour_start"].ToString() && o.EndTime == occ["hour_end"].ToString()))
+                                    continue;
                                 Occurence occurence = new Occurence();
                                 occurence.Day = occ["jour"].ToString();
                                 occurence.StartTime = occ["hour_start"].ToString();
                                 occurence.EndTime = occ["hour_end"].ToString();
+                                occurence.ActivityID = act.ID;
                                 act.Occurences.Add(occurence);
                             }
 
                             act.Keywords = act.GetKeywords();
 
-                            activities.Add(act);
+              //              activities.Add(act);
+
                         }
                     }
                 }
@@ -88,12 +102,22 @@ namespace TchillrREST
                 dumb.Adresse = exp.Message;
                 dumb.City = exp.Source;
                 dumb.Description = "dumb desc";
-                dumb.Idactivites = 1;
+                dumb.ID = 1;
 
-                activities.Add(dumb);
+                //activities.Add(dumb);
             }
 
-            return activities;
+            context.SaveChanges();
+
+            return context.Activities.ToList<Activity>();
+            //return activities;
+        }
+
+        public List<Data.Activity> GetFromDBAllActivities()
+        {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            return context.Activities.ToList<Activity>();
         }
 
         public List<Data.Categorie> GetStaticCategories()
@@ -197,7 +221,7 @@ namespace TchillrREST
                             act.Adresse = activity["adresse"].ToString();
                             act.City = activity["city"].ToString();
                             act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
-                            act.Idactivites = (int)activity["idactivites"];
+                            act.ID = (int)activity["idactivites"];
 
                             activities.Add(act);
                         }
@@ -215,7 +239,7 @@ namespace TchillrREST
                 dumb.Adresse = exp.Message;
                 dumb.City = exp.Source;
                 dumb.Description = "dumb desc";
-                dumb.Idactivites = 1;
+                dumb.ID = 1;
 
                 activities.Add(dumb);
             }

@@ -54,7 +54,7 @@ namespace TchillrREST
                             act.Adresse = activity["adresse"].ToString();
                             act.City = activity["city"].ToString();
                             act.Description = StripHTML(HttpUtility.HtmlDecode(activity["description"].ToString()));
-                            act.Idactivites = (int)activity["idactivites"];
+                            act.ID = (int)activity["idactivites"];
 
                             activities.Add(act);
                         }
@@ -72,7 +72,7 @@ namespace TchillrREST
                 dumb.Adresse = exp.Message;
                 dumb.City = exp.Source;
                 dumb.Description = "dumb desc";
-                dumb.Idactivites = 1;
+                dumb.ID = 1;
 
                 activities.Add(dumb);
             }

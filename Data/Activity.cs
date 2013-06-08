@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Runtime.Serialization;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TchillrREST.Data
 {
@@ -10,7 +12,9 @@ namespace TchillrREST.Data
     public class Activity
     {
         [DataMember(Name = "identifier")]
-        public int Idactivites { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int ID { get; set; }
 
         [DataMember(Name = "name")]
         public string Nom { get; set; }

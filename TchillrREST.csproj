@@ -78,6 +78,7 @@
     <Compile Include="Data\Activity.cs" />
     <Compile Include="Data\Categorie.cs" />
     <Compile Include="Data\Occurence.cs" />
+    <Compile Include="Data\TchillrDBContext.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
