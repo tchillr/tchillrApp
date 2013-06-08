@@ -318,7 +318,7 @@ namespace TchillrREST
             context.SaveChanges();
         }
 
-        public List<int> PostInterests(string username, Stream content)
+        public bool PostInterests(string username, Stream content)
         {
             // convert Stream Data to StreamReader
             StreamReader reader = new StreamReader(content);
@@ -326,7 +326,7 @@ namespace TchillrREST
             // Read StreamReader data as string
             string xmlString = reader.ReadToEnd();
 
-            return new List<int>();
+            return true;
         }
 
         public List<int> GetInterests(string usernameid)

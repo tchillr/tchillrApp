@@ -41,7 +41,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        List<int> PostInterests(string usernameid, Stream content);
+        bool PostInterests(string usernameid, Stream content);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
