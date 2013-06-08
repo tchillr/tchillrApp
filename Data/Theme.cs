@@ -8,7 +8,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TchillrREST.Data
 {
-    [DataContract]
     public class Theme
     {
         [DataMember(Name = "identifier")]

@@ -25,8 +25,15 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "tags")]
-        List<Tag> GetTags();
+                  UriTemplate = "{theme}/Tags")]
+        List<Tag> GetTags(string theme);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "Themes")]
+        List<Theme> GetThemes();
 
         [OperationContract]
         [WebInvoke(Method = "GET",

@@ -11,6 +11,7 @@ using System.Web;
 using System.ServiceModel.Activation;
 using Newtonsoft.Json.Linq;
 using TchillrREST.Data;
+using System.Data.Objects;
 
 namespace TchillrREST
 {
@@ -116,8 +117,8 @@ namespace TchillrREST
         public List<Data.Activity> GetFromDBAllActivities()
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
-
-            return context.Activities.ToList<Activity>();
+            List<Activity> lstActi = context.Activities.ToList<Activity>();
+            return lstActi;
         }
 
         public List<Data.Categorie> GetStaticCategories()
@@ -247,15 +248,74 @@ namespace TchillrREST
             return activities;
         }
 
-        public List<Tag> GetTags()
+        public List<Tag> GetTags(string theme)
         {
-            string theme = "Musique";
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            context.Configuration.ProxyCreationEnabled = false;
+
+            List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
+            
+            return tags;
+        }
+
+        public List<Theme> GetThemes()
+        {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
 
             //List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
             //return tags;
-            List<Tag> tags = context.Tags.ToList<Tag>();
-            return tags;
+            List<Theme> themes = context.Themes.Include("Tags").ToList<Theme>();
+            return themes;
+        }
+
+        public void InjectTags(string theme)
+        {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            Tag tg = new Tag();
+            tg.Title = "Concert";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            tg = new Tag();
+            tg.Title = "Festival";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            tg = new Tag();
+            tg.Title = "Jazz";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            tg = new Tag();
+            tg.Title = "Classique";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            tg = new Tag();
+            tg.Title = "Percussion";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            tg = new Tag();
+            tg.Title = "Hip Hop";
+            tg.Weight = 1;
+            tg.ThemeID = 1;
+
+            context.Tags.Add(tg);
+
+            context.SaveChanges();
         }
     }
 }
