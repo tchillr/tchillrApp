@@ -36,7 +36,7 @@ namespace TchillrREST
 
             try
             {
-                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/staticActivy2.txt");
+                WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/staticActivy3.txt");
 
                 req.Method = "GET";
 
@@ -255,7 +255,7 @@ namespace TchillrREST
             context.Configuration.ProxyCreationEnabled = false;
 
             List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
-            
+
             return tags;
         }
 
@@ -316,6 +316,28 @@ namespace TchillrREST
             context.Tags.Add(tg);
 
             context.SaveChanges();
+        }
+
+        public List<int> PostInterests(string username, Stream content)
+        {
+            // convert Stream Data to StreamReader
+            StreamReader reader = new StreamReader(content);
+
+            // Read StreamReader data as string
+            string xmlString = reader.ReadToEnd();
+
+            return new List<int>();
+        }
+
+        public List<int> GetInterests(string usernameid)
+        {
+            List<int> results = new List<int>();
+
+            results.Add(5);
+            results.Add(7);
+            results.Add(8);
+
+            return results;
         }
     }
 }

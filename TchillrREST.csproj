@@ -65,6 +65,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="staticActivy2.txt" />
+    <Content Include="staticActivy3.txt" />
     <Content Include="TchillrService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -82,6 +83,7 @@
     <Compile Include="Data\Tag.cs" />
     <Compile Include="Data\TchillrDBContext.cs" />
     <Compile Include="Data\Theme.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
