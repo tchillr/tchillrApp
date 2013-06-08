@@ -20,7 +20,7 @@ namespace TchillrREST
     (RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class TchillrREST : ITchillrREST
+    public class TchillrREST2 : ITchillrREST
     {
         const string HTML_TAG_PATTERN = @"<[^>]*>";
 

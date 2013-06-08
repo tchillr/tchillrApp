@@ -25,6 +25,13 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "{theme}/tags")]
+        List<Tag> GetTags(string theme);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "StaticActivities")]
         List<Data.Activity> GetStaticAllActivities();
 
