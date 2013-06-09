@@ -344,8 +344,9 @@ namespace TchillrREST
             int tagID = int.Parse(result.Split('=')[1]);
 
             UserTag ut = context.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
-            if (ut == null || ut.UserID == 0 || ut.UserID == null)
+            if (ut == null || ut.UserID == 0)
             {
+                ut = new UserTag();
                 ut.UserID = userNameID;
                 ut.TagID = tagID;
                 context.UserTags.Add(ut);
