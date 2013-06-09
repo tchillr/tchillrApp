@@ -143,7 +143,7 @@ namespace TchillrREST
             foreach (Activity act in lstActi)
                 act.GetKeywords(tags);
 
-            return lstActi.Where(acti => acti.ContextualTags.Intersect(userContextualTags).Count() > 0).ToList<Data.Activity>();
+            return lstActi.Where(acti => acti.ContextualTags.Intersect(userContextualTags).Count() > 0).OrderByDescending(acti => acti.ContextualTags.Intersect(userContextualTags).Count()).ToList<Data.Activity>();
 
 
         }
