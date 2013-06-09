@@ -98,10 +98,10 @@ namespace TchillrREST.Data
                         wordCount.Add(word, weight);
 
                     if (tags.Contains(word.ToUpper()))
-                        if(this.ContextualTags.Contains(word))
+                        if (this.ContextualTags.Contains(word.ToUpper()))
                             continue;
                         else
-                            this.ContextualTags.Add(word);
+                            this.ContextualTags.Add(word.ToUpper());
                 }
             }
             return wordCount;

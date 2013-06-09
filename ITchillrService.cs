@@ -14,6 +14,12 @@ namespace TchillrREST
     [ServiceContract]
     public interface ITchillrService
     {
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities")]
+        List<Data.Activity> GetUserActivities(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",

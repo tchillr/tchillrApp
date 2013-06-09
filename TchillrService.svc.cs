@@ -128,6 +128,26 @@ namespace TchillrREST
             return lstActi;
         }
 
+        public List<Data.Activity> GetUserActivities(string usernameid)
+        {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            List<Activity> lstActi = context.Activities.ToList<Activity>();
+
+            List<int> userTags = GetInterests(usernameid);
+            List<string> userContextualTags = context.Tags.Where(tg => userTags.Contains(tg.ID)).Select(x => x.Title).ToList<string>();
+            userContextualTags = userContextualTags.ConvertAll(d => d.ToUpper());
+
+            List<string> tags = context.Tags.Select(tg => tg.Title).ToList<string>();
+            tags = tags.ConvertAll(d => d.ToUpper());
+
+            foreach (Activity act in lstActi)
+                act.GetKeywords(tags);
+
+            return lstActi.Where(acti => acti.ContextualTags.Intersect(userContextualTags).Count() > 0).ToList<Data.Activity>();
+
+
+        }
+
         public List<Data.Categorie> GetDBCategories()
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
