@@ -41,7 +41,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        bool PostInterests(string usernameid, Stream content);
+        string PostInterests(string usernameid, Stream content);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -63,6 +63,13 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "StaticCategories")]
         List<Data.Categorie> GetStaticCategories();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "DBCategories")]
+        List<Data.Categorie> GetDBCategories();
 
         [OperationContract]
         [WebInvoke(Method = "GET",

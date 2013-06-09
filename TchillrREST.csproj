@@ -84,6 +84,7 @@
     <Compile Include="Data\TchillrDBContext.cs" />
     <Compile Include="Data\Theme.cs" />
     <Compile Include="Data\User.cs" />
+    <Compile Include="Data\UserTag.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

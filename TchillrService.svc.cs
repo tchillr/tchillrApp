@@ -121,11 +121,19 @@ namespace TchillrREST
             return lstActi;
         }
 
+        public List<Data.Categorie> GetDBCategories()
+        {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            return context.Categories.ToList<Categorie>();
+        }
+
         public List<Data.Categorie> GetStaticCategories()
         {
             List<Data.Categorie> categories = new List<Categorie>();
             try
             {
+                //TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
                 WebRequest req = WebRequest.Create("http://" + HttpContext.Current.Request.Url.Authority + "/categories.txt");
 
                 req.Method = "GET";
@@ -143,16 +151,21 @@ namespace TchillrREST
                             cat.Idcategorie = (int)categorie["idcategories"];
                             cat.Nom = WebUtility.HtmlDecode(categorie["name"].ToString());
 
+                            //context.Categories.Add(cat);
                             categories.Add(cat);
                         }
                         //return HttpUtility.HtmlDecode(reader.ReadToEnd());
                     }
                 }
+
+                //context.SaveChanges();
             }
             catch (Exception exp)
             {
 
             }
+
+           
 
             return categories;
         }
@@ -318,24 +331,32 @@ namespace TchillrREST
             context.SaveChanges();
         }
 
-        public bool PostInterests(string username, Stream content)
+        public string PostInterests(string username, Stream content)
         {
             // convert Stream Data to StreamReader
             StreamReader reader = new StreamReader(content);
 
-            // Read StreamReader data as string
-            string xmlString = reader.ReadToEnd();
+            return reader.ReadToEnd();
+            //JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+            //foreach (JObject activity in jsonActivities["data"])
+            //{
 
-            return true;
+            //}
+
+            //return new List<int>();
         }
 
         public List<int> GetInterests(string usernameid)
         {
-            List<int> results = new List<int>();
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
 
-            results.Add(5);
-            results.Add(7);
-            results.Add(8);
+            List<int> results = new List<int>();
+            int userNameID = int.Parse(usernameid);
+
+            foreach (UserTag ut in context.UserTags.Where(userTag => userTag.UserID == userNameID))
+            {
+                results.Add(ut.TagID);
+            }
 
             return results;
         }

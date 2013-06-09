@@ -13,6 +13,7 @@ namespace TchillrREST.Data
         public DbSet<Occurence> Occurences { get; set; }
         public DbSet<Theme> Themes { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<UserTag> UserTags { get; set; }
 
         public TchillrDBContext(string connectionString)
             : base(connectionString)
