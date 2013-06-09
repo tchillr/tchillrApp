@@ -117,7 +117,7 @@ namespace TchillrREST
         public List<Data.Activity> GetFromDBAllActivities()
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
-            List<Activity> lstActi = context.Activities.Include("Occurences").Take(100).ToList<Activity>();
+            List<Activity> lstActi = context.Activities.Include("Occurences").Take(10).ToList<Activity>();
             return lstActi;
         }
 
