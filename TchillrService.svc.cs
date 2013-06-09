@@ -331,12 +331,34 @@ namespace TchillrREST
             context.SaveChanges();
         }
 
-        public string PostInterests(string username, Stream content)
+        public List<int> PostInterests(string usernameid, Stream content)
         {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            int userNameID = int.Parse(usernameid);
             // convert Stream Data to StreamReader
             StreamReader reader = new StreamReader(content);
 
-            return reader.ReadToEnd();
+            string result = reader.ReadToEnd();
+
+            int tagID = int.Parse(result.Split('=')[1]);
+
+            UserTag ut = context.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
+            if (ut == null || ut.UserID == 0 || ut.UserID == null)
+            {
+                ut.UserID = userNameID;
+                ut.TagID = tagID;
+                context.UserTags.Add(ut);
+            }
+            else
+                context.UserTags.Remove(ut);
+
+            context.SaveChanges();
+
+            //return context.UserTags.Where(userTags => userTags.UserID == userNameID).Select(x => x.TagID).ToList<int>();
+
+            return GetInterests(usernameid);
+
             //JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
             //foreach (JObject activity in jsonActivities["data"])
             //{
