@@ -55,15 +55,17 @@ namespace TchillrREST.Data
         public Dictionary<string, int> GetKeywords(List<string> tags)
         {
             const int MAX_KEYWORDS_RETURNED = 8;
-            
+
             Dictionary<string, int> wordCount = new Dictionary<string, int>();
+            this.ContextualTags = new List<string>();
+
             const int NAME_WEIGHT = 5;
             const int SHORT_DESCRIPTION_WEIGHT = 3;
             const int DESCRIPTION_WEIGHT = 1;
 
-            GetWordsOccurences(this.Nom, NAME_WEIGHT,wordCount,tags);
-            GetWordsOccurences(this.ShortDescription, SHORT_DESCRIPTION_WEIGHT, wordCount,tags);
-            GetWordsOccurences(this.Description, DESCRIPTION_WEIGHT,wordCount,tags);
+            GetWordsOccurences(this.Nom, NAME_WEIGHT, wordCount, tags);
+            GetWordsOccurences(this.ShortDescription, SHORT_DESCRIPTION_WEIGHT, wordCount, tags);
+            GetWordsOccurences(this.Description, DESCRIPTION_WEIGHT, wordCount, tags);
 
             var sortedDict = (from entry in wordCount orderby entry.Value descending select entry).Take(MAX_KEYWORDS_RETURNED).ToDictionary(pair => pair.Key, pair => pair.Value);
 
@@ -74,18 +76,17 @@ namespace TchillrREST.Data
 
         private Dictionary<string, int> GetWordsOccurences(string text, int weight, Dictionary<string, int> wordCount, List<string> tags)
         {
-            this.ContextualTags = new List<string>();
-            
+
             List<string> bannedWords = new List<string>();
             bannedWords.AddRange(new string[] { "le", "la", "les", "l'", "un", "une", "des", "d'", "du", "de", "au", "aux", "ce", "cet", "cette", "ces", "ses", "mon", "ton", "son", "ma", "ta", "sa", 
                                                 "mes", "tes", "notre", "votre", "leur", "vötre", "nötre", "leurs", "quel", "quelle", "quels", "quelles", "et", "je","tu","il","elle","ils","elles","nous",
                                                 "vous","et","se","avec","en","à","&","","donc","qui",":","par","a","sur","lui","pour","plus",";","dans","d'un","-","dans","celui","tous","tout","que","-",
                                                 "!","?",".","nos","beaucoup"
                                                 });
-            
+
             if (!string.IsNullOrEmpty(text))
             {
-                List<string> words = text.Split(' ').ToList<string>().Select(x=> x.ToLower()).ToList<string>();
+                List<string> words = text.Split(' ').ToList<string>().Select(x => x.ToLower()).ToList<string>();
                 foreach (string word in words)
                 {
                     if (bannedWords.Contains(word) || word.Length <= 2)
