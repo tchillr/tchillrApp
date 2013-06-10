@@ -46,8 +46,8 @@ namespace TchillrREST.Data
         [DataMember(Name = "occurences")]
         public List<Occurence> Occurences { get; set; }
 
-        [DataMember(Name = "contextualTags")]
-        public List<string> ContextualTags { get; set; }
+        [DataMember(Name = "activityContextualTags")]
+        public List<string> ActivityContextualTags { get; set; }
 
         [DataMember(Name = "keywords")]
         public Dictionary<string, int> Keywords { get; set; }
@@ -57,7 +57,7 @@ namespace TchillrREST.Data
             const int MAX_KEYWORDS_RETURNED = 8;
 
             Dictionary<string, int> wordCount = new Dictionary<string, int>();
-            this.ContextualTags = new List<string>();
+            this.ActivityContextualTags = new List<string>();
 
             const int NAME_WEIGHT = 5;
             const int SHORT_DESCRIPTION_WEIGHT = 3;
@@ -98,10 +98,10 @@ namespace TchillrREST.Data
                         wordCount.Add(word, weight);
 
                     if (tags.Contains(word.ToUpper()))
-                        if (this.ContextualTags.Contains(word.ToUpper()))
+                        if (this.ActivityContextualTags.Contains(word.ToUpper()))
                             continue;
                         else
-                            this.ContextualTags.Add(word.ToUpper());
+                            this.ActivityContextualTags.Add(word.ToUpper());
                 }
             }
             return wordCount;
