@@ -79,6 +79,7 @@
     <Compile Include="Data\Activity.cs" />
     <Compile Include="Data\ActivityTags.cs" />
     <Compile Include="Data\Categorie.cs" />
+    <Compile Include="Data\Keyword.cs" />
     <Compile Include="Data\MigrationContextFactory.cs" />
     <Compile Include="Data\Occurence.cs" />
     <Compile Include="Data\Tag.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Data\Theme.cs" />
     <Compile Include="Data\User.cs" />
     <Compile Include="Data\UserTag.cs" />
+    <Compile Include="Data\WordCloud.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

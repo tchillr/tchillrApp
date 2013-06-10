@@ -139,18 +139,33 @@ namespace TchillrREST
             context.Configuration.ProxyCreationEnabled = false;
 
             List<Activity> lstActi = context.Activities.ToList<Activity>();
+            List<Tag> lstTags = context.Tags.ToList<Tag>();
 
             List<int> userTags = GetInterests(usernameid);
-            List<string> userContextualTags = context.Tags.Where(tg => userTags.Contains(tg.ID)).Select(x => x.Title).ToList<string>();
+            List<string> userContextualTags = new List<string>();
+            foreach (Tag tag in lstTags.Where(tg => userTags.Contains(tg.ID)))
+            {
+                userContextualTags.Add(tag.Title);
+                tag.WordsCloud = context.WordsCloud.Where(twc => twc.TagID == tag.ID).ToList<WordCloud>();
+                foreach(WordCloud wc in tag.WordsCloud)
+                {
+                    userContextualTags.Add(wc.Title);
+                }
+            }
+            //List<string> userContextualTags = context.Tags.Where(tg => userTags.Contains(tg.ID)).Select(x => x.Title).ToList<string>();
+
             userContextualTags = userContextualTags.ConvertAll(d => d.ToUpper());
 
-            List<string> tags = context.Tags.Select(tg => tg.Title).ToList<string>();
-            tags = tags.ConvertAll(d => d.ToUpper());
+            //List<string> tags = context.Tags.Select(tg => tg.Title).ToList<string>();
+            //tags = tags.ConvertAll(d => d.ToUpper());
 
             foreach (Activity act in lstActi)
             {
-                act.GetKeywords(tags);
-                act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).ToList<Occurence>();
+                act.Keywords = context.Keywords.Where(keywords => keywords.ActivityID == act.ID).ToList<Keyword>();
+                //act.Keywords = act.GetKeywords(tags);
+                act.ActivityContextualTags = act.GetContextualTags(userContextualTags);
+                //act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).Take(1).ToList<Occurence>();
+                //act.Occurences = (from c in context.Occurences select c).Take(1).ToList<Occurence>();
             }
 
             return lstActi.Where(acti => acti.ActivityContextualTags.Intersect(userContextualTags).Count() > 0).OrderByDescending(acti => acti.ActivityContextualTags.Intersect(userContextualTags).Count()).ToList<Data.Activity>();

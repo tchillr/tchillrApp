@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TchillrREST.Data
 {
     [DataContract]
-    public class Tag
+    public class Keyword
     {
         [DataMember(Name = "identifier")]
         [Key]
@@ -19,15 +19,13 @@ namespace TchillrREST.Data
         [DataMember(Name = "title")]
         public string Title { get; set; }
 
-        [DataMember(Name = "weight")]
-        public int Weight { get; set; }
+        [DataMember(Name = "hits")]
+        public int Hits { get; set; }
 
-        [DataMember(Name = "wordsCloud")]
-        public List<WordCloud> WordsCloud;
+        [ForeignKey("Activity")]
+        public int ActivityID { get; set; }
 
-        [ForeignKey("Theme")]
-        public int ThemeID { get; set; }
+        public virtual Activity Activity { get; set; }
 
-        public virtual Theme Theme { get; set; }
     }
 }
