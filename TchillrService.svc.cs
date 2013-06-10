@@ -131,6 +131,8 @@ namespace TchillrREST
         public List<Data.Activity> GetUserActivities(string usernameid)
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            context.Configuration.ProxyCreationEnabled = false;
+
             List<Activity> lstActi = context.Activities.ToList<Activity>();
 
             List<int> userTags = GetInterests(usernameid);
@@ -141,7 +143,10 @@ namespace TchillrREST
             tags = tags.ConvertAll(d => d.ToUpper());
 
             foreach (Activity act in lstActi)
+            {
                 act.GetKeywords(tags);
+                act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).ToList<Occurence>();
+            }
 
             return lstActi.Where(acti => acti.ActivityContextualTags.Intersect(userContextualTags).Count() > 0).OrderByDescending(acti => acti.ActivityContextualTags.Intersect(userContextualTags).Count()).ToList<Data.Activity>();
 
