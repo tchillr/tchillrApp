@@ -145,7 +145,15 @@ namespace TchillrREST
 
             return lstActi.Where(acti => acti.ContextualTags.Intersect(userContextualTags).Count() > 0).OrderByDescending(acti => acti.ContextualTags.Intersect(userContextualTags).Count()).ToList<Data.Activity>();
 
+        }
 
+        public List<Data.Theme> GetThemes()
+        {
+            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+
+            context.Configuration.ProxyCreationEnabled = false;
+
+            return context.Themes.Include("Tags").ToList<Data.Theme>();
         }
 
         public List<Data.Categorie> GetDBCategories()
@@ -192,7 +200,7 @@ namespace TchillrREST
 
             }
 
-           
+
 
             return categories;
         }
@@ -297,16 +305,6 @@ namespace TchillrREST
             List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
 
             return tags;
-        }
-
-        public List<Theme> GetThemes()
-        {
-            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
-
-            //List<Tag> tags = context.Tags.Where(tg => tg.Theme.Title == theme).ToList<Tag>();
-            //return tags;
-            List<Theme> themes = context.Themes.Include("Tags").ToList<Theme>();
-            return themes;
         }
 
         public void InjectTags(string theme)
