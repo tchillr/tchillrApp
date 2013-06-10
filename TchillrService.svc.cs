@@ -164,7 +164,7 @@ namespace TchillrREST
                 act.Keywords = context.Keywords.Where(keywords => keywords.ActivityID == act.ID).ToList<Keyword>();
                 //act.Keywords = act.GetKeywords(tags);
                 act.ActivityContextualTags = act.GetContextualTags(userContextualTags);
-                //act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).Take(1).ToList<Occurence>();
+                act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).ToList<Occurence>();
                 //act.Occurences = (from c in context.Occurences select c).Take(1).ToList<Occurence>();
             }
 
