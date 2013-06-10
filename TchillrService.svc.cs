@@ -117,13 +117,18 @@ namespace TchillrREST
         public List<Data.Activity> GetFromDBAllActivities()
         {
             TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            context.Configuration.ProxyCreationEnabled = false;
+
             List<Activity> lstActi = context.Activities.ToList<Activity>();
 
             List<string> tags = context.Tags.Select(tg => tg.Title).ToList<string>();
             tags = tags.ConvertAll(d => d.ToUpper());
 
             foreach (Activity act in lstActi)
+            {
                 act.GetKeywords(tags);
+                act.Occurences = context.Occurences.Where(os => os.ActivityID == act.ID).ToList<Occurence>();
+            }
 
             return lstActi;
         }
