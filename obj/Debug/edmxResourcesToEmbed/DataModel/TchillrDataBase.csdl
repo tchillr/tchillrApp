@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TchillrDataBaseModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="TchillrDataBaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Activities" EntityType="TchillrDataBaseModel.Activity" />
+    <EntitySet Name="Categories" EntityType="TchillrDataBaseModel.Category" />
+    <EntitySet Name="Keywords" EntityType="TchillrDataBaseModel.Keyword" />
+    <EntitySet Name="Occurences" EntityType="TchillrDataBaseModel.Occurence" />
+    <EntitySet Name="Rubriques" EntityType="TchillrDataBaseModel.Rubrique" />
+    <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Tag" />
+    <EntitySet Name="Themes" EntityType="TchillrDataBaseModel.Theme" />
+    <EntitySet Name="Users" EntityType="TchillrDataBaseModel.User" />
+    <EntitySet Name="WordClouds" EntityType="TchillrDataBaseModel.WordCloud" />
+    <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.FK_Keywords_0">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Keywords" EntitySet="Keywords" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Occurences_0" Association="TchillrDataBaseModel.FK_Occurences_0">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Occurences" EntitySet="Occurences" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rubriques_0" Association="TchillrDataBaseModel.FK_Rubriques_0">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Rubriques" EntitySet="Rubriques" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tags_0" Association="TchillrDataBaseModel.FK_Tags_0">
+      <End Role="Themes" EntitySet="Themes" />
+      <End Role="Tags" EntitySet="Tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.FK_WordClouds_0">
+      <End Role="Tags" EntitySet="Tags" />
+      <End Role="WordClouds" EntitySet="WordClouds" />
+    </AssociationSet>
+    <AssociationSet Name="UserTags" Association="TchillrDataBaseModel.UserTags">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Tags" EntitySet="Tags" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="shortDescription" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="city" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="place" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="adress" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="longitude" Type="Double" />
+    <Property Name="latitude" Type="Double" />
+    <Property Name="zipcode" Type="Int32" />
+    <Property Name="accessType" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="idorganisateurs" Type="Int32" />
+    <Property Name="idlieux" Type="Int32" />
+    <Property Name="updated" Type="DateTime" />
+    <Property Name="price" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="metro" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="velib" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
+    <Property Name="bus" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="created" Type="DateTime" />
+    <Property Name="mediaID" Type="Int32" />
+    <Property Name="organisateur" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
+    <Property Name="hasFee" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Keywords" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Activities" ToRole="Keywords" />
+    <NavigationProperty Name="Occurences" Relationship="TchillrDataBaseModel.FK_Occurences_0" FromRole="Activities" ToRole="Occurences" />
+    <NavigationProperty Name="Rubriques" Relationship="TchillrDataBaseModel.FK_Rubriques_0" FromRole="Activities" ToRole="Rubriques" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="IdCategorie" />
+    </Key>
+    <Property Name="IdCategorie" Type="Int32" Nullable="false" />
+    <Property Name="Nom" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Keyword">
+    <Key>
+      <PropertyRef Name="activityID" />
+      <PropertyRef Name="title" />
+      <PropertyRef Name="hits" />
+    </Key>
+    <Property Name="activityID" Type="Int32" Nullable="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="hits" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Activity" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Keywords" ToRole="Activities" />
+  </EntityType>
+  <EntityType Name="Occurence">
+    <Key>
+      <PropertyRef Name="ActivityID" />
+      <PropertyRef Name="jour" />
+      <PropertyRef Name="hour_start" />
+      <PropertyRef Name="hour_end" />
+    </Key>
+    <Property Name="ActivityID" Type="Int32" Nullable="false" />
+    <Property Name="jour" Type="DateTime" Nullable="false" />
+    <Property Name="hour_start" Type="Time" Nullable="false" />
+    <Property Name="hour_end" Type="Time" Nullable="false" />
+    <NavigationProperty Name="Activity" Relationship="TchillrDataBaseModel.FK_Occurences_0" FromRole="Occurences" ToRole="Activities" />
+  </EntityType>
+  <EntityType Name="Rubrique">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="activityID" Type="Int32" Nullable="false" />
+    <Property Name="identifier" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Activity" Relationship="TchillrDataBaseModel.FK_Rubriques_0" FromRole="Rubriques" ToRole="Activities" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="weight" Type="Int32" Nullable="false" />
+    <Property Name="themeID" Type="Int32" />
+    <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Tags" ToRole="Themes" />
+    <NavigationProperty Name="WordCloud" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
+    <NavigationProperty Name="Users" Relationship="TchillrDataBaseModel.UserTags" FromRole="Tags" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Theme">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Themes" ToRole="Tags" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.UserTags" FromRole="User" ToRole="Tags" />
+  </EntityType>
+  <EntityType Name="WordCloud">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="150" Unicode="true" FixedLength="false" />
+    <Property Name="tagID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="WordClouds" ToRole="Tags" />
+  </EntityType>
+  <Association Name="FK_Keywords_0">
+    <End Role="Activities" Type="TchillrDataBaseModel.Activity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Keywords" Type="TchillrDataBaseModel.Keyword" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Keywords">
+        <PropertyRef Name="activityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Occurences_0">
+    <End Role="Activities" Type="TchillrDataBaseModel.Activity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Occurences" Type="TchillrDataBaseModel.Occurence" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Occurences">
+        <PropertyRef Name="ActivityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rubriques_0">
+    <End Role="Activities" Type="TchillrDataBaseModel.Activity" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Rubriques" Type="TchillrDataBaseModel.Rubrique" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Rubriques">
+        <PropertyRef Name="activityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tags_0">
+    <End Role="Themes" Type="TchillrDataBaseModel.Theme" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Themes">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Tags">
+        <PropertyRef Name="identifier" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_WordClouds_0">
+    <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="WordClouds" Type="TchillrDataBaseModel.WordCloud" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Tags">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="WordClouds">
+        <PropertyRef Name="identifier" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserTags">
+    <End Role="User" Type="TchillrDataBaseModel.User" Multiplicity="*" />
+    <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="0..1" />
+  </Association>
+</Schema>

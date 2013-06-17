@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TchillrDataBaseModelStoreContainer" CdmEntityContainer="TchillrDataBaseEntities">
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Activity">
+        <MappingFragment StoreEntitySet="Activities">
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="shortDescription" ColumnName="shortDescription" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="place" ColumnName="place" />
+          <ScalarProperty Name="adress" ColumnName="adress" />
+          <ScalarProperty Name="longitude" ColumnName="longitude" />
+          <ScalarProperty Name="latitude" ColumnName="latitude" />
+          <ScalarProperty Name="zipcode" ColumnName="zipcode" />
+          <ScalarProperty Name="accessType" ColumnName="accessType" />
+          <ScalarProperty Name="idorganisateurs" ColumnName="idorganisateurs" />
+          <ScalarProperty Name="idlieux" ColumnName="idlieux" />
+          <ScalarProperty Name="updated" ColumnName="updated" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="metro" ColumnName="metro" />
+          <ScalarProperty Name="velib" ColumnName="velib" />
+          <ScalarProperty Name="bus" ColumnName="bus" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="mediaID" ColumnName="mediaID" />
+          <ScalarProperty Name="organisateur" ColumnName="organisateur" />
+          <ScalarProperty Name="hasFee" ColumnName="hasFee" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Category">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="IdCategorie" ColumnName="IdCategorie" />
+          <ScalarProperty Name="Nom" ColumnName="Nom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Keywords">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Keyword">
+        <MappingFragment StoreEntitySet="Keywords">
+          <ScalarProperty Name="activityID" ColumnName="activityID" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="hits" ColumnName="hits" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Occurences">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Occurence">
+        <MappingFragment StoreEntitySet="Occurences">
+          <ScalarProperty Name="ActivityID" ColumnName="ActivityID" />
+          <ScalarProperty Name="jour" ColumnName="jour" />
+          <ScalarProperty Name="hour_start" ColumnName="hour_start" />
+          <ScalarProperty Name="hour_end" ColumnName="hour_end" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rubriques">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Rubrique">
+        <MappingFragment StoreEntitySet="Rubriques">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="activityID" ColumnName="activityID" />
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tags">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Tag">
+        <MappingFragment StoreEntitySet="Tags">
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="weight" ColumnName="weight" />
+          <ScalarProperty Name="themeID" ColumnName="themeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Themes">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Theme">
+        <MappingFragment StoreEntitySet="Themes">
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+          <ScalarProperty Name="title" ColumnName="title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WordClouds">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.WordCloud">
+        <MappingFragment StoreEntitySet="WordClouds">
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="tagID" ColumnName="tagID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UserTags" TypeName="TchillrDataBaseModel.UserTags" StoreEntitySet="UserTags">
+      <EndProperty Name="User">
+        <ScalarProperty Name="identifier" ColumnName="UserID" />
+      </EndProperty>
+      <EndProperty Name="Tags">
+        <ScalarProperty Name="identifier" ColumnName="TagID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

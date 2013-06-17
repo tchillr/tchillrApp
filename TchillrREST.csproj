@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -66,6 +67,7 @@
     <Content Include="Global.asax" />
     <Content Include="staticActivy2.txt" />
     <Content Include="staticActivy3.txt" />
+    <Content Include="Tchillr.svc" />
     <Content Include="TchillrService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -76,6 +78,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\TchillrDataBase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TchillrDataBase.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\Utilities.cs" />
     <Compile Include="Data\Activity.cs" />
     <Compile Include="Data\ActivityTags.cs" />
     <Compile Include="Data\Categorie.cs" />
@@ -98,10 +106,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ITchillr.cs" />
     <Compile Include="ITchillrREST.cs" />
     <Compile Include="ITchillrService.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tchillr.svc.cs">
+      <DependentUpon>Tchillr.svc</DependentUpon>
+    </Compile>
     <Compile Include="TchillrREST.cs" />
     <Compile Include="TchillrService.svc.cs">
       <DependentUpon>TchillrService.svc</DependentUpon>
@@ -117,6 +129,10 @@
     </Content>
     <Content Include="categories.txt" />
     <Content Include="packages.config" />
+    <EntityDeploy Include="DataModel\TchillrDataBase.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TchillrDataBase.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="static\staticActivy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
