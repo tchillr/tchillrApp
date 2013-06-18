@@ -50,10 +50,14 @@ namespace TchillrREST
             return JsonConvert.SerializeObject(activitiesForDays.ToList());
         }
 
-        public string GetThemes()
+        public TchillrREST.DataModel.TchillrResponse GetThemes()
         {
-            
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Themes, Formatting.None);
+            DateTime now = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            tchill.data = TchillrREST.Utilities.TchillrContext.Themes;
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
         }
 
         public string GetDBCategories()
@@ -119,8 +123,11 @@ namespace TchillrREST
             return JsonConvert.SerializeObject(userActivities.OrderByDescending(acti => acti.score).ToList());
         }
 
-        public string GetUserActivitiesForDays(string usernameid, string nbDays)
+        public TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays)
         {
+            DateTime start = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
             int userNameID = int.Parse(usernameid);
             List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
             //Dictionary<int, int> activitiesScrore = new Dictionary<int, int>();
@@ -200,7 +207,12 @@ namespace TchillrREST
 
             //activitiesScrore.OrderBy(item => item.Value);
 
-            return JsonConvert.SerializeObject(userActivities.OrderByDescending(acti => acti.score).ToList());
+            tchill.data = userActivities.OrderByDescending(acti => acti.score);
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
+
+            //return JsonConvert.SerializeObject(.ToList());
         }
 
         #endregion

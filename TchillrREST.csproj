@@ -83,11 +83,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TchillrDataBase.edmx</DependentUpon>
     </Compile>
+    <Compile Include="DataModel\TchillrResponse.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="ITchillrWCFService.cs" />
     <Compile Include="TchillrWCFService.svc.cs">
       <DependentUpon>TchillrWCFService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\ContractResolver.cs" />
     <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="Data\Activity.cs" />
     <Compile Include="Data\ActivityTags.cs" />

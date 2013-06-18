@@ -15,6 +15,8 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -1811,6 +1813,7 @@ namespace TchillrREST.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [JsonIgnore]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_0", "Tags")]
         public Tag Tag
         {

@@ -48,7 +48,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "Themes")]
-        string GetThemes();
+        TchillrREST.DataModel.TchillrResponse GetThemes();
 
         //[OperationContract]
         //[WebInvoke(Method = "GET",
@@ -69,7 +69,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/activities/timespan/{nbDays}")]
-        string GetUserActivitiesForDays(string usernameid, string nbDays);
+        TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays);
 
         #endregion
 
