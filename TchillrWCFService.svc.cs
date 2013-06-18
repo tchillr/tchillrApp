@@ -209,7 +209,7 @@ namespace TchillrREST
 
             tchill.data = userActivities.OrderByDescending(acti => acti.score);
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
             return tchill;
 
             //return JsonConvert.SerializeObject(.ToList());
