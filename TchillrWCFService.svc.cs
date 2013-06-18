@@ -138,10 +138,12 @@ namespace TchillrREST
             tags = tags.ConvertAll(d => d.ToUpper());
             tagWordsCloud = tagWordsCloud.ConvertAll(d => d.ToUpper());
 
-            DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
+            DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
+
+            DateTime till = now.AddDays(double.Parse(nbDays));
             var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
                                     from occ in TchillrREST.Utilities.TchillrContext.Occurences
-                                    where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
+                                    where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
                                     select acti;
 
             foreach (DataModel.Activity activity in activitiesForDays)
