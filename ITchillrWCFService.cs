@@ -13,6 +13,8 @@ namespace TchillrREST
     [ServiceContract]
     public interface ITchillrWCFService
     {
+        #region GET
+
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
@@ -32,14 +34,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        List<int> GetInterests(string usernameid);
-
-        //[OperationContract]
-        //[WebInvoke(Method = "POST",
-        //    ResponseFormat = WebMessageFormat.Json,
-        //    BodyStyle = WebMessageBodyStyle.Wrapped,
-        //          UriTemplate = "users/{usernameid}/interests")]
-        //List<int> PostInterests(string usernameid, Stream content);
+        string GetInterests(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -47,5 +42,46 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "activities/timespan/{nbDays}")]
         string GetActivitiesForDays(string nbDays);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "Themes")]
+        string GetThemes();
+
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //    ResponseFormat = WebMessageFormat.Json,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //          UriTemplate = "DBCategories")]
+        //string GetCategories();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities")]
+        string GetUserActivities(string usernameid);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities/timespan/{nbDays}")]
+        string GetUserActivitiesForDays(string usernameid, string nbDays);
+
+        #endregion
+
+        #region POST
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/interests")]
+        string PostInterests(string usernameid, Stream content);
+
+        #endregion
     }
 }

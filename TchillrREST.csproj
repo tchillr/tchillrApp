@@ -78,16 +78,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModel\TchillrDataBase.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TchillrDataBase.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataModel\TchillrDataBase.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TchillrDataBase.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Extension.cs" />
     <Compile Include="ITchillrWCFService.cs" />
     <Compile Include="TchillrWCFService.svc.cs">
       <DependentUpon>TchillrWCFService.svc</DependentUpon>
@@ -137,10 +133,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TchillrDataBase.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="DataModel\TchillrDataBase.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TchillrDataBase.cs</LastGenOutput>
-    </None>
     <None Include="static\staticActivy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TchillrDataBaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+      <Schema Namespace="TchillrDataBaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="TchillrDataBaseModelStoreContainer">
           <EntitySet Name="Activities" EntityType="TchillrDataBaseModel.Store.Activities" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Categories" EntityType="TchillrDataBaseModel.Store.Categories" store:Type="Tables" Schema="dbo" />
@@ -31,14 +31,6 @@
           <AssociationSet Name="FK_Tags_0" Association="TchillrDataBaseModel.Store.FK_Tags_0">
             <End Role="Themes" EntitySet="Themes" />
             <End Role="Tags" EntitySet="Tags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserTags_0" Association="TchillrDataBaseModel.Store.FK_UserTags_0">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserTags" EntitySet="UserTags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserTags_1" Association="TchillrDataBaseModel.Store.FK_UserTags_1">
-            <End Role="Tags" EntitySet="Tags" />
-            <End Role="UserTags" EntitySet="UserTags" />
           </AssociationSet>
           <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.Store.FK_WordClouds_0">
             <End Role="Tags" EntitySet="Tags" />
@@ -134,8 +126,9 @@
         </EntityType>
         <EntityType Name="UserTags">
           <Key>
-            <PropertyRef Name="UserID" />
+            <PropertyRef Name="identifier" />
           </Key>
+          <Property Name="identifier" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="TagID" Type="int" Nullable="false" />
         </EntityType>
@@ -203,47 +196,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_UserTags_0">
-          <End Role="User" Type="TchillrDataBaseModel.Store.User" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="UserTags" Type="TchillrDataBaseModel.Store.UserTags" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="identifier" />
-            </Principal>
-            <Dependent Role="UserTags">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserTags_1">
-          <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="1" />
-          <End Role="UserTags" Type="TchillrDataBaseModel.Store.UserTags" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tags">
-              <PropertyRef Name="identifier" />
-            </Principal>
-            <Dependent Role="UserTags">
-              <PropertyRef Name="TagID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_WordClouds_0">
           <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WordClouds" Type="TchillrDataBaseModel.Store.WordClouds" Multiplicity="0..1" />
+          <End Role="WordClouds" Type="TchillrDataBaseModel.Store.WordClouds" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tags">
               <PropertyRef Name="identifier" />
             </Principal>
             <Dependent Role="WordClouds">
-              <PropertyRef Name="identifier" />
+              <PropertyRef Name="tagID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TchillrDataBaseModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -256,6 +224,7 @@
           <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Tag" />
           <EntitySet Name="Themes" EntityType="TchillrDataBaseModel.Theme" />
           <EntitySet Name="Users" EntityType="TchillrDataBaseModel.User" />
+          <EntitySet Name="UserTags" EntityType="TchillrDataBaseModel.UserTag" />
           <EntitySet Name="WordClouds" EntityType="TchillrDataBaseModel.WordCloud" />
           <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.FK_Keywords_0">
             <End Role="Activities" EntitySet="Activities" />
@@ -276,10 +245,6 @@
           <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.FK_WordClouds_0">
             <End Role="Tags" EntitySet="Tags" />
             <End Role="WordClouds" EntitySet="WordClouds" />
-          </AssociationSet>
-          <AssociationSet Name="UserTags" Association="TchillrDataBaseModel.UserTags">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Tags" EntitySet="Tags" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Activity">
@@ -361,8 +326,7 @@
           <Property Name="weight" Type="Int32" Nullable="false" />
           <Property Name="themeID" Type="Int32" />
           <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Tags" ToRole="Themes" />
-          <NavigationProperty Name="WordCloud" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
-          <NavigationProperty Name="Users" Relationship="TchillrDataBaseModel.UserTags" FromRole="Tags" ToRole="User" />
+          <NavigationProperty Name="WordClouds" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
         </EntityType>
         <EntityType Name="Theme">
           <Key>
@@ -378,7 +342,14 @@
           </Key>
           <Property Name="identifier" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.UserTags" FromRole="User" ToRole="Tags" />
+        </EntityType>
+        <EntityType Name="UserTag">
+          <Key>
+            <PropertyRef Name="identifier" />
+          </Key>
+          <Property Name="identifier" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="TagID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="WordCloud">
           <Key>
@@ -449,19 +420,15 @@
           <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="WordClouds" Type="TchillrDataBaseModel.WordCloud" Multiplicity="0..1" />
+          <End Role="WordClouds" Type="TchillrDataBaseModel.WordCloud" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tags">
               <PropertyRef Name="identifier" />
             </Principal>
             <Dependent Role="WordClouds">
-              <PropertyRef Name="identifier" />
+              <PropertyRef Name="tagID" />
             </Dependent>
           </ReferentialConstraint>
-        </Association>
-        <Association Name="UserTags">
-          <End Role="User" Type="TchillrDataBaseModel.User" Multiplicity="*" />
-          <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="0..1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -527,19 +494,16 @@
             <ScalarProperty Name="identifier" ColumnName="identifier" />
             <ScalarProperty Name="name" ColumnName="name" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="UserTags"><EntityTypeMapping TypeName="TchillrDataBaseModel.UserTag"><MappingFragment StoreEntitySet="UserTags">
+            <ScalarProperty Name="identifier" ColumnName="identifier" />
+            <ScalarProperty Name="UserID" ColumnName="UserID" />
+            <ScalarProperty Name="TagID" ColumnName="TagID" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="WordClouds"><EntityTypeMapping TypeName="TchillrDataBaseModel.WordCloud"><MappingFragment StoreEntitySet="WordClouds">
             <ScalarProperty Name="identifier" ColumnName="identifier" />
             <ScalarProperty Name="title" ColumnName="title" />
             <ScalarProperty Name="tagID" ColumnName="tagID" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <AssociationSetMapping Name="UserTags" TypeName="TchillrDataBaseModel.UserTags" StoreEntitySet="UserTags">
-            <EndProperty Name="User">
-              <ScalarProperty Name="identifier" ColumnName="UserID" />
-            </EndProperty>
-            <EndProperty Name="Tags">
-              <ScalarProperty Name="identifier" ColumnName="TagID" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -556,45 +520,40 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="TchillrDataBase">
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Activity" Width="1.5" PointX="2.75" PointY="5.75" Height="5.8263151041666648" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Category" Width="1.5" PointX="7.75" PointY="0.75" Height="1.4033821614583335" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Keyword" Width="1.5" PointX="5" PointY="5.125" Height="1.7879850260416674" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Occurence" Width="1.5" PointX="5" PointY="7.75" Height="1.9802864583333344" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Rubrique" Width="1.5" PointX="5" PointY="10.5" Height="1.7879850260416674" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Tag" Width="1.5" PointX="3" PointY="1" Height="2.3648893229166665" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.Theme" Width="1.5" PointX="0.75" PointY="1.375" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.User" Width="1.5" PointX="0.75" PointY="5.375" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="TchillrDataBaseModel.WordCloud" Width="1.5" PointX="5.25" PointY="1.25" Height="1.7879850260416674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Activity" Width="1.5" PointX="0.75" PointY="1.75" Height="5.8263151041666656" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Category" Width="1.5" PointX="5.75" PointY="4.75" Height="1.4033821614583335" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Keyword" Width="1.5" PointX="3" PointY="1.125" Height="1.7879850260416665" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Occurence" Width="1.5" PointX="3" PointY="3.75" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Rubrique" Width="1.5" PointX="3" PointY="6.5" Height="1.7879850260416674" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Tag" Width="1.5" PointX="8" PointY="0.875" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Theme" Width="1.5" PointX="5.75" PointY="1.25" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.User" Width="1.5" PointX="7.75" PointY="4.75" Height="1.4033821614583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.UserTag" Width="1.5" PointX="5.75" PointY="7.75" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="TchillrDataBaseModel.WordCloud" Width="1.5" PointX="10.25" PointY="1.125" Height="1.7879850260416674" IsExpanded="true" />
         <AssociationConnector Association="TchillrDataBaseModel.FK_Keywords_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.25" PointY="6.3314925130208337" />
-          <ConnectorPoint PointX="5" PointY="6.3314925130208337" />
+          <ConnectorPoint PointX="2.25" PointY="2.3314925130208333" />
+          <ConnectorPoint PointX="3" PointY="2.3314925130208333" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Occurences_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.25" PointY="8.7401432291666676" />
-          <ConnectorPoint PointX="5" PointY="8.7401432291666676" />
+          <ConnectorPoint PointX="2.25" PointY="4.7401432291666667" />
+          <ConnectorPoint PointX="3" PointY="4.7401432291666667" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Rubriques_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.25" PointY="11.038157552083332" />
-          <ConnectorPoint PointX="5" PointY="11.038157552083332" />
+          <ConnectorPoint PointX="2.25" PointY="7.0381575520833328" />
+          <ConnectorPoint PointX="3" PointY="7.0381575520833328" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Tags_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="2.172841796875" />
-          <ConnectorPoint PointX="3" PointY="2.172841796875" />
+          <ConnectorPoint PointX="7.25" PointY="2.047841796875" />
+          <ConnectorPoint PointX="8" PointY="2.047841796875" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_WordClouds_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="2.1439925130208337" />
-          <ConnectorPoint PointX="5.25" PointY="2.1439925130208337" />
-        </AssociationConnector>
-        <AssociationConnector Association="TchillrDataBaseModel.UserTags" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="5.53125" />
-          <ConnectorPoint PointX="4.40625" PointY="5.53125" />
-          <ConnectorPoint PointX="4.40625" PointY="3.3648893229166665" />
+          <ConnectorPoint PointX="9.5" PointY="2.0189925130208337" />
+          <ConnectorPoint PointX="10.25" PointY="2.0189925130208337" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

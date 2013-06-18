@@ -8,6 +8,10 @@ namespace TchillrREST
 {
     public class Utilities
     {
+        #region CONST
+        public const short RUBRIQUE_WEIGHT = 6;
+        #endregion
+
         private static TchillrREST.DataModel.Entities context = null;
 
         public static TchillrREST.DataModel.Entities TchillrContext
@@ -105,5 +109,9 @@ namespace TchillrREST
             return keywords;
         }
 
+
+        public static TchillrREST.DataModel.User GetUserByID(int userID){
+            return TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(user => user.identifier == userID);
+        }
     }
 }

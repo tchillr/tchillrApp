@@ -56,19 +56,19 @@ namespace TchillrREST
                   UriTemplate = "Themes")]
         List<Theme> GetThemes();
 
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "StaticActivities")]
-        List<Data.Activity> GetStaticAllActivities();
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //    ResponseFormat = WebMessageFormat.Json,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //          UriTemplate = "StaticActivities")]
+        //List<Data.Activity> GetStaticAllActivities();
 
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "StaticCategories")]
-        List<Data.Categorie> GetStaticCategories();
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //    ResponseFormat = WebMessageFormat.Json,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //          UriTemplate = "StaticCategories")]
+        //List<Data.Categorie> GetStaticCategories();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -77,18 +77,18 @@ namespace TchillrREST
                   UriTemplate = "DBCategories")]
         List<Data.Categorie> GetDBCategories();
 
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "Categories")]
-        List<Data.Categorie> GetCategories();
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //    ResponseFormat = WebMessageFormat.Json,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //          UriTemplate = "Categories")]
+        //List<Data.Categorie> GetCategories();
 
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-                  ResponseFormat = WebMessageFormat.Json,
-                  UriTemplate = "Activities")]
-        List<Activity> GetAllActivities();
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //          ResponseFormat = WebMessageFormat.Json,
+        //          UriTemplate = "Activities")]
+        //List<Activity> GetAllActivities();
 
     }
 }

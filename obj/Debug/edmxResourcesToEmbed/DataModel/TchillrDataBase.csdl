@@ -9,6 +9,7 @@
     <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Tag" />
     <EntitySet Name="Themes" EntityType="TchillrDataBaseModel.Theme" />
     <EntitySet Name="Users" EntityType="TchillrDataBaseModel.User" />
+    <EntitySet Name="UserTags" EntityType="TchillrDataBaseModel.UserTag" />
     <EntitySet Name="WordClouds" EntityType="TchillrDataBaseModel.WordCloud" />
     <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.FK_Keywords_0">
       <End Role="Activities" EntitySet="Activities" />
@@ -29,10 +30,6 @@
     <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.FK_WordClouds_0">
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
-    </AssociationSet>
-    <AssociationSet Name="UserTags" Association="TchillrDataBaseModel.UserTags">
-      <End Role="User" EntitySet="Users" />
-      <End Role="Tags" EntitySet="Tags" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Activity">
@@ -114,8 +111,7 @@
     <Property Name="weight" Type="Int32" Nullable="false" />
     <Property Name="themeID" Type="Int32" />
     <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Tags" ToRole="Themes" />
-    <NavigationProperty Name="WordCloud" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
-    <NavigationProperty Name="Users" Relationship="TchillrDataBaseModel.UserTags" FromRole="Tags" ToRole="User" />
+    <NavigationProperty Name="WordClouds" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
   </EntityType>
   <EntityType Name="Theme">
     <Key>
@@ -131,7 +127,14 @@
     </Key>
     <Property Name="identifier" Type="Int32" Nullable="false" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.UserTags" FromRole="User" ToRole="Tags" />
+  </EntityType>
+  <EntityType Name="UserTag">
+    <Key>
+      <PropertyRef Name="identifier" />
+    </Key>
+    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="TagID" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="WordCloud">
     <Key>
@@ -202,18 +205,14 @@
     <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="WordClouds" Type="TchillrDataBaseModel.WordCloud" Multiplicity="0..1" />
+    <End Role="WordClouds" Type="TchillrDataBaseModel.WordCloud" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Tags">
         <PropertyRef Name="identifier" />
       </Principal>
       <Dependent Role="WordClouds">
-        <PropertyRef Name="identifier" />
+        <PropertyRef Name="tagID" />
       </Dependent>
     </ReferentialConstraint>
-  </Association>
-  <Association Name="UserTags">
-    <End Role="User" Type="TchillrDataBaseModel.User" Multiplicity="*" />
-    <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="0..1" />
   </Association>
 </Schema>
