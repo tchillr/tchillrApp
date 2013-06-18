@@ -52,7 +52,8 @@ namespace TchillrREST
 
         public string GetThemes()
         {
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Themes);
+            
+            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Themes, Formatting.None);
         }
 
         public string GetDBCategories()
@@ -68,7 +69,7 @@ namespace TchillrREST
             List<string> tags = new List<string>();
             List<string> tagWordsCloud = new List<string>();
 
-            List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID).Select(userTag => userTag.TagID).ToList();
+            List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
             foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
                 if (userTags.Contains(tag.identifier))
                     tags.Add(tag.title);
@@ -127,7 +128,7 @@ namespace TchillrREST
             List<string> tags = new List<string>();
             List<string> tagWordsCloud = new List<string>();
 
-            List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID).Select(userTag => userTag.TagID).ToList();
+            List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
             foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
                 if (userTags.Contains(tag.identifier))
                     tags.Add(tag.title);
