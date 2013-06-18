@@ -38,8 +38,10 @@ namespace TchillrREST
             return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID));
         }
 
-        public string GetActivitiesForDays(string nbDays)
+        public TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays)
         {
+            DateTime start = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
             var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
@@ -47,7 +49,10 @@ namespace TchillrREST
                                     where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
                                     select acti;
 
-            return JsonConvert.SerializeObject(activitiesForDays.ToList());
+            tchill.data = activitiesForDays;
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+            return tchill;
         }
 
         public TchillrREST.DataModel.TchillrResponse GetThemes()

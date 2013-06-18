@@ -41,7 +41,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "activities/timespan/{nbDays}")]
-        string GetActivitiesForDays(string nbDays);
+        TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
