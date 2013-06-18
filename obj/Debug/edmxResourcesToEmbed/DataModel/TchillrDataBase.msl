@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TchillrDataBaseModelStoreContainer" CdmEntityContainer="TchillrDataBaseEntities">
+  <EntityContainerMapping StorageEntityContainer="TchillrDataBaseModelStoreContainer" CdmEntityContainer="Entities">
     <EntitySetMapping Name="Activities">
       <EntityTypeMapping TypeName="TchillrDataBaseModel.Activity">
         <MappingFragment StoreEntitySet="Activities">

@@ -68,6 +68,7 @@
     <Content Include="staticActivy2.txt" />
     <Content Include="staticActivy3.txt" />
     <Content Include="TchillrService.svc" />
+    <Content Include="TchillrWCFService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -77,6 +78,21 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\TchillrDataBase.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TchillrDataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModel\TchillrDataBase.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TchillrDataBase.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="ITchillrWCFService.cs" />
+    <Compile Include="TchillrWCFService.svc.cs">
+      <DependentUpon>TchillrWCFService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Utilities.cs" />
     <Compile Include="Data\Activity.cs" />
     <Compile Include="Data\ActivityTags.cs" />
     <Compile Include="Data\Categorie.cs" />
@@ -110,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="staticActivy.txt">
@@ -118,9 +133,20 @@
     </Content>
     <Content Include="categories.txt" />
     <Content Include="packages.config" />
+    <EntityDeploy Include="DataModel\TchillrDataBase.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TchillrDataBase.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataModel\TchillrDataBase.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TchillrDataBase.cs</LastGenOutput>
+    </None>
     <None Include="static\staticActivy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
