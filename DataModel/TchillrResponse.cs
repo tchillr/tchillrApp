@@ -18,7 +18,8 @@ namespace TchillrREST.DataModel
         {
              //_data = new  List<object>();
              //_data.Add(JsonConvert.SerializeObject(jsonObject, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() }));
-            _data = jsonObject;
+            //_data = jsonObject;
+            _data = JsonConvert.SerializeObject(jsonObject, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
         }
          
     }

@@ -154,7 +154,7 @@ namespace TchillrREST
             return tchill;
         }
 
-        public Message GetUserActivitiesForDays(string usernameid, string nbDays)
+        public TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays)
         {
             try
             {
@@ -239,15 +239,16 @@ namespace TchillrREST
 
                 //activitiesScrore.OrderBy(item => item.Value);
 
-                tchill.data = userActivities.OrderByDescending(acti => acti.score);
+                tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList<DataModel.Activity>());
                 tchill.success = true;
                 tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
-                //return tchill;
-
-                string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+                return tchill;
+                
+                /*string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
                 return WebOperationContext.Current.CreateTextResponse(myResponseBody,
                             "application/json; charset=utf-8",
                             Encoding.UTF8);
+                 */
             }
             catch (Exception exp) { }
             return null;
