@@ -11,13 +11,16 @@ namespace TchillrREST.DataModel
         public bool success { get; set; }
         public double responseTime { get; set; }
 
-        private List<object> _data;
-        public List<object> data { get { return _data; } set { _data = value;} }
+        private object _data;
+        public object data { get { return _data; } set { _data = value;} }
 
-        public void SetData(object jsonObject)
+        public virtual void SetData(object jsonObject)
         {
-             _data = new  List<object>();
-            _data.Add(JsonConvert.SerializeObject(jsonObject, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() })); 
+             //_data = new  List<object>();
+             //_data.Add(JsonConvert.SerializeObject(jsonObject, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() }));
+            _data = jsonObject;
         }
+         
     }
+
 }

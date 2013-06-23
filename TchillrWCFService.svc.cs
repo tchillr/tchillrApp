@@ -8,6 +8,8 @@ using System.ServiceModel.Activation;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.IO;
+using System.ServiceModel.Web;
+using System.ServiceModel.Channels;
 
 namespace TchillrREST
 {
@@ -152,14 +154,13 @@ namespace TchillrREST
             return tchill;
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays)
+        public Message GetUserActivitiesForDays(string usernameid, string nbDays)
         {
             DateTime start = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             int userNameID = int.Parse(usernameid);
             List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
-            //Dictionary<int, int> activitiesScrore = new Dictionary<int, int>();
 
             List<string> tags = new List<string>();
             List<string> tagWordsCloud = new List<string>();
@@ -236,10 +237,15 @@ namespace TchillrREST
 
             //activitiesScrore.OrderBy(item => item.Value);
 
-            tchill.SetData(userActivities.OrderByDescending(acti => acti.score));
+            tchill.data = userActivities.OrderByDescending(acti => acti.score);
             tchill.success = true;
             tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
-            return tchill;
+            //return tchill;
+
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
 
             //return JsonConvert.SerializeObject(.ToList());
         }

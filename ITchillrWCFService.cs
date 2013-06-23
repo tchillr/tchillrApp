@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.Text;
 using System.ServiceModel.Web;
 using System.IO;
+using System.ServiceModel.Channels;
 
 namespace TchillrREST
 {
@@ -69,7 +70,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/activities/timespan/{nbDays}")]
-        TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays);
+        Message GetUserActivitiesForDays(string usernameid, string nbDays);
 
         #endregion
 
