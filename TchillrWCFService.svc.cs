@@ -18,24 +18,37 @@ namespace TchillrREST
     {
         #region GET
 
-        public string GetFromDBAllActivities()
+        public TchillrREST.DataModel.TchillrResponse GetFromDBAllActivities()
         {
-            TchillrREST.Utilities.TchillrContext.ContextOptions.ProxyCreationEnabled = false;
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Activities);
+            DateTime now = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities);
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
         }
 
-        public string GetTags(string theme)
+        public TchillrREST.DataModel.TchillrResponse GetTags(string theme)
         {
-            TchillrREST.Utilities.TchillrContext.ContextOptions.ProxyCreationEnabled = false;
-
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme.title == theme));
+            DateTime now = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme.title == theme));
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
         }
 
-        public string GetInterests(string usernameid)
+        public TchillrREST.DataModel.TchillrResponse GetInterests(string usernameid)
         {
+            DateTime now = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
             int userNameID = int.Parse(usernameid);
 
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID));
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID));
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
         }
 
         public TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays)
@@ -49,7 +62,7 @@ namespace TchillrREST
                                     where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
                                     select acti;
 
-            tchill.data = activitiesForDays;
+            tchill.SetData(activitiesForDays);
             tchill.success = true;
             tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
             return tchill;
@@ -59,19 +72,27 @@ namespace TchillrREST
         {
             DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.data = TchillrREST.Utilities.TchillrContext.Themes;
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Themes);
             tchill.success = true;
             tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
             return tchill;
         }
 
-        public string GetDBCategories()
+        public TchillrREST.DataModel.TchillrResponse GetDBCategories()
         {
-            return JsonConvert.SerializeObject(TchillrREST.Utilities.TchillrContext.Categories);
+            DateTime now = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Categories);
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill;
         }
 
-        public string GetUserActivities(string usernameid)
+        public TchillrREST.DataModel.TchillrResponse GetUserActivities(string usernameid)
         {
+            DateTime start = DateTime.Now;
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
             int userNameID = int.Parse(usernameid);
             List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
 
@@ -125,7 +146,10 @@ namespace TchillrREST
                 }
             }
 
-            return JsonConvert.SerializeObject(userActivities.OrderByDescending(acti => acti.score).ToList());
+            tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList());
+            tchill.success = true;
+            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+            return tchill;
         }
 
         public TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays)
@@ -212,7 +236,7 @@ namespace TchillrREST
 
             //activitiesScrore.OrderBy(item => item.Value);
 
-            tchill.data = userActivities.OrderByDescending(acti => acti.score);
+            tchill.SetData(userActivities.OrderByDescending(acti => acti.score));
             tchill.success = true;
             tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
             return tchill;
@@ -224,7 +248,7 @@ namespace TchillrREST
 
         #region POST
 
-        public string PostInterests(string usernameid, Stream content)
+        public TchillrREST.DataModel.TchillrResponse PostInterests(string usernameid, Stream content)
         {
 
             int userNameID = int.Parse(usernameid);

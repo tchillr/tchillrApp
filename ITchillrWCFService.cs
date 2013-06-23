@@ -20,21 +20,21 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "DBActivities")]
-        string GetFromDBAllActivities();
+        TchillrREST.DataModel.TchillrResponse GetFromDBAllActivities();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "{theme}/Tags")]
-        string GetTags(string theme);
+        TchillrREST.DataModel.TchillrResponse GetTags(string theme);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        string GetInterests(string usernameid);
+        TchillrREST.DataModel.TchillrResponse GetInterests(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -62,7 +62,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/activities")]
-        string GetUserActivities(string usernameid);
+        TchillrREST.DataModel.TchillrResponse GetUserActivities(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -80,7 +80,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        string PostInterests(string usernameid, Stream content);
+        TchillrREST.DataModel.TchillrResponse PostInterests(string usernameid, Stream content);
 
         #endregion
     }
