@@ -156,99 +156,101 @@ namespace TchillrREST
 
         public Message GetUserActivitiesForDays(string usernameid, string nbDays)
         {
-            DateTime start = DateTime.Now;
-            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-
-            int userNameID = int.Parse(usernameid);
-            List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
-
-            List<string> tags = new List<string>();
-            List<string> tagWordsCloud = new List<string>();
-
-            List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
-            foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
-                if (userTags.Contains(tag.identifier))
-                    tags.Add(tag.title);
-
-            tagWordsCloud = TchillrREST.Utilities.TchillrContext.WordClouds.Where(wordCloud => userTags.Contains(wordCloud.tagID)).Select(wordCloud => wordCloud.title).ToList();
-
-            tags = tags.ConvertAll(d => d.ToUpper());
-            tagWordsCloud = tagWordsCloud.ConvertAll(d => d.ToUpper());
-
-            DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
-
-            DateTime till = now.AddDays(double.Parse(nbDays));
-            var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
-                                    from occ in TchillrREST.Utilities.TchillrContext.Occurences
-                                    where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
-                                    select acti;
-
-            foreach (DataModel.Activity activity in activitiesForDays)
+            try
             {
-                //activitiesScrore[activity.identifier] = 0;
+                DateTime start = DateTime.Now;
+                TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-                List<string> keywordsString = activity.Keywords.Select(keyword => keyword.title).ToList();
+                int userNameID = int.Parse(usernameid);
+                List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
 
-                var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
-                                   where keywordsString.Contains(dbTags.title)
-                                   select dbTags;
+                List<string> tags = new List<string>();
+                List<string> tagWordsCloud = new List<string>();
 
-                activity.tags = activityTags.ToList();
+                List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
+                foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
+                    if (userTags.Contains(tag.identifier))
+                        tags.Add(tag.title);
 
-                activity.score = 0;
-                foreach (DataModel.Keyword keyword in activity.Keywords)
+                tagWordsCloud = TchillrREST.Utilities.TchillrContext.WordClouds.Where(wordCloud => userTags.Contains(wordCloud.tagID)).Select(wordCloud => wordCloud.title).ToList();
+
+                tags = tags.ConvertAll(d => d.ToUpper());
+                tagWordsCloud = tagWordsCloud.ConvertAll(d => d.ToUpper());
+
+                DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
+
+                DateTime till = now.AddDays(double.Parse(nbDays));
+                var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
+                                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
+                                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
+                                        select acti;
+
+                foreach (DataModel.Activity activity in activitiesForDays)
                 {
-                    string upperTitle = keyword.title.ToUpper();
-                    if (tags.Contains(upperTitle))
-                        //activitiesScrore[activity.identifier] += keyword.hits;
-                        activity.score += keyword.hits;
-                    if (tagWordsCloud.Contains(upperTitle))
-                        //activitiesScrore[activity.identifier] += 1;
-                        activity.score += 1;
+                    //activitiesScrore[activity.identifier] = 0;
+
+                    List<string> keywordsString = activity.Keywords.Select(keyword => keyword.title).ToList();
+
+                    var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
+                                       where keywordsString.Contains(dbTags.title)
+                                       select dbTags;
+
+                    activity.tags = activityTags.ToList();
+
+                    activity.score = 0;
+                    foreach (DataModel.Keyword keyword in activity.Keywords)
+                    {
+                        string upperTitle = keyword.title.ToUpper();
+                        if (tags.Contains(upperTitle))
+                            //activitiesScrore[activity.identifier] += keyword.hits;
+                            activity.score += keyword.hits;
+                        if (tagWordsCloud.Contains(upperTitle))
+                            //activitiesScrore[activity.identifier] += 1;
+                            activity.score += 1;
+                    }
+
+                    foreach (DataModel.Rubrique rubrique in activity.Rubriques)
+                    {
+                        string upperName = rubrique.name.ToUpper();
+                        if (tags.Contains(upperName))
+                            //activitiesScrore[activity.identifier] += Utilities.RUBRIQUE_WEIGHT;
+                            activity.score += Utilities.RUBRIQUE_WEIGHT;
+                        if (tagWordsCloud.Contains(upperName))
+                            //activitiesScrore[activity.identifier] += 1;
+                            activity.score += 1;
+                    }
+
+                    if (activity.score > 0)
+                    {
+                        if (!userActivities.Contains(activity))
+                            userActivities.Add(activity);
+                    }
                 }
 
-                foreach (DataModel.Rubrique rubrique in activity.Rubriques)
-                {
-                    string upperName = rubrique.name.ToUpper();
-                    if (tags.Contains(upperName))
-                        //activitiesScrore[activity.identifier] += Utilities.RUBRIQUE_WEIGHT;
-                        activity.score += Utilities.RUBRIQUE_WEIGHT;
-                    if (tagWordsCloud.Contains(upperName))
-                        //activitiesScrore[activity.identifier] += 1;
-                        activity.score += 1;
-                }
+                //List<int> activitiesID = activitiesScrore.Where(item => item.Value > 0).Select(item => item.Key).ToList();
 
-                if (activity.score > 0)
-                {
-                    if (!userActivities.Contains(activity))
-                        userActivities.Add(activity);
-                }
+                //var activitiesForUser = from acti in TchillrREST.Utilities.TchillrContext.Activities
+                //                        where activitiesID.Contains(acti.identifier)
+                //                        select acti;
+
+                //var activitiesForUser = from acti in userActivities
+                //                        orderby descending acti.score
+                //                        select acti;
+
+                //activitiesScrore.OrderBy(item => item.Value);
+
+                tchill.data = userActivities.OrderByDescending(acti => acti.score);
+                tchill.success = true;
+                tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+                //return tchill;
+
+                string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+                return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                            "application/json; charset=utf-8",
+                            Encoding.UTF8);
             }
-
-            //List<int> activitiesID = activitiesScrore.Where(item => item.Value > 0).Select(item => item.Key).ToList();
-
-            //var activitiesForUser = from acti in TchillrREST.Utilities.TchillrContext.Activities
-            //                        where activitiesID.Contains(acti.identifier)
-            //                        select acti;
-
-            //var activitiesForUser = from acti in userActivities
-            //                        orderby descending acti.score
-            //                        select acti;
-
-            //activitiesScrore.OrderBy(item => item.Value);
-
-            tchill.data = userActivities.OrderByDescending(acti => acti.score);
-            tchill.success = true;
-            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
-            //return tchill;
-
-            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                        "application/json; charset=utf-8",
-                        Encoding.UTF8);
-
-
-
+            catch (Exception exp) { }
+            return null;
             //return JsonConvert.SerializeObject(.ToList());
         }
 
