@@ -70,7 +70,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/activities/timespan/{nbDays}")]
-        TchillrREST.DataModel.TchillrResponse GetUserActivitiesForDays(string usernameid, string nbDays);
+        Message GetUserActivitiesForDays(string usernameid, string nbDays);
 
         #endregion
 

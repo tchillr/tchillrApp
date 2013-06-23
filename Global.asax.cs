@@ -6,6 +6,8 @@ using System.Web.Security;
 using System.Web.SessionState;
 using System.Web.Routing;
 using System.ServiceModel.Activation;
+using Newtonsoft.Json;
+using TchillrREST.Contract;
 
 namespace TchillrREST
 {
@@ -14,6 +16,7 @@ namespace TchillrREST
 
         protected void Application_Start(object sender, EventArgs e)
         {
+
         }
 
         protected void Session_Start(object sender, EventArgs e)
