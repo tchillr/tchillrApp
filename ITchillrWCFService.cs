@@ -21,7 +21,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "DBActivities")]
-        TchillrREST.DataModel.TchillrResponse GetFromDBAllActivities();
+        Message GetFromDBAllActivities();
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -35,7 +35,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        TchillrREST.DataModel.TchillrResponse GetInterests(string usernameid);
+        Message GetInterests(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -81,7 +81,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/interests")]
-        TchillrREST.DataModel.TchillrResponse PostInterests(string usernameid, Stream content);
+        Message PostInterests(string usernameid, Stream content);
 
         #endregion
     }

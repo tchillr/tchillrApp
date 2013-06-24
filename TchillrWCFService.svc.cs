@@ -20,14 +20,14 @@ namespace TchillrREST
     {
         #region GET
 
-        public TchillrREST.DataModel.TchillrResponse GetFromDBAllActivities()
+        public Message GetFromDBAllActivities()
         {
-            DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities);
+            //tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities);
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities.Take(100).ToList<DataModel.Activity>());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            return tchill;
+            
+            return tchill.GetResponseMessage();
         }
 
         public TchillrREST.DataModel.TchillrResponse GetTags(string theme)
@@ -40,17 +40,27 @@ namespace TchillrREST
             return tchill;
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetInterests(string usernameid)
+        public Message GetInterests(string usernameid)
         {
             DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             int userNameID = int.Parse(usernameid);
-
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID));
+            List<DataModel.Tag> results = new List<DataModel.Tag>();
+            foreach(DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID)){
+                DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
+                if (tag != null)
+                    results.Add(tag);
+            }
+            tchill.SetData(results);
             tchill.success = true;
             tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            return tchill;
+            //return tchill;
+
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
         }
 
         public TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays)
@@ -259,7 +269,7 @@ namespace TchillrREST
 
         #region POST
 
-        public TchillrREST.DataModel.TchillrResponse PostInterests(string usernameid, Stream content)
+        public Message PostInterests(string usernameid, Stream content)
         {
 
             int userNameID = int.Parse(usernameid);
