@@ -69,7 +69,9 @@
     <Content Include="staticActivy3.txt" />
     <Content Include="TchillrService.svc" />
     <Content Include="TchillrWCFService.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
