@@ -30,14 +30,14 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetTags(string theme)
+        public Message GetTags(string theme)
         {
-            DateTime now = DateTime.Now;
+            //DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme.title == theme));
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme.title == theme).ToList<DataModel.Tag>());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            return tchill;
+            //tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill.GetResponseMessage();
         }
 
         public Message GetInterests(string usernameid)
@@ -63,9 +63,9 @@ namespace TchillrREST
                         Encoding.UTF8);
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays)
+        public Message GetActivitiesForDays(string nbDays)
         {
-            DateTime start = DateTime.Now;
+            //DateTime start = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
@@ -74,35 +74,35 @@ namespace TchillrREST
                                     where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
                                     select acti;
 
-            tchill.SetData(activitiesForDays);
+            tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
-            return tchill;
+            //tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+            return tchill.GetResponseMessage();
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetThemes()
+        public Message GetThemes()
         {
-            DateTime now = DateTime.Now;
+            //DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.Themes);
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Themes.ToList<DataModel.Theme>());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            return tchill;
+            //tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill.GetResponseMessage();
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetDBCategories()
+        public Message GetDBCategories()
         {
-            DateTime now = DateTime.Now;
+            //DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.Categories);
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Categories.ToList<DataModel.Category>());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            return tchill;
+            //tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
+            return tchill.GetResponseMessage();
         }
 
-        public TchillrREST.DataModel.TchillrResponse GetUserActivities(string usernameid)
+        public Message GetUserActivities(string usernameid)
         {
-            DateTime start = DateTime.Now;
+            //DateTime start = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             int userNameID = int.Parse(usernameid);
@@ -160,8 +160,8 @@ namespace TchillrREST
 
             tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList());
             tchill.success = true;
-            tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
-            return tchill;
+            //tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+            return tchill.GetResponseMessage();
         }
 
         public Message GetUserActivitiesForDays(string usernameid, string nbDays)

@@ -28,7 +28,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "{theme}/Tags")]
-        TchillrREST.DataModel.TchillrResponse GetTags(string theme);
+        Message GetTags(string theme);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
@@ -42,14 +42,14 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "activities/timespan/{nbDays}")]
-        TchillrREST.DataModel.TchillrResponse GetActivitiesForDays(string nbDays);
+        Message GetActivitiesForDays(string nbDays);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "Themes")]
-        TchillrREST.DataModel.TchillrResponse GetThemes();
+        Message GetThemes();
 
         //[OperationContract]
         //[WebInvoke(Method = "GET",
@@ -63,7 +63,7 @@ namespace TchillrREST
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "users/{usernameid}/activities")]
-        TchillrREST.DataModel.TchillrResponse GetUserActivities(string usernameid);
+        Message GetUserActivities(string usernameid);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
