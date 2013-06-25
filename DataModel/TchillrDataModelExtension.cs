@@ -9,7 +9,7 @@ namespace TchillrREST.DataModel
     public partial class Activity
     {
         [DataMemberAttribute()]
-        public List<DataModel.Tag> tags { get; set; }
+        public Dictionary<int,string> tags { get; set; }
 
         [DataMemberAttribute()]
         public int score { get; set; }

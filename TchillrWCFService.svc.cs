@@ -129,9 +129,9 @@ namespace TchillrREST
 
                 var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
                                    where keywordsString.Contains(dbTags.title) || dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null
-                                   select dbTags;
+                                   select new { dbTags.identifier, dbTags.title };
 
-                activity.tags = activityTags.ToList();
+                activity.tags = activityTags.ToDictionary(grp => grp.identifier, grp => grp.title);
 
                 activity.score = 0;
                 foreach (DataModel.Keyword keyword in activity.Keywords)
@@ -223,9 +223,9 @@ namespace TchillrREST
 
                     var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
                                        where keywordsString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null
-                                       select dbTags;
+                                       select new { dbTags.identifier, dbTags.title };
 
-                    activity.tags = activityTags.ToList();
+                    activity.tags = activityTags.ToDictionary(grp => grp.identifier, grp => grp.title);
 
                     activity.score = 0;
                     foreach (DataModel.Keyword keyword in keywords)
