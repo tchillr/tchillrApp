@@ -80,6 +80,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModel\Dictionary.cs" />
     <Compile Include="DataModel\TchillrDataBase.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
