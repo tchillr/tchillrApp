@@ -4,11 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TchillrDataBaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="TchillrDataBaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="TchillrDataBaseModelStoreContainer">
           <EntitySet Name="Activities" EntityType="TchillrDataBaseModel.Store.Activities" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Categories" EntityType="TchillrDataBaseModel.Store.Categories" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Keywords" EntityType="TchillrDataBaseModel.Store.Keywords" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Media" EntityType="TchillrDataBaseModel.Store.Media" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Occurences" EntityType="TchillrDataBaseModel.Store.Occurences" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Rubriques" EntityType="TchillrDataBaseModel.Store.Rubriques" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Store.Tags" store:Type="Tables" Schema="dbo" />
@@ -19,6 +20,10 @@
           <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.Store.FK_Keywords_0">
             <End Role="Activities" EntitySet="Activities" />
             <End Role="Keywords" EntitySet="Keywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Media_0" Association="TchillrDataBaseModel.Store.FK_Media_0">
+            <End Role="Activities" EntitySet="Activities" />
+            <End Role="Media" EntitySet="Media" />
           </AssociationSet>
           <AssociationSet Name="FK_Occurences_0" Association="TchillrDataBaseModel.Store.FK_Occurences_0">
             <End Role="Activities" EntitySet="Activities" />
@@ -42,27 +47,27 @@
             <PropertyRef Name="identifier" />
           </Key>
           <Property Name="identifier" Type="int" Nullable="false" />
-          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="150" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="description" Type="nvarchar(max)" />
           <Property Name="shortDescription" Type="nvarchar(max)" />
-          <Property Name="city" Type="nvarchar" MaxLength="150" />
-          <Property Name="place" Type="nvarchar" MaxLength="150" />
-          <Property Name="adress" Type="nvarchar" MaxLength="150" />
+          <Property Name="city" Type="nvarchar" MaxLength="200" />
+          <Property Name="place" Type="nvarchar" MaxLength="200" />
+          <Property Name="adress" Type="nvarchar" MaxLength="200" />
           <Property Name="longitude" Type="float" />
           <Property Name="latitude" Type="float" />
           <Property Name="zipcode" Type="int" />
-          <Property Name="accessType" Type="nvarchar" MaxLength="100" />
+          <Property Name="accessType" Type="nvarchar" MaxLength="200" />
           <Property Name="idorganisateurs" Type="int" />
           <Property Name="idlieux" Type="int" />
           <Property Name="updated" Type="datetime" />
           <Property Name="price" Type="nvarchar(max)" />
-          <Property Name="metro" Type="nvarchar" MaxLength="150" />
-          <Property Name="velib" Type="nchar" MaxLength="150" />
-          <Property Name="bus" Type="nvarchar" MaxLength="150" />
+          <Property Name="metro" Type="nvarchar" MaxLength="350" />
+          <Property Name="velib" Type="nchar" MaxLength="350" />
+          <Property Name="bus" Type="nvarchar" MaxLength="350" />
           <Property Name="created" Type="datetime" />
           <Property Name="mediaID" Type="int" />
-          <Property Name="organisateur" Type="nchar" MaxLength="150" />
-          <Property Name="hasFee" Type="nvarchar" MaxLength="150" />
+          <Property Name="organisateur" Type="nchar" MaxLength="200" />
+          <Property Name="hasFee" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
@@ -80,6 +85,20 @@
           <Property Name="activityID" Type="int" Nullable="false" />
           <Property Name="title" Type="nvarchar" Nullable="false" MaxLength="150" />
           <Property Name="hits" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Media">
+          <Key>
+            <PropertyRef Name="activityID" />
+            <PropertyRef Name="caption" />
+            <PropertyRef Name="credit" />
+            <PropertyRef Name="path" />
+            <PropertyRef Name="type" />
+          </Key>
+          <Property Name="activityID" Type="int" Nullable="false" />
+          <Property Name="caption" Type="nvarchar" Nullable="false" MaxLength="400" />
+          <Property Name="credit" Type="nvarchar" Nullable="false" MaxLength="400" />
+          <Property Name="path" Type="nvarchar" Nullable="false" MaxLength="400" />
+          <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="400" />
         </EntityType>
         <EntityType Name="Occurences">
           <Key>
@@ -154,6 +173,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Media_0">
+          <End Role="Activities" Type="TchillrDataBaseModel.Store.Activities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Media" Type="TchillrDataBaseModel.Store.Media" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activities">
+              <PropertyRef Name="identifier" />
+            </Principal>
+            <Dependent Role="Media">
+              <PropertyRef Name="activityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Occurences_0">
           <End Role="Activities" Type="TchillrDataBaseModel.Store.Activities" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -210,8 +243,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TchillrDataBaseModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -246,6 +278,11 @@
             <End Role="Tags" EntitySet="Tags" />
             <End Role="WordClouds" EntitySet="WordClouds" />
           </AssociationSet>
+          <EntitySet Name="Media" EntityType="TchillrDataBaseModel.Medium" />
+          <AssociationSet Name="FK_Media_0" Association="TchillrDataBaseModel.FK_Media_0">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Medium" EntitySet="Media" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Activity">
           <Key>
@@ -276,6 +313,7 @@
           <NavigationProperty Name="Keywords" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Activities" ToRole="Keywords" />
           <NavigationProperty Name="Occurences" Relationship="TchillrDataBaseModel.FK_Occurences_0" FromRole="Activities" ToRole="Occurences" />
           <NavigationProperty Name="Rubriques" Relationship="TchillrDataBaseModel.FK_Rubriques_0" FromRole="Activities" ToRole="Rubriques" />
+          <NavigationProperty Name="Media" Relationship="TchillrDataBaseModel.FK_Media_0" FromRole="Activity" ToRole="Medium" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -430,6 +468,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Medium">
+          <Key>
+            <PropertyRef Name="activityID" />
+            <PropertyRef Name="path" />
+            <PropertyRef Name="type" />
+            <PropertyRef Name="credit" />
+            <PropertyRef Name="caption" />
+          </Key>
+          <Property Type="Int32" Name="activityID" Nullable="false" />
+          <Property Type="String" Name="path" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="credit" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="caption" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Activity" Relationship="TchillrDataBaseModel.FK_Media_0" FromRole="Medium" ToRole="Activity" />
+        </EntityType>
+        <Association Name="FK_Media_0">
+          <End Type="TchillrDataBaseModel.Activity" Role="Activity" Multiplicity="1" />
+          <End Type="TchillrDataBaseModel.Medium" Role="Medium" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="identifier" />
+            </Principal>
+            <Dependent Role="Medium">
+              <PropertyRef Name="activityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -504,6 +569,17 @@
             <ScalarProperty Name="title" ColumnName="title" />
             <ScalarProperty Name="tagID" ColumnName="tagID" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Media">
+            <EntityTypeMapping TypeName="TchillrDataBaseModel.Medium">
+              <MappingFragment StoreEntitySet="Media">
+                <ScalarProperty Name="caption" ColumnName="caption" />
+                <ScalarProperty Name="credit" ColumnName="credit" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="activityID" ColumnName="activityID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -544,8 +620,8 @@
           <ConnectorPoint PointX="3" PointY="4.7401432291666667" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Rubriques_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="7.0381575520833328" />
-          <ConnectorPoint PointX="3" PointY="7.0381575520833328" />
+          <ConnectorPoint PointX="2.25" PointY="7.1343082682291659" />
+          <ConnectorPoint PointX="3" PointY="7.1343082682291659" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Tags_0" ManuallyRouted="false">
           <ConnectorPoint PointX="7.25" PointY="2.047841796875" />
@@ -554,6 +630,12 @@
         <AssociationConnector Association="TchillrDataBaseModel.FK_WordClouds_0" ManuallyRouted="false">
           <ConnectorPoint PointX="9.5" PointY="2.0189925130208337" />
           <ConnectorPoint PointX="10.25" PointY="2.0189925130208337" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="TchillrDataBaseModel.Medium" Width="1.5" PointX="3" PointY="9.625" Height="2.1725878906250031" />
+        <AssociationConnector Association="TchillrDataBaseModel.FK_Media_0" >
+          <ConnectorPoint PointX="1.5" PointY="7.7686165364583317" />
+          <ConnectorPoint PointX="1.5" PointY="10.711293945312502" />
+          <ConnectorPoint PointX="3" PointY="10.711293945312502" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

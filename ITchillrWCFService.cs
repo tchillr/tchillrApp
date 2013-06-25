@@ -79,6 +79,13 @@ namespace TchillrREST
                   UriTemplate = "parisapi/{offset}/{limit}")]
         Message TestParisAPI(string offset, string limit);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "updateMedia/{skip}")]
+        Message UpdateMedia(string skip);
+
         #endregion
 
         #region POST

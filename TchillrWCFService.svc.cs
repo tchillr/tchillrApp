@@ -11,6 +11,7 @@ using System.IO;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace TchillrREST
 {
@@ -27,7 +28,7 @@ namespace TchillrREST
             //tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities);
             tchill.SetData(TchillrREST.Utilities.TchillrContext.Activities.Take(100).ToList<DataModel.Activity>());
             tchill.success = true;
-            
+
             return tchill.GetResponseMessage();
         }
 
@@ -48,7 +49,8 @@ namespace TchillrREST
 
             int userNameID = int.Parse(usernameid);
             List<DataModel.Tag> results = new List<DataModel.Tag>();
-            foreach(DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID)){
+            foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID))
+            {
                 DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
                 if (tag != null)
                     results.Add(tag);
@@ -288,12 +290,12 @@ namespace TchillrREST
                 tchill.success = true;
                 tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
                 //return tchill;
-                
+
                 string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
                 return WebOperationContext.Current.CreateTextResponse(myResponseBody,
                             "application/json; charset=utf-8",
                             Encoding.UTF8);
-                 
+
             }
             catch (Exception exp) { }
             return null;
@@ -334,6 +336,43 @@ namespace TchillrREST
                         Encoding.UTF8);
         }
 
+        public Message UpdateMedia(string skip)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            int numberOfItemToSkip = int.Parse(skip);
+            foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
+            {
+                WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569fd060ba86e691b40342e501710688cac1&id=" + activity.identifier);
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                using (Stream respStream = resp.GetResponseStream())
+                {
+                    StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                    JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+                    foreach (JObject jsonActivity in jsonActivities["data"])
+                    {
+                        foreach (JObject media in jsonActivity["media"])
+                        {
+                            DataModel.Medium medium = new DataModel.Medium();
+                            medium.caption = string.IsNullOrEmpty(media["caption"].ToString()) ? "" : media["caption"].ToString();
+                            medium.credit = media["credit"].ToString();
+                            medium.path = media["path"].ToString();
+                            medium.type = media["type"].ToString();
+                            activity.Media.Add(medium);
+                        }
+                    }
+                }
+            }
+
+            TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            tchill.success = true;
+            tchill.data = "done";
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
+        }
         #endregion
 
         #region POST

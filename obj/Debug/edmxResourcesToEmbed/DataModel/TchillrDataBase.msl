@@ -109,5 +109,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Media">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.Medium">
+        <MappingFragment StoreEntitySet="Media">
+          <ScalarProperty Name="caption" ColumnName="caption" />
+          <ScalarProperty Name="credit" ColumnName="credit" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="path" ColumnName="path" />
+          <ScalarProperty Name="activityID" ColumnName="activityID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

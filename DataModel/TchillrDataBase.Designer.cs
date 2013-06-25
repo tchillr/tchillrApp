@@ -14,7 +14,6 @@ using System.Data.EntityClient;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -24,6 +23,7 @@ using System.Collections.Generic;
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Rubriques_0", "Activities", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Rubriques", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Rubrique), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Tags_0", "Themes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Theme), "Tags", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(TchillrREST.DataModel.Tag), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_WordClouds_0", "Tags", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Tag), "WordClouds", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.WordCloud), true)]
+[assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Media_0", "Activity", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Medium", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Medium), true)]
 
 #endregion
 
@@ -234,6 +234,22 @@ namespace TchillrREST.DataModel
             }
         }
         private ObjectSet<WordCloud> _WordClouds;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Medium> Media
+        {
+            get
+            {
+                if ((_Media == null))
+                {
+                    _Media = base.CreateObjectSet<Medium>("Media");
+                }
+                return _Media;
+            }
+        }
+        private ObjectSet<Medium> _Media;
 
         #endregion
         #region AddTo Methods
@@ -316,6 +332,14 @@ namespace TchillrREST.DataModel
         public void AddToWordClouds(WordCloud wordCloud)
         {
             base.AddObject("WordClouds", wordCloud);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Media EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToMedia(Medium medium)
+        {
+            base.AddObject("Media", medium);
         }
 
         #endregion
@@ -952,6 +976,28 @@ namespace TchillrREST.DataModel
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Media_0", "Medium")]
+        public EntityCollection<Medium> Media
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Medium>("TchillrDataBaseModel.FK_Media_0", "Medium");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Medium>("TchillrDataBaseModel.FK_Media_0", "Medium", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -1184,6 +1230,218 @@ namespace TchillrREST.DataModel
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Activity>("TchillrDataBaseModel.FK_Keywords_0", "Activities", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TchillrDataBaseModel", Name="Medium")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Medium : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Medium object.
+        /// </summary>
+        /// <param name="activityID">Initial value of the activityID property.</param>
+        /// <param name="path">Initial value of the path property.</param>
+        /// <param name="type">Initial value of the type property.</param>
+        /// <param name="credit">Initial value of the credit property.</param>
+        /// <param name="caption">Initial value of the caption property.</param>
+        public static Medium CreateMedium(global::System.Int32 activityID, global::System.String path, global::System.String type, global::System.String credit, global::System.String caption)
+        {
+            Medium medium = new Medium();
+            medium.activityID = activityID;
+            medium.path = path;
+            medium.type = type;
+            medium.credit = credit;
+            medium.caption = caption;
+            return medium;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 activityID
+        {
+            get
+            {
+                return _activityID;
+            }
+            set
+            {
+                if (_activityID != value)
+                {
+                    OnactivityIDChanging(value);
+                    ReportPropertyChanging("activityID");
+                    _activityID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("activityID");
+                    OnactivityIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _activityID;
+        partial void OnactivityIDChanging(global::System.Int32 value);
+        partial void OnactivityIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String path
+        {
+            get
+            {
+                return _path;
+            }
+            set
+            {
+                if (_path != value)
+                {
+                    OnpathChanging(value);
+                    ReportPropertyChanging("path");
+                    _path = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("path");
+                    OnpathChanged();
+                }
+            }
+        }
+        private global::System.String _path;
+        partial void OnpathChanging(global::System.String value);
+        partial void OnpathChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String type
+        {
+            get
+            {
+                return _type;
+            }
+            set
+            {
+                if (_type != value)
+                {
+                    OntypeChanging(value);
+                    ReportPropertyChanging("type");
+                    _type = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("type");
+                    OntypeChanged();
+                }
+            }
+        }
+        private global::System.String _type;
+        partial void OntypeChanging(global::System.String value);
+        partial void OntypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String credit
+        {
+            get
+            {
+                return _credit;
+            }
+            set
+            {
+                if (_credit != value)
+                {
+                    OncreditChanging(value);
+                    ReportPropertyChanging("credit");
+                    _credit = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("credit");
+                    OncreditChanged();
+                }
+            }
+        }
+        private global::System.String _credit;
+        partial void OncreditChanging(global::System.String value);
+        partial void OncreditChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String caption
+        {
+            get
+            {
+                return _caption;
+            }
+            set
+            {
+                if (_caption != value)
+                {
+                    OncaptionChanging(value);
+                    ReportPropertyChanging("caption");
+                    _caption = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("caption");
+                    OncaptionChanged();
+                }
+            }
+        }
+        private global::System.String _caption;
+        partial void OncaptionChanging(global::System.String value);
+        partial void OncaptionChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Media_0", "Activity")]
+        public Activity Activity
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Activity>("TchillrDataBaseModel.FK_Media_0", "Activity").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Activity>("TchillrDataBaseModel.FK_Media_0", "Activity").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Activity> ActivityReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Activity>("TchillrDataBaseModel.FK_Media_0", "Activity");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Activity>("TchillrDataBaseModel.FK_Media_0", "Activity", value);
                 }
             }
         }

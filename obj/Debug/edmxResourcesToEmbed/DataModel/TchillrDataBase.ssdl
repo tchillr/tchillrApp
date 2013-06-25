@@ -4,6 +4,7 @@
     <EntitySet Name="Activities" EntityType="TchillrDataBaseModel.Store.Activities" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Categories" EntityType="TchillrDataBaseModel.Store.Categories" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Keywords" EntityType="TchillrDataBaseModel.Store.Keywords" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Media" EntityType="TchillrDataBaseModel.Store.Media" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Occurences" EntityType="TchillrDataBaseModel.Store.Occurences" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Rubriques" EntityType="TchillrDataBaseModel.Store.Rubriques" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Store.Tags" store:Type="Tables" Schema="dbo" />
@@ -14,6 +15,10 @@
     <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.Store.FK_Keywords_0">
       <End Role="Activities" EntitySet="Activities" />
       <End Role="Keywords" EntitySet="Keywords" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Media_0" Association="TchillrDataBaseModel.Store.FK_Media_0">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="Media" EntitySet="Media" />
     </AssociationSet>
     <AssociationSet Name="FK_Occurences_0" Association="TchillrDataBaseModel.Store.FK_Occurences_0">
       <End Role="Activities" EntitySet="Activities" />
@@ -37,27 +42,27 @@
       <PropertyRef Name="identifier" />
     </Key>
     <Property Name="identifier" Type="int" Nullable="false" />
-    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="150" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="200" />
     <Property Name="description" Type="nvarchar(max)" />
     <Property Name="shortDescription" Type="nvarchar(max)" />
-    <Property Name="city" Type="nvarchar" MaxLength="150" />
-    <Property Name="place" Type="nvarchar" MaxLength="150" />
-    <Property Name="adress" Type="nvarchar" MaxLength="150" />
+    <Property Name="city" Type="nvarchar" MaxLength="200" />
+    <Property Name="place" Type="nvarchar" MaxLength="200" />
+    <Property Name="adress" Type="nvarchar" MaxLength="200" />
     <Property Name="longitude" Type="float" />
     <Property Name="latitude" Type="float" />
     <Property Name="zipcode" Type="int" />
-    <Property Name="accessType" Type="nvarchar" MaxLength="100" />
+    <Property Name="accessType" Type="nvarchar" MaxLength="200" />
     <Property Name="idorganisateurs" Type="int" />
     <Property Name="idlieux" Type="int" />
     <Property Name="updated" Type="datetime" />
     <Property Name="price" Type="nvarchar(max)" />
-    <Property Name="metro" Type="nvarchar" MaxLength="150" />
-    <Property Name="velib" Type="nchar" MaxLength="150" />
-    <Property Name="bus" Type="nvarchar" MaxLength="150" />
+    <Property Name="metro" Type="nvarchar" MaxLength="350" />
+    <Property Name="velib" Type="nchar" MaxLength="350" />
+    <Property Name="bus" Type="nvarchar" MaxLength="350" />
     <Property Name="created" Type="datetime" />
     <Property Name="mediaID" Type="int" />
-    <Property Name="organisateur" Type="nchar" MaxLength="150" />
-    <Property Name="hasFee" Type="nvarchar" MaxLength="150" />
+    <Property Name="organisateur" Type="nchar" MaxLength="200" />
+    <Property Name="hasFee" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="Categories">
     <Key>
@@ -75,6 +80,20 @@
     <Property Name="activityID" Type="int" Nullable="false" />
     <Property Name="title" Type="nvarchar" Nullable="false" MaxLength="150" />
     <Property Name="hits" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Media">
+    <Key>
+      <PropertyRef Name="activityID" />
+      <PropertyRef Name="caption" />
+      <PropertyRef Name="credit" />
+      <PropertyRef Name="path" />
+      <PropertyRef Name="type" />
+    </Key>
+    <Property Name="activityID" Type="int" Nullable="false" />
+    <Property Name="caption" Type="nvarchar" Nullable="false" MaxLength="400" />
+    <Property Name="credit" Type="nvarchar" Nullable="false" MaxLength="400" />
+    <Property Name="path" Type="nvarchar" Nullable="false" MaxLength="400" />
+    <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="400" />
   </EntityType>
   <EntityType Name="Occurences">
     <Key>
@@ -145,6 +164,20 @@
         <PropertyRef Name="identifier" />
       </Principal>
       <Dependent Role="Keywords">
+        <PropertyRef Name="activityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Media_0">
+    <End Role="Activities" Type="TchillrDataBaseModel.Store.Activities" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Media" Type="TchillrDataBaseModel.Store.Media" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Media">
         <PropertyRef Name="activityID" />
       </Dependent>
     </ReferentialConstraint>

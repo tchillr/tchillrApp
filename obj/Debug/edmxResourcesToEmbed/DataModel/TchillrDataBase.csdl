@@ -31,6 +31,11 @@
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
     </AssociationSet>
+    <EntitySet Name="Media" EntityType="TchillrDataBaseModel.Medium" />
+    <AssociationSet Name="FK_Media_0" Association="TchillrDataBaseModel.FK_Media_0">
+      <End Role="Activity" EntitySet="Activities" />
+      <End Role="Medium" EntitySet="Media" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Activity">
     <Key>
@@ -61,6 +66,7 @@
     <NavigationProperty Name="Keywords" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Activities" ToRole="Keywords" />
     <NavigationProperty Name="Occurences" Relationship="TchillrDataBaseModel.FK_Occurences_0" FromRole="Activities" ToRole="Occurences" />
     <NavigationProperty Name="Rubriques" Relationship="TchillrDataBaseModel.FK_Rubriques_0" FromRole="Activities" ToRole="Rubriques" />
+    <NavigationProperty Name="Media" Relationship="TchillrDataBaseModel.FK_Media_0" FromRole="Activity" ToRole="Medium" />
   </EntityType>
   <EntityType Name="Category">
     <Key>
@@ -212,6 +218,33 @@
       </Principal>
       <Dependent Role="WordClouds">
         <PropertyRef Name="tagID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Medium">
+    <Key>
+      <PropertyRef Name="activityID" />
+      <PropertyRef Name="path" />
+      <PropertyRef Name="type" />
+      <PropertyRef Name="credit" />
+      <PropertyRef Name="caption" />
+    </Key>
+    <Property Type="Int32" Name="activityID" Nullable="false" />
+    <Property Type="String" Name="path" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="type" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="credit" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="caption" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Activity" Relationship="TchillrDataBaseModel.FK_Media_0" FromRole="Medium" ToRole="Activity" />
+  </EntityType>
+  <Association Name="FK_Media_0">
+    <End Type="TchillrDataBaseModel.Activity" Role="Activity" Multiplicity="1" />
+    <End Type="TchillrDataBaseModel.Medium" Role="Medium" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activity">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Medium">
+        <PropertyRef Name="activityID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
