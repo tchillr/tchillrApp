@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
+using System.Net;
 
 namespace TchillrREST
 {
@@ -193,6 +194,7 @@ namespace TchillrREST
                 var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
                                         from occ in TchillrREST.Utilities.TchillrContext.Occurences
                                         where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
+                                        && acti.latitude > 0 && acti.longitude > 0
                                         select acti;
 
                 foreach (DataModel.Activity activity in activitiesForDays)
@@ -281,6 +283,40 @@ namespace TchillrREST
             catch (Exception exp) { }
             return null;
             //return JsonConvert.SerializeObject(.ToList());
+        }
+
+        public Message TestParisAPI(string offset, string limit)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&created=0";
+            try
+            {
+                WebRequest req = WebRequest.Create(BASE_URL + "&offset=" + offset + "&limit=" + limit);
+
+                req.Method = "GET";
+
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        tchill.data = reader.ReadToEnd();
+                    }
+                }
+
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
         }
 
         #endregion

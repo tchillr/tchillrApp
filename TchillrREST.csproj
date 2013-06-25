@@ -85,8 +85,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TchillrDataBase.edmx</DependentUpon>
     </Compile>
+    <Compile Include="DataModel\TchillrDataModelExtension.cs" />
     <Compile Include="DataModel\TchillrResponse.cs" />
-    <Compile Include="Extension.cs" />
     <Compile Include="ITchillrWCFService.cs" />
     <Compile Include="TchillrWCFService.svc.cs">
       <DependentUpon>TchillrWCFService.svc</DependentUpon>

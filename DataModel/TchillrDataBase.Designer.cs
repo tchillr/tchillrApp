@@ -15,8 +15,6 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
-using System.Web.Script.Serialization;
-using Newtonsoft.Json;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -885,18 +883,10 @@ namespace TchillrREST.DataModel
         partial void OnhasFeeChanging(global::System.String value);
         partial void OnhasFeeChanged();
 
-        #region added properties
-        [DataMember(Name = "score")]
-        public int score { get; set; }
-
-        [DataMember(Name = "tags")]
-        public List<Tag> tags { get; set; }
-
         #endregion
-        #endregion
-
+    
         #region Navigation Properties
-
+    
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
@@ -1813,7 +1803,6 @@ namespace TchillrREST.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [JsonIgnore]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_0", "Tags")]
         public Tag Tag
         {

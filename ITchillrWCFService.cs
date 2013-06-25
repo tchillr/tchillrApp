@@ -72,6 +72,13 @@ namespace TchillrREST
                   UriTemplate = "users/{usernameid}/activities/timespan/{nbDays}")]
         Message GetUserActivitiesForDays(string usernameid, string nbDays);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "parisapi/{offset}/{limit}")]
+        Message TestParisAPI(string offset, string limit);
+
         #endregion
 
         #region POST
