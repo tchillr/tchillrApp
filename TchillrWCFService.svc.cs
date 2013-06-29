@@ -344,7 +344,7 @@ namespace TchillrREST
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             int numberOfItemToSkip = int.Parse(skip);
-            foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.Where(act=> act.Media.Count == 0).OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
+            foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Media.Count == 0).OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
             {
                 WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569fd060ba86e691b40342e501710688cac1&id=" + activity.identifier);
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
@@ -554,7 +554,6 @@ namespace TchillrREST
                 ut = new TchillrREST.DataModel.UserTag();
                 ut.UserID = userNameID;
                 ut.TagID = tagID;
-                ut.identifier = TchillrREST.Utilities.TchillrContext.UserTags.Count() + 1;
                 TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
             }
             else

@@ -138,7 +138,7 @@
     <Key>
       <PropertyRef Name="identifier" />
     </Key>
-    <Property Name="identifier" Type="int" Nullable="false" />
+    <Property Name="identifier" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="UserID" Type="int" Nullable="false" />
     <Property Name="TagID" Type="int" Nullable="false" />
   </EntityType>
