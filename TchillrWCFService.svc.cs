@@ -52,7 +52,7 @@ namespace TchillrREST
 
             int userNameID = int.Parse(usernameid);
             List<DataModel.Tag> results = new List<DataModel.Tag>();
-            foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.identifier == userNameID))
+            foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
             {
                 DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
                 if (tag != null)
