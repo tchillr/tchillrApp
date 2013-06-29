@@ -28,10 +28,6 @@
       <End Role="Activities" EntitySet="Activities" />
       <End Role="Rubriques" EntitySet="Rubriques" />
     </AssociationSet>
-    <AssociationSet Name="FK_Tags_0" Association="TchillrDataBaseModel.Store.FK_Tags_0">
-      <End Role="Themes" EntitySet="Themes" />
-      <End Role="Tags" EntitySet="Tags" />
-    </AssociationSet>
     <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.Store.FK_WordClouds_0">
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
@@ -120,7 +116,7 @@
       <PropertyRef Name="identifier" />
     </Key>
     <Property Name="identifier" Type="int" Nullable="false" />
-    <Property Name="title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="title" Type="nvarchar" Nullable="false" MaxLength="200" />
     <Property Name="weight" Type="int" Nullable="false" />
     <Property Name="themeID" Type="int" />
   </EntityType>
@@ -210,24 +206,8 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Tags_0">
-    <End Role="Themes" Type="TchillrDataBaseModel.Store.Themes" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="Themes">
-        <PropertyRef Name="identifier" />
-      </Principal>
-      <Dependent Role="Tags">
-        <PropertyRef Name="identifier" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_WordClouds_0">
-    <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+    <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="1" />
     <End Role="WordClouds" Type="TchillrDataBaseModel.Store.WordClouds" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Tags">
