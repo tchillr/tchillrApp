@@ -84,28 +84,9 @@ namespace TchillrREST
 
                         keywords.Add(keyword);
                     }
-                    //Keyword keyWord = this.Keywords.FirstOrDefault( key=> key.Title == word);
-                    //if (keyWord == null || string.IsNullOrEmpty(keyWord.Title))
-                    //{
-                    //    keyWord = new Keyword();
-                    //    keyWord.Hits = weight;
-                    //    keyWord.Title = word;
-                    //    keyWord.ActivityID = this.ID;
-                    //    this.Keywords.Add(keyWord);
-                    //}
-                    //else
-                    //{
-                    //    keyWord.Hits += weight;
-                    //}
-
-                    //if (tags.Contains(word.ToUpper()))
-                    //    if (this.ActivityContextualTags.Contains(word.ToUpper()))
-                    //        continue;
-                    //    else
-                    //        this.ActivityContextualTags.Add(word.ToUpper());
                 }
             }
-            //return this.Keywords;
+            keywords.ForEach(keyword => keyword.title.ToUpper());
             return keywords;
         }
 

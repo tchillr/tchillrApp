@@ -86,6 +86,13 @@ namespace TchillrREST
                   UriTemplate = "updateMedia/{skip}")]
         Message UpdateMedia(string skip);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "InjectToDataBase/{offset}/{limit}")]
+        Message InjectToDataBase(string offset, string limit);
+        
         #endregion
 
         #region POST

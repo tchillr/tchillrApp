@@ -12,6 +12,9 @@ using System.ServiceModel.Web;
 using System.ServiceModel.Channels;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+using System.Data.Objects.DataClasses;
+using System.Web;
 
 namespace TchillrREST
 {
@@ -341,7 +344,7 @@ namespace TchillrREST
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             int numberOfItemToSkip = int.Parse(skip);
-            foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
+            foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.Where(act=> act.Media.Count == 0).OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
             {
                 WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569fd060ba86e691b40342e501710688cac1&id=" + activity.identifier);
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
@@ -373,6 +376,163 @@ namespace TchillrREST
                         "application/json; charset=utf-8",
                         Encoding.UTF8);
         }
+
+
+        const string HTML_TAG_PATTERN = @"<[^>]*>";
+        const string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&created=0";
+        //const string LIMIT = "58";
+
+        static string StripHTML(string inputString)
+        {
+            return Regex.Replace
+              (inputString, HTML_TAG_PATTERN, string.Empty);
+        }
+
+        public Message InjectToDataBase(string off, string lmt)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            try
+            {
+                int counter = 1;
+                DataModel.Entities context = TchillrREST.Utilities.TchillrContext;
+                int offset = int.Parse(off);
+                while (offset <= 500)
+                {
+                    WebRequest req = WebRequest.Create(BASE_URL + "&offset=" + offset + "&limit=" + lmt);
+
+                    req.Method = "GET";
+                    try
+                    {
+                        HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                        if (resp.StatusCode == HttpStatusCode.OK)
+                        {
+
+                            using (Stream respStream = resp.GetResponseStream())
+                            {
+                                StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+
+                                JObject jsonActivities = JObject.Parse(reader.ReadToEnd());
+                                foreach (JObject activity in jsonActivities["data"])
+                                {
+                                    int ident = (int)activity["idactivites"];
+                                    bool insert = false;
+                                    DataModel.Activity act = context.Activities.FirstOrDefault(acti => acti.identifier == ident);
+                                    if (act == null || act.identifier == 0)
+                                    {
+                                        act = new DataModel.Activity();
+                                        act.Occurences = new EntityCollection<DataModel.Occurence>();
+                                        act.Rubriques = new EntityCollection<DataModel.Rubrique>();
+                                        insert = true;
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+                                    act.name = WebUtility.HtmlDecode(activity["nom"].ToString());
+                                    act.adress = WebUtility.HtmlDecode(activity["adresse"].ToString());
+                                    act.city = WebUtility.HtmlDecode(activity["city"].ToString());
+                                    act.description = StripHTML(WebUtility.HtmlDecode(activity["description"].ToString()));
+                                    act.identifier = (int)activity["idactivites"];
+                                    act.zipcode = (int)activity["zipcode"];
+                                    act.place = activity["lieu"].ToString();
+                                    act.accessType = activity["accessType"].ToString();
+                                    act.hasFee = activity["hasFee"].ToString();
+                                    act.created = activity["created"] == null || activity["created"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(activity["created"].ToString());
+
+                                    act.shortDescription = string.Empty;
+
+                                    float temp = 0;
+                                    if (float.TryParse(activity["lat"].ToString().Replace('.', ','), out temp))
+                                        act.latitude = temp;
+                                    temp = 0;
+                                    if (float.TryParse(activity["lon"].ToString().Replace('.', ','), out temp))
+                                        act.longitude = temp;
+
+                                    EntityCollection<DataModel.Occurence> occurences = new EntityCollection<DataModel.Occurence>();
+                                    foreach (JObject occ in activity["occurences"])
+                                    {
+                                        DataModel.Occurence occurence = new DataModel.Occurence();
+                                        occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(occ["jour"].ToString());
+                                        occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
+                                        occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
+                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
+                                            occurences.Add(occurence);
+                                    }
+
+                                    foreach (DataModel.Occurence occ in occurences.OrderBy(occ => occ.jour).ThenBy(occ => occ.hour_start).ThenBy(occ => occ.hour_end))
+                                        act.Occurences.Add(occ);
+
+                                    foreach (JObject rub in activity["rubriques"])
+                                    {
+                                        DataModel.Rubrique rubrique = new DataModel.Rubrique();
+                                        rubrique.name = rub["rubrique"].ToString();
+                                        act.Rubriques.Add(rubrique);
+                                    }
+
+                                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&id=" + activity["idactivites"]);
+                                    HttpWebResponse resp2 = req2.GetResponse() as HttpWebResponse;
+                                    using (Stream respStream2 = resp2.GetResponseStream())
+                                    {
+                                        StreamReader reader2 = new StreamReader(respStream2, Encoding.UTF8);
+                                        JObject jsonActivities2 = JObject.Parse(reader2.ReadToEnd());
+                                        foreach (JObject activity2 in jsonActivities2["data"])
+                                        {
+                                            act.shortDescription = StripHTML(HttpUtility.HtmlDecode(activity2["small_description"].ToString()));
+                                            act.idorganisateurs = activity2["idorganisateurs"] == null ? 0 : (int)activity2["idorganisateurs"];
+                                            act.idlieux = activity2["idlieux"] == null ? 0 : (int)activity2["idlieux"];
+                                            act.updated = activity2["updated"] == null || activity2["updated"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(activity2["updated"].ToString());
+                                            act.price = StripHTML(WebUtility.HtmlDecode(activity2["price"].ToString()));
+                                            act.metro = StripHTML(WebUtility.HtmlDecode(activity2["metro"].ToString()));
+                                            act.velib = StripHTML(WebUtility.HtmlDecode(activity2["velib"].ToString()));
+                                            act.bus = StripHTML(WebUtility.HtmlDecode(activity2["bus"].ToString()));
+                                            foreach (JObject media in activity2["media"])
+                                            {
+                                                DataModel.Medium medium = new DataModel.Medium();
+                                                medium.caption = string.IsNullOrEmpty(media["caption"].ToString()) ? "" : media["caption"].ToString();
+                                                medium.credit = media["credit"].ToString();
+                                                medium.path = media["path"].ToString();
+                                                medium.type = media["type"].ToString();
+                                                act.Media.Add(medium);
+                                            }
+                                        }
+                                    }
+
+                                    TchillrREST.Utilities.SetKeywords(act, context.Tags.Select(tg => tg.title).ToList<string>());
+
+                                    Console.WriteLine("Adding acitivity # " + counter + " with id " + act.identifier);
+                                    if (insert)
+                                        context.Activities.AddObject(act);
+                                    counter++;
+                                }
+                            }
+                        }
+
+                        offset += int.Parse(lmt);
+                    }
+                    catch (Exception exp)
+                    {
+                        offset += int.Parse(lmt);
+                    }
+                }
+
+                context.SaveChanges();
+
+                tchill.success = true;
+                tchill.data = "done";
+
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
+        }
+
         #endregion
 
         #region POST
