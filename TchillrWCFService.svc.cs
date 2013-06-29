@@ -554,6 +554,7 @@ namespace TchillrREST
                 ut = new TchillrREST.DataModel.UserTag();
                 ut.UserID = userNameID;
                 ut.TagID = tagID;
+                ut.identifier = TchillrREST.Utilities.TchillrContext.UserTags.Count() + 1;
                 TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
             }
             else
