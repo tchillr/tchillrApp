@@ -466,7 +466,7 @@ namespace TchillrREST
                                     foreach (JObject occ in activity["occurences"])
                                     {
                                         DataModel.Occurence occurence = new DataModel.Occurence();
-                                        occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(occ["jour"].ToString());
+                                        occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(occ["jour"].ToString());
                                         occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
                                         occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
                                         if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
@@ -489,7 +489,7 @@ namespace TchillrREST
                                     act.place = activity["lieu"].ToString();
                                     act.accessType = activity["accessType"].ToString();
                                     act.hasFee = activity["hasFee"].ToString();
-                                    act.created = activity["created"] == null || activity["created"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(activity["created"].ToString());
+                                    act.created = activity["created"] == null || activity["created"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(activity["created"].ToString());
 
                                     act.shortDescription = string.Empty;
 
@@ -519,7 +519,7 @@ namespace TchillrREST
                                             act.shortDescription = StripHTML(HttpUtility.HtmlDecode(activity2["small_description"].ToString()));
                                             act.idorganisateurs = activity2["idorganisateurs"] == null ? 0 : (int)activity2["idorganisateurs"];
                                             act.idlieux = activity2["idlieux"] == null ? 0 : (int)activity2["idlieux"];
-                                            act.updated = activity2["updated"] == null || activity2["updated"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(activity2["updated"].ToString());
+                                            act.updated = activity2["updated"] == null || activity2["updated"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(activity2["updated"].ToString());
                                             act.price = StripHTML(WebUtility.HtmlDecode(activity2["price"].ToString()));
                                             act.metro = StripHTML(WebUtility.HtmlDecode(activity2["metro"].ToString()));
                                             act.velib = StripHTML(WebUtility.HtmlDecode(activity2["velib"].ToString()));
