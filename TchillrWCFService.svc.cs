@@ -568,10 +568,10 @@ namespace TchillrREST
             List<int> idsObsoletActivities = new List<int>();
             try
             {
-
+                DateTime yesturday = DateTime.Now.AddDays(-1);
                 foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.Activities)
                 {
-                    if (acti.Occurences.Count > 0 &&  acti.Occurences.Last().jour < DateTime.Now)
+                    if (acti.Occurences.Count > 0 && acti.Occurences.Last().jour < yesturday)
                         idsObsoletActivities.Add(acti.identifier);
                 }
 
