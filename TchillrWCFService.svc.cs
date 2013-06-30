@@ -566,14 +566,26 @@ namespace TchillrREST
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             List<int> idsObsoletActivities = new List<int>();
+            List<DataModel.Activity> obsoleteActivities = new List<DataModel.Activity>();
             try
             {
                 DateTime yesturday = DateTime.Now.AddDays(-1);
                 foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.Activities)
                 {
                     if (acti.Occurences.Count > 0 && acti.Occurences.Last().jour < yesturday)
+                    {
                         idsObsoletActivities.Add(acti.identifier);
+                        obsoleteActivities.Add(acti);
+                    }
+
                 }
+
+                foreach (DataModel.Activity obsActi in obsoleteActivities)
+                {
+                    TchillrREST.Utilities.TchillrContext.Activities.DeleteObject(obsActi);
+                }
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
 
                 tchill.success = true;
                 tchill.SetData(idsObsoletActivities);
