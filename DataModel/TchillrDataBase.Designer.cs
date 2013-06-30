@@ -840,30 +840,6 @@ namespace TchillrREST.DataModel
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> mediaID
-        {
-            get
-            {
-                return _mediaID;
-            }
-            set
-            {
-                OnmediaIDChanging(value);
-                ReportPropertyChanging("mediaID");
-                _mediaID = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("mediaID");
-                OnmediaIDChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _mediaID;
-        partial void OnmediaIDChanging(Nullable<global::System.Int32> value);
-        partial void OnmediaIDChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String organisateur
         {
             get

@@ -61,7 +61,6 @@
           <Property Name="velib" Type="nchar" MaxLength="350" />
           <Property Name="bus" Type="nvarchar" MaxLength="350" />
           <Property Name="created" Type="datetime" />
-          <Property Name="mediaID" Type="int" />
           <Property Name="organisateur" Type="nchar" MaxLength="200" />
           <Property Name="hasFee" Type="nvarchar" MaxLength="200" />
         </EntityType>
@@ -287,7 +286,6 @@
           <Property Name="velib" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
           <Property Name="bus" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
           <Property Name="created" Type="DateTime" />
-          <Property Name="mediaID" Type="Int32" />
           <Property Name="organisateur" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
           <Property Name="hasFee" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Keywords" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Activities" ToRole="Keywords" />
@@ -501,7 +499,6 @@
             <ScalarProperty Name="velib" ColumnName="velib" />
             <ScalarProperty Name="bus" ColumnName="bus" />
             <ScalarProperty Name="created" ColumnName="created" />
-            <ScalarProperty Name="mediaID" ColumnName="mediaID" />
             <ScalarProperty Name="organisateur" ColumnName="organisateur" />
             <ScalarProperty Name="hasFee" ColumnName="hasFee" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
@@ -600,8 +597,8 @@
           <ConnectorPoint PointX="3" PointY="4.7401432291666667" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Rubriques_0" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="7.1343082682291659" />
-          <ConnectorPoint PointX="3" PointY="7.1343082682291659" />
+          <ConnectorPoint PointX="2.25" PointY="7.0381575520833328" />
+          <ConnectorPoint PointX="3" PointY="7.0381575520833328" />
         </AssociationConnector>
         <AssociationConnector Association="TchillrDataBaseModel.FK_Tags_0" ManuallyRouted="false">
           <ConnectorPoint PointX="7.25" PointY="2.047841796875" />
@@ -613,7 +610,7 @@
         </AssociationConnector>
         <EntityTypeShape EntityType="TchillrDataBaseModel.Medium" Width="1.5" PointX="3" PointY="9.625" Height="2.1725878906250031" />
         <AssociationConnector Association="TchillrDataBaseModel.FK_Media_0" >
-          <ConnectorPoint PointX="1.5" PointY="7.7686165364583317" />
+          <ConnectorPoint PointX="1.5" PointY="7.5763151041666656" />
           <ConnectorPoint PointX="1.5" PointY="10.711293945312502" />
           <ConnectorPoint PointX="3" PointY="10.711293945312502" />
         </AssociationConnector>

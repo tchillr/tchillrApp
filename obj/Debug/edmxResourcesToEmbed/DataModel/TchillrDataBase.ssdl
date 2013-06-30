@@ -56,7 +56,6 @@
     <Property Name="velib" Type="nchar" MaxLength="350" />
     <Property Name="bus" Type="nvarchar" MaxLength="350" />
     <Property Name="created" Type="datetime" />
-    <Property Name="mediaID" Type="int" />
     <Property Name="organisateur" Type="nchar" MaxLength="200" />
     <Property Name="hasFee" Type="nvarchar" MaxLength="200" />
   </EntityType>

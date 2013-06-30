@@ -60,7 +60,6 @@
     <Property Name="velib" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
     <Property Name="bus" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
     <Property Name="created" Type="DateTime" />
-    <Property Name="mediaID" Type="Int32" />
     <Property Name="organisateur" Type="String" MaxLength="150" Unicode="true" FixedLength="true" />
     <Property Name="hasFee" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="Keywords" Relationship="TchillrDataBaseModel.FK_Keywords_0" FromRole="Activities" ToRole="Keywords" />

@@ -23,7 +23,30 @@ namespace TchillrREST
     (RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TchillrWCFService : ITchillrWCFService
     {
+
+        #region TokenID
+
+        /*
+         bitar.alaa@gmail.com
+         30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d
+         */
+        /*
+         jad
+         70f38523e129a2a9c0aa0a08f26b569fd060ba86e691b40342e501710688cac1
+         */
+        /*
+         Tchillr@gmail.com
+          05b1bc4403734e5a11db3be63c2792597bc1af3998790282d66eb39dfc073bee
+         */
+        /*
+         alaa.bitar@orange.com
+          70f38523e129a2a9c0aa0a08f26b569ffe0d64cc438386fd94b19652d92c67d840cafd2914e4bb2f4decbc1d566769e2
+         */
+
+        #endregion
+
         #region GET
+
 
         public Message GetFromDBAllActivities()
         {
@@ -346,7 +369,7 @@ namespace TchillrREST
             int numberOfItemToSkip = int.Parse(skip);
             foreach (DataModel.Activity activity in TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Media.Count == 0).OrderBy(act => act.identifier).Skip(numberOfItemToSkip).ToList())
             {
-                WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569fd060ba86e691b40342e501710688cac1&id=" + activity.identifier);
+                WebRequest req = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&id=" + activity.identifier);
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
                 using (Stream respStream = resp.GetResponseStream())
                 {
@@ -356,12 +379,22 @@ namespace TchillrREST
                     {
                         foreach (JObject media in jsonActivity["media"])
                         {
-                            DataModel.Medium medium = new DataModel.Medium();
-                            medium.caption = string.IsNullOrEmpty(media["caption"].ToString()) ? "" : media["caption"].ToString();
-                            medium.credit = media["credit"].ToString();
-                            medium.path = media["path"].ToString();
-                            medium.type = media["type"].ToString();
-                            activity.Media.Add(medium);
+                            string path = media["path"].ToString();
+                            DataModel.Medium medium = activity.Media.FirstOrDefault(med => med.path == path);
+                            if (medium == null)
+                            {
+                                medium = new DataModel.Medium();
+                                medium.caption = string.IsNullOrEmpty(media["caption"].ToString()) ? "" : media["caption"].ToString();
+                                medium.credit = media["credit"].ToString();
+                                medium.path = media["path"].ToString();
+                                medium.type = media["type"].ToString();
+                                activity.Media.Add(medium);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+
                         }
                     }
                 }
@@ -371,15 +404,13 @@ namespace TchillrREST
 
             tchill.success = true;
             tchill.data = "done";
-            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                        "application/json; charset=utf-8",
-                        Encoding.UTF8);
+
+            return tchill.GetResponseMessage();
         }
 
 
         const string HTML_TAG_PATTERN = @"<[^>]*>";
-        const string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&created=0";
+        const string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=70f38523e129a2a9c0aa0a08f26b569ffe0d64cc438386fd94b19652d92c67d840cafd2914e4bb2f4decbc1d566769e2&created=0";
         //const string LIMIT = "58";
 
         static string StripHTML(string inputString)
@@ -391,9 +422,9 @@ namespace TchillrREST
         public Message InjectToDataBase(string off, string lmt)
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            int counter = 1;
             try
             {
-                int counter = 1;
                 DataModel.Entities context = TchillrREST.Utilities.TchillrContext;
                 int offset = int.Parse(off);
                 while (offset <= 500)
@@ -469,7 +500,7 @@ namespace TchillrREST
                                         act.Rubriques.Add(rubrique);
                                     }
 
-                                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&id=" + activity["idactivites"]);
+                                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569ffe0d64cc438386fd94b19652d92c67d840cafd2914e4bb2f4decbc1d566769e2&id=" + activity["idactivites"]);
                                     HttpWebResponse resp2 = req2.GetResponse() as HttpWebResponse;
                                     using (Stream respStream2 = resp2.GetResponseStream())
                                     {
@@ -518,7 +549,7 @@ namespace TchillrREST
                 context.SaveChanges();
 
                 tchill.success = true;
-                tchill.data = "done";
+                tchill.data = "done added " + counter + " activities";
 
             }
             catch (Exception exp)
@@ -527,10 +558,7 @@ namespace TchillrREST
                 tchill.data = exp.Message;
             }
 
-            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                        "application/json; charset=utf-8",
-                        Encoding.UTF8);
+            return tchill.GetResponseMessage();
         }
 
         #endregion
