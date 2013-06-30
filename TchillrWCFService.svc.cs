@@ -427,7 +427,8 @@ namespace TchillrREST
             {
                 DataModel.Entities context = TchillrREST.Utilities.TchillrContext;
                 int offset = int.Parse(off);
-                while (offset <= 500)
+                int loopLimit = offset + 500;
+                while (offset <= loopLimit)
                 {
                     WebRequest req = WebRequest.Create(BASE_URL + "&offset=" + offset + "&limit=" + lmt);
 
@@ -559,6 +560,31 @@ namespace TchillrREST
             }
 
             return tchill.GetResponseMessage();
+        }
+
+        public Message cleanDataBase()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            List<int> idsObsoletActivities = new List<int>();
+            try
+            {
+
+                foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.Activities)
+                {
+                    if (acti.Occurences.Last().jour < DateTime.Now)
+                        idsObsoletActivities.Add(acti.identifier);
+                }
+
+                tchill.success = true;
+                tchill.SetData(idsObsoletActivities);
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.SetData(exp.Message);
+            }
+            return tchill.GetResponseMessage();
+
         }
 
         #endregion

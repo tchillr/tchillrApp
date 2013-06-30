@@ -92,6 +92,13 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "InjectToDataBase/{offset}/{limit}")]
         Message InjectToDataBase(string offset, string limit);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "cleanDataBase")]
+        Message cleanDataBase();
         
         #endregion
 
