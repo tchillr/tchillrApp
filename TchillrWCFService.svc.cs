@@ -571,7 +571,7 @@ namespace TchillrREST
 
                 foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.Activities)
                 {
-                    if (acti.Occurences.Last().jour < DateTime.Now)
+                    if (acti.Occurences.Count > 0 &&  acti.Occurences.Last().jour < DateTime.Now)
                         idsObsoletActivities.Add(acti.identifier);
                 }
 
