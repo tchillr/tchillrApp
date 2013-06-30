@@ -422,6 +422,7 @@ namespace TchillrREST
         public Message InjectToDataBase(string off, string lmt)
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            DateTime yesturday = DateTime.Now.AddDays(-1);
             int counter = 1;
             try
             {
@@ -460,6 +461,25 @@ namespace TchillrREST
                                     {
                                         continue;
                                     }
+
+                                    EntityCollection<DataModel.Occurence> occurences = new EntityCollection<DataModel.Occurence>();
+                                    foreach (JObject occ in activity["occurences"])
+                                    {
+                                        DataModel.Occurence occurence = new DataModel.Occurence();
+                                        occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(occ["jour"].ToString());
+                                        occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
+                                        occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
+                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
+                                            occurences.Add(occurence);
+                                    }
+
+                                    foreach (DataModel.Occurence occ in occurences.OrderBy(occ => occ.jour).ThenBy(occ => occ.hour_start).ThenBy(occ => occ.hour_end))
+                                        act.Occurences.Add(occ);
+
+                                    // we do not add an activity in the database if it is already obsolete
+                                    if (act.Occurences.Count > 0 && act.Occurences.Last().jour < yesturday)
+                                        continue;
+
                                     act.name = WebUtility.HtmlDecode(activity["nom"].ToString());
                                     act.adress = WebUtility.HtmlDecode(activity["adresse"].ToString());
                                     act.city = WebUtility.HtmlDecode(activity["city"].ToString());
@@ -480,19 +500,6 @@ namespace TchillrREST
                                     if (float.TryParse(activity["lon"].ToString().Replace('.', ','), out temp))
                                         act.longitude = temp;
 
-                                    EntityCollection<DataModel.Occurence> occurences = new EntityCollection<DataModel.Occurence>();
-                                    foreach (JObject occ in activity["occurences"])
-                                    {
-                                        DataModel.Occurence occurence = new DataModel.Occurence();
-                                        occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? DateTime.MinValue : DateTime.Parse(occ["jour"].ToString());
-                                        occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
-                                        occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
-                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
-                                            occurences.Add(occurence);
-                                    }
-
-                                    foreach (DataModel.Occurence occ in occurences.OrderBy(occ => occ.jour).ThenBy(occ => occ.hour_start).ThenBy(occ => occ.hour_end))
-                                        act.Occurences.Add(occ);
 
                                     foreach (JObject rub in activity["rubriques"])
                                     {
