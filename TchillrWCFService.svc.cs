@@ -469,6 +469,8 @@ namespace TchillrREST
                                         occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(occ["jour"].ToString());
                                         occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
                                         occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
+                                        if (occurence.hour_end.TotalHours == 24)
+                                            occurence.hour_end = TimeSpan.Parse("23:59:59");
                                         if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
                                             occurences.Add(occurence);
                                     }
