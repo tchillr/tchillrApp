@@ -564,6 +564,8 @@ namespace TchillrREST
             {
                 tchill.success = false;
                 tchill.data = exp.Message;
+                if (exp.InnerException != null)
+                    tchill.data += " " + exp.InnerException.Message;
             }
 
             return tchill.GetResponseMessage();
