@@ -99,6 +99,13 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "cleanDataBase")]
         Message cleanDataBase();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "fixLatLon")]
+        Message fixLatLon();
         
         #endregion
 

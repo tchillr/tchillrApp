@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using System.Data.Objects.DataClasses;
 
 namespace TchillrREST
 {
-    public class Utilities
+    public static class Utilities
     {
         #region CONST
         public const short RUBRIQUE_WEIGHT = 6;
@@ -93,6 +94,15 @@ namespace TchillrREST
 
         public static TchillrREST.DataModel.User GetUserByID(int userID){
             return TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(user => user.identifier == userID);
+        }
+
+        public static EntityCollection<T> ToEntityCollection<T>(this List<T> source) where T : class, IEntityWithRelationships
+        {
+
+            EntityCollection<T> collection = new EntityCollection<T>();
+            foreach (var item in source)
+                collection.Add(item);
+            return collection;
         }
     }
 }

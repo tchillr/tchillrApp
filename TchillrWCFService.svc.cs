@@ -98,12 +98,15 @@ namespace TchillrREST
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
-            var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
-                                    from occ in TchillrREST.Utilities.TchillrContext.Occurences
-                                    where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
-                                    select acti;
+            //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
+            //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
+            //                        where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
+            //                        select acti;
 
-            tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
+            //foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.CreateQuery<DataModel.Activity>("Select VALUE act from Activities as act, Occurences as occ where act.identifier = occ.activityID and occ.jour > CurrentDateTime() and AddDays(CurrentDateTime(),"+nbDays+") < occ.jour"))
+            //    Console.WriteLine(acti.identifier);
+
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.CreateQuery<DataModel.Activity>("Select VALUE act from Activities as act, Occurences as occ where act.identifier = occ.activityID and occ.jour > CurrentDateTime() and occ.jour > AddDays(CurrentDateTime()," + nbDays + ") ").ToList<DataModel.Activity>());
             tchill.success = true;
             //tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
             return tchill.GetResponseMessage();
@@ -608,6 +611,31 @@ namespace TchillrREST
             }
             return tchill.GetResponseMessage();
 
+        }
+
+        public Message fixLatLon()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.longitude > 3))
+            {
+                try
+                {
+                    act.longitude = double.Parse(act.longitude.ToString().Insert(1, ","));
+
+                    act.latitude = double.Parse(act.latitude.ToString().Insert(2, ","));
+                }
+                catch (Exception exp)
+                {
+
+                }
+            }
+
+            TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            tchill.success = true;
+            tchill.data = "done";
+            return tchill.GetResponseMessage();
         }
 
         #endregion
