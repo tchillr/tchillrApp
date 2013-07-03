@@ -119,5 +119,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="UserActivities">
+      <EntityTypeMapping TypeName="TchillrDataBaseModel.UserActivity">
+        <MappingFragment StoreEntitySet="UserActivities">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="occurence_hour_end" ColumnName="occurence_hour_end" />
+          <ScalarProperty Name="occurence_hour_start" ColumnName="occurence_hour_start" />
+          <ScalarProperty Name="occurence_jour" ColumnName="occurence_jour" />
+          <ScalarProperty Name="userID" ColumnName="userID" />
+          <ScalarProperty Name="transport_mode" ColumnName="transport_mode" />
+          <ScalarProperty Name="keywords" ColumnName="keywords" />
+          <ScalarProperty Name="activityID" ColumnName="activityID" />
+          <ScalarProperty Name="identifier" ColumnName="identifier" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

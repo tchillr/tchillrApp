@@ -10,6 +10,7 @@
     <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Store.Tags" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Themes" EntityType="TchillrDataBaseModel.Store.Themes" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="User" EntityType="TchillrDataBaseModel.Store.User" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserActivities" EntityType="TchillrDataBaseModel.Store.UserActivities" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UserTags" EntityType="TchillrDataBaseModel.Store.UserTags" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="WordClouds" EntityType="TchillrDataBaseModel.Store.WordClouds" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.Store.FK_Keywords_0">
@@ -130,15 +131,31 @@
     <Key>
       <PropertyRef Name="identifier" />
     </Key>
-    <Property Name="identifier" Type="int" Nullable="false" />
-    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="identifier" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="UserActivities">
+    <Key>
+      <PropertyRef Name="identifier" />
+      <PropertyRef Name="activityID" />
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Name="identifier" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="activityID" Type="int" Nullable="false" />
+    <Property Name="keywords" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="transport_mode" Type="nvarchar(max)" />
+    <Property Name="userID" Type="int" Nullable="false" />
+    <Property Name="occurence_jour" Type="datetime" Nullable="false" />
+    <Property Name="occurence_hour_start" Type="time" Nullable="false" />
+    <Property Name="occurence_hour_end" Type="time" Nullable="false" />
+    <Property Name="status" Type="int" />
   </EntityType>
   <EntityType Name="UserTags">
     <Key>
       <PropertyRef Name="identifier" />
     </Key>
     <Property Name="identifier" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
     <Property Name="TagID" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="WordClouds">

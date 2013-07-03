@@ -250,6 +250,22 @@ namespace TchillrREST.DataModel
             }
         }
         private ObjectSet<Medium> _Media;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<UserActivity> UserActivities
+        {
+            get
+            {
+                if ((_UserActivities == null))
+                {
+                    _UserActivities = base.CreateObjectSet<UserActivity>("UserActivities");
+                }
+                return _UserActivities;
+            }
+        }
+        private ObjectSet<UserActivity> _UserActivities;
 
         #endregion
         #region AddTo Methods
@@ -340,6 +356,14 @@ namespace TchillrREST.DataModel
         public void AddToMedia(Medium medium)
         {
             base.AddObject("Media", medium);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the UserActivities EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToUserActivities(UserActivity userActivity)
+        {
+            base.AddObject("UserActivities", userActivity);
         }
 
         #endregion
@@ -2087,12 +2111,103 @@ namespace TchillrREST.DataModel
         /// </summary>
         /// <param name="identifier">Initial value of the identifier property.</param>
         /// <param name="name">Initial value of the name property.</param>
-        public static User CreateUser(global::System.Int32 identifier, global::System.String name)
+        public static User CreateUser(global::System.Guid identifier, global::System.String name)
         {
             User user = new User();
             user.identifier = identifier;
             user.name = name;
             return user;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid identifier
+        {
+            get
+            {
+                return _identifier;
+            }
+            set
+            {
+                if (_identifier != value)
+                {
+                    OnidentifierChanging(value);
+                    ReportPropertyChanging("identifier");
+                    _identifier = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("identifier");
+                    OnidentifierChanged();
+                }
+            }
+        }
+        private global::System.Guid _identifier;
+        partial void OnidentifierChanging(global::System.Guid value);
+        partial void OnidentifierChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="TchillrDataBaseModel", Name="UserActivity")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class UserActivity : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new UserActivity object.
+        /// </summary>
+        /// <param name="identifier">Initial value of the identifier property.</param>
+        /// <param name="activityID">Initial value of the activityID property.</param>
+        /// <param name="keywords">Initial value of the keywords property.</param>
+        /// <param name="userID">Initial value of the userID property.</param>
+        /// <param name="occurence_jour">Initial value of the occurence_jour property.</param>
+        /// <param name="occurence_hour_start">Initial value of the occurence_hour_start property.</param>
+        /// <param name="occurence_hour_end">Initial value of the occurence_hour_end property.</param>
+        public static UserActivity CreateUserActivity(global::System.Int32 identifier, global::System.Int32 activityID, global::System.String keywords, global::System.Int32 userID, global::System.DateTime occurence_jour, global::System.TimeSpan occurence_hour_start, global::System.TimeSpan occurence_hour_end)
+        {
+            UserActivity userActivity = new UserActivity();
+            userActivity.identifier = identifier;
+            userActivity.activityID = activityID;
+            userActivity.keywords = keywords;
+            userActivity.userID = userID;
+            userActivity.occurence_jour = occurence_jour;
+            userActivity.occurence_hour_start = occurence_hour_start;
+            userActivity.occurence_hour_end = occurence_hour_end;
+            return userActivity;
         }
 
         #endregion
@@ -2128,26 +2243,200 @@ namespace TchillrREST.DataModel
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String name
+        public global::System.Int32 activityID
         {
             get
             {
-                return _name;
+                return _activityID;
             }
             set
             {
-                OnnameChanging(value);
-                ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("name");
-                OnnameChanged();
+                if (_activityID != value)
+                {
+                    OnactivityIDChanging(value);
+                    ReportPropertyChanging("activityID");
+                    _activityID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("activityID");
+                    OnactivityIDChanged();
+                }
             }
         }
-        private global::System.String _name;
-        partial void OnnameChanging(global::System.String value);
-        partial void OnnameChanged();
+        private global::System.Int32 _activityID;
+        partial void OnactivityIDChanging(global::System.Int32 value);
+        partial void OnactivityIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String keywords
+        {
+            get
+            {
+                return _keywords;
+            }
+            set
+            {
+                OnkeywordsChanging(value);
+                ReportPropertyChanging("keywords");
+                _keywords = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("keywords");
+                OnkeywordsChanged();
+            }
+        }
+        private global::System.String _keywords;
+        partial void OnkeywordsChanging(global::System.String value);
+        partial void OnkeywordsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String transport_mode
+        {
+            get
+            {
+                return _transport_mode;
+            }
+            set
+            {
+                Ontransport_modeChanging(value);
+                ReportPropertyChanging("transport_mode");
+                _transport_mode = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("transport_mode");
+                Ontransport_modeChanged();
+            }
+        }
+        private global::System.String _transport_mode;
+        partial void Ontransport_modeChanging(global::System.String value);
+        partial void Ontransport_modeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 userID
+        {
+            get
+            {
+                return _userID;
+            }
+            set
+            {
+                if (_userID != value)
+                {
+                    OnuserIDChanging(value);
+                    ReportPropertyChanging("userID");
+                    _userID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("userID");
+                    OnuserIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _userID;
+        partial void OnuserIDChanging(global::System.Int32 value);
+        partial void OnuserIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime occurence_jour
+        {
+            get
+            {
+                return _occurence_jour;
+            }
+            set
+            {
+                Onoccurence_jourChanging(value);
+                ReportPropertyChanging("occurence_jour");
+                _occurence_jour = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("occurence_jour");
+                Onoccurence_jourChanged();
+            }
+        }
+        private global::System.DateTime _occurence_jour;
+        partial void Onoccurence_jourChanging(global::System.DateTime value);
+        partial void Onoccurence_jourChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.TimeSpan occurence_hour_start
+        {
+            get
+            {
+                return _occurence_hour_start;
+            }
+            set
+            {
+                Onoccurence_hour_startChanging(value);
+                ReportPropertyChanging("occurence_hour_start");
+                _occurence_hour_start = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("occurence_hour_start");
+                Onoccurence_hour_startChanged();
+            }
+        }
+        private global::System.TimeSpan _occurence_hour_start;
+        partial void Onoccurence_hour_startChanging(global::System.TimeSpan value);
+        partial void Onoccurence_hour_startChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.TimeSpan occurence_hour_end
+        {
+            get
+            {
+                return _occurence_hour_end;
+            }
+            set
+            {
+                Onoccurence_hour_endChanging(value);
+                ReportPropertyChanging("occurence_hour_end");
+                _occurence_hour_end = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("occurence_hour_end");
+                Onoccurence_hour_endChanged();
+            }
+        }
+        private global::System.TimeSpan _occurence_hour_end;
+        partial void Onoccurence_hour_endChanging(global::System.TimeSpan value);
+        partial void Onoccurence_hour_endChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                OnstatusChanging(value);
+                ReportPropertyChanging("status");
+                _status = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("status");
+                OnstatusChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _status;
+        partial void OnstatusChanging(Nullable<global::System.Int32> value);
+        partial void OnstatusChanged();
 
         #endregion
     
@@ -2169,7 +2458,7 @@ namespace TchillrREST.DataModel
         /// <param name="identifier">Initial value of the identifier property.</param>
         /// <param name="userID">Initial value of the UserID property.</param>
         /// <param name="tagID">Initial value of the TagID property.</param>
-        public static UserTag CreateUserTag(global::System.Int32 identifier, global::System.Int32 userID, global::System.Int32 tagID)
+        public static UserTag CreateUserTag(global::System.Int32 identifier, global::System.Guid userID, global::System.Int32 tagID)
         {
             UserTag userTag = new UserTag();
             userTag.identifier = identifier;
@@ -2213,7 +2502,7 @@ namespace TchillrREST.DataModel
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 UserID
+        public global::System.Guid UserID
         {
             get
             {
@@ -2228,8 +2517,8 @@ namespace TchillrREST.DataModel
                 OnUserIDChanged();
             }
         }
-        private global::System.Int32 _UserID;
-        partial void OnUserIDChanging(global::System.Int32 value);
+        private global::System.Guid _UserID;
+        partial void OnUserIDChanging(global::System.Guid value);
         partial void OnUserIDChanged();
     
         /// <summary>

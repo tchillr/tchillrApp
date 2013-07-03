@@ -92,7 +92,7 @@ namespace TchillrREST
         }
 
 
-        public static TchillrREST.DataModel.User GetUserByID(int userID){
+        public static TchillrREST.DataModel.User GetUserByID(Guid userID){
             return TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(user => user.identifier == userID);
         }
 

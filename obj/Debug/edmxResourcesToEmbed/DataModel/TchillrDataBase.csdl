@@ -36,6 +36,7 @@
       <End Role="Activity" EntitySet="Activities" />
       <End Role="Medium" EntitySet="Media" />
     </AssociationSet>
+    <EntitySet Name="UserActivities" EntityType="TchillrDataBaseModel.UserActivity" />
   </EntityContainer>
   <EntityType Name="Activity">
     <Key>
@@ -130,7 +131,7 @@
     <Key>
       <PropertyRef Name="identifier" />
     </Key>
-    <Property Name="identifier" Type="Int32" Nullable="false" />
+    <Property Name="identifier" Type="Guid" Nullable="false" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
   </EntityType>
   <EntityType Name="UserTag">
@@ -138,7 +139,7 @@
       <PropertyRef Name="identifier" />
     </Key>
     <Property Name="identifier" Type="Int32" Nullable="false" />
-    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Guid" Nullable="false" />
     <Property Name="TagID" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="WordCloud">
@@ -247,4 +248,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="UserActivity">
+    <Key>
+      <PropertyRef Name="identifier" />
+      <PropertyRef Name="activityID" />
+      <PropertyRef Name="userID" />
+    </Key>
+    <Property Type="Int32" Name="identifier" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Int32" Name="activityID" Nullable="false" />
+    <Property Type="String" Name="keywords" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="transport_mode" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Type="Int32" Name="userID" Nullable="false" />
+    <Property Type="DateTime" Name="occurence_jour" Nullable="false" />
+    <Property Type="Time" Name="occurence_hour_start" Nullable="false" />
+    <Property Type="Time" Name="occurence_hour_end" Nullable="false" />
+    <Property Type="Int32" Name="status" />
+  </EntityType>
 </Schema>

@@ -15,6 +15,7 @@
           <EntitySet Name="Tags" EntityType="TchillrDataBaseModel.Store.Tags" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Themes" EntityType="TchillrDataBaseModel.Store.Themes" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="User" EntityType="TchillrDataBaseModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserActivities" EntityType="TchillrDataBaseModel.Store.UserActivities" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserTags" EntityType="TchillrDataBaseModel.Store.UserTags" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="WordClouds" EntityType="TchillrDataBaseModel.Store.WordClouds" store:Type="Tables" Schema="dbo" />
           <AssociationSet Name="FK_Keywords_0" Association="TchillrDataBaseModel.Store.FK_Keywords_0">
@@ -135,15 +136,31 @@
           <Key>
             <PropertyRef Name="identifier" />
           </Key>
-          <Property Name="identifier" Type="int" Nullable="false" />
-          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="identifier" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="UserActivities">
+          <Key>
+            <PropertyRef Name="identifier" />
+            <PropertyRef Name="activityID" />
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Name="identifier" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="activityID" Type="int" Nullable="false" />
+          <Property Name="keywords" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="transport_mode" Type="nvarchar(max)" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="occurence_jour" Type="datetime" Nullable="false" />
+          <Property Name="occurence_hour_start" Type="time" Nullable="false" />
+          <Property Name="occurence_hour_end" Type="time" Nullable="false" />
+          <Property Name="status" Type="int" />
         </EntityType>
         <EntityType Name="UserTags">
           <Key>
             <PropertyRef Name="identifier" />
           </Key>
           <Property Name="identifier" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="TagID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="WordClouds">
@@ -262,6 +279,7 @@
             <End Role="Activity" EntitySet="Activities" />
             <End Role="Medium" EntitySet="Media" />
           </AssociationSet>
+          <EntitySet Name="UserActivities" EntityType="TchillrDataBaseModel.UserActivity" />
         </EntityContainer>
         <EntityType Name="Activity">
           <Key>
@@ -356,7 +374,7 @@
           <Key>
             <PropertyRef Name="identifier" />
           </Key>
-          <Property Name="identifier" Type="Int32" Nullable="false" />
+          <Property Name="identifier" Type="Guid" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="UserTag">
@@ -364,7 +382,7 @@
             <PropertyRef Name="identifier" />
           </Key>
           <Property Name="identifier" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Guid" Nullable="false" />
           <Property Name="TagID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="WordCloud">
@@ -473,6 +491,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="identifier" />
+            <PropertyRef Name="activityID" />
+            <PropertyRef Name="userID" />
+          </Key>
+          <Property Type="Int32" Name="identifier" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="activityID" Nullable="false" />
+          <Property Type="String" Name="keywords" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="transport_mode" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="userID" Nullable="false" />
+          <Property Type="DateTime" Name="occurence_jour" Nullable="false" />
+          <Property Type="Time" Name="occurence_hour_start" Nullable="false" />
+          <Property Type="Time" Name="occurence_hour_end" Nullable="false" />
+          <Property Type="Int32" Name="status" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -557,6 +591,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserActivities">
+            <EntityTypeMapping TypeName="TchillrDataBaseModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivities">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="occurence_hour_end" ColumnName="occurence_hour_end" />
+                <ScalarProperty Name="occurence_hour_start" ColumnName="occurence_hour_start" />
+                <ScalarProperty Name="occurence_jour" ColumnName="occurence_jour" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="transport_mode" ColumnName="transport_mode" />
+                <ScalarProperty Name="keywords" ColumnName="keywords" />
+                <ScalarProperty Name="activityID" ColumnName="activityID" />
+                <ScalarProperty Name="identifier" ColumnName="identifier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -614,6 +663,7 @@
           <ConnectorPoint PointX="1.5" PointY="10.711293945312502" />
           <ConnectorPoint PointX="3" PointY="10.711293945312502" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="TchillrDataBaseModel.UserActivity" Width="1.5" PointX="8.375" PointY="7.75" Height="2.5571907552083317" />
       </Diagram>
     </Diagrams>
   </Designer>

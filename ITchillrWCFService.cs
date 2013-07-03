@@ -106,6 +106,34 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "fixLatLon")]
         Message fixLatLon();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/went")]
+        Message UserActivityWent(string usernameID, string activityID);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/like")]
+        Message UserActivityLike(string usernameID, string activityID);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/dontlike")]
+        Message UserActivityDontLike(string usernameID, string activityID);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "login/adduser/{userguid}")]
+        Message AddUser(string userguid);
         
         #endregion
 

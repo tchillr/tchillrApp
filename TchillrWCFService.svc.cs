@@ -73,7 +73,7 @@ namespace TchillrREST
             DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-            int userNameID = int.Parse(usernameid);
+            Guid userNameID = Guid.Parse(usernameid);
             List<DataModel.Tag> results = new List<DataModel.Tag>();
             foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
             {
@@ -98,15 +98,12 @@ namespace TchillrREST
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
-            //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
-            //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
-            //                        where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
-            //                        select acti;
+            var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
+                                    from occ in TchillrREST.Utilities.TchillrContext.Occurences
+                                    where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
+                                    select acti;
 
-            //foreach (DataModel.Activity acti in TchillrREST.Utilities.TchillrContext.CreateQuery<DataModel.Activity>("Select VALUE act from Activities as act, Occurences as occ where act.identifier = occ.activityID and occ.jour > CurrentDateTime() and AddDays(CurrentDateTime(),"+nbDays+") < occ.jour"))
-            //    Console.WriteLine(acti.identifier);
-
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.CreateQuery<DataModel.Activity>("Select VALUE act from Activities as act, Occurences as occ where act.identifier = occ.activityID and occ.jour > CurrentDateTime() and occ.jour > AddDays(CurrentDateTime()," + nbDays + ") ").ToList<DataModel.Activity>());
+            tchill.SetData(activitiesForDays.ToList());
             tchill.success = true;
             //tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
             return tchill.GetResponseMessage();
@@ -137,7 +134,7 @@ namespace TchillrREST
             //DateTime start = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-            int userNameID = int.Parse(usernameid);
+            Guid userNameID = Guid.Parse(usernameid);
             List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
 
             List<string> tags = new List<string>();
@@ -211,7 +208,7 @@ namespace TchillrREST
                 DateTime start = DateTime.Now;
                 TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-                int userNameID = int.Parse(usernameid);
+                Guid userNameID = Guid.Parse(usernameid);
                 List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
 
                 List<string> tags = new List<string>();
@@ -638,6 +635,84 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
+        //UriTemplate = "users/{usernameid}/activities/{activityID}/went")]
+        public Message UserActivityDontLike(string usernameID, string activityID)
+        {
+            return UserActivity(usernameID, activityID, 1);
+        }
+
+        public Message UserActivityLike(string usernameID, string activityID)
+        {
+            return UserActivity(usernameID, activityID, 2);
+        }
+
+        public Message UserActivityWent(string usernameID, string activityID)
+        {
+            return UserActivity(usernameID, activityID, 3);
+        }
+
+        private Message UserActivity(string usernameID, string activityID, int status)
+        {
+            int uID = int.Parse(usernameID);
+            int actID = int.Parse(activityID);
+
+            DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            DataModel.UserActivity userActi = TchillrREST.Utilities.TchillrContext.UserActivities.FirstOrDefault(ua => ua.activityID == actID && ua.userID == uID);
+            if (userActi != null)
+            {
+                userActi.status = status;
+            }
+            else
+            {
+                userActi = new DataModel.UserActivity();
+                userActi.activityID = actID;
+                DataModel.Activity act = TchillrREST.Utilities.TchillrContext.Activities.FirstOrDefault(acti => acti.identifier == actID);
+                if (act != null)
+                {
+                    userActi.keywords = String.Join("###", act.Keywords.Select(key => key.title).ToList());
+                }
+                userActi.status = status;
+                userActi.userID = uID;
+                TchillrREST.Utilities.TchillrContext.UserActivities.AddObject(userActi);
+            }
+
+            TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            return tchill.GetResponseMessage();
+        }
+
+        public Message AddUser(string userGUID)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            
+            Guid usrGuid = Guid.Empty;
+            if (Guid.TryParse(userGUID, out usrGuid))
+            {
+                DataModel.User newUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == usrGuid);
+                if (newUser == null)
+                {
+                    newUser.identifier = usrGuid;
+                    newUser.name = "User " + TchillrREST.Utilities.TchillrContext.Users.Count() + 1;
+                    TchillrREST.Utilities.TchillrContext.Users.AddObject(newUser);
+                    TchillrREST.Utilities.TchillrContext.SaveChanges();
+                    tchill.data = "user identifier:" + newUser.identifier + " name:" + newUser.name + " created.";
+                    tchill.success = true;
+                }
+                else
+                {
+                    tchill.data = "userGUID " + userGUID + " already exists.";
+                    tchill.success = false;
+                }
+            }
+            else
+            {
+                tchill.data = "userGUID " + userGUID + " could not be parse as a valid Guid.";
+                tchill.success = false;
+            }
+
+            return tchill.GetResponseMessage();
+        }
+
         #endregion
 
         #region POST
@@ -645,7 +720,7 @@ namespace TchillrREST
         public Message PostInterests(string usernameid, Stream content)
         {
 
-            int userNameID = int.Parse(usernameid);
+            Guid userNameID = Guid.Parse(usernameid);
             // convert Stream Data to StreamReader
             StreamReader reader = new StreamReader(content);
 
@@ -654,7 +729,7 @@ namespace TchillrREST
             int tagID = int.Parse(result.Split('=')[1]);
 
             TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
-            if (ut == null || ut.UserID == 0)
+            if (ut == null || ut.UserID == Guid.Empty)
             {
                 ut = new TchillrREST.DataModel.UserTag();
                 ut.UserID = userNameID;
