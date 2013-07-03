@@ -111,22 +111,22 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "users/{usernameid}/activities/{activityID}/went")]
-        Message UserActivityWent(string usernameID, string activityID);
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/attending")]
+        Message UserActivityAttending(string usernameID, string activityID);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "users/{usernameid}/activities/{activityID}/like")]
-        Message UserActivityLike(string usernameID, string activityID);
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/going")]
+        Message UserActivityGoing(string usernameID, string activityID);
 
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "users/{usernameid}/activities/{activityID}/dontlike")]
-        Message UserActivityDontLike(string usernameID, string activityID);
+        //[OperationContract]
+        //[WebInvoke(Method = "GET",
+        //    ResponseFormat = WebMessageFormat.Json,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //          UriTemplate = "users/{usernameid}/activities/{activityID}/dontlike")]
+        //Message UserActivityDontLike(string usernameID, string activityID);
 
         [OperationContract]
         [WebInvoke(Method = "GET",

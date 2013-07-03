@@ -251,9 +251,12 @@ namespace TchillrREST
                     List<DataModel.Keyword> keywords = activity.Keywords.ToList();
                     List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
                     List<DataModel.Tag> acitivityTags = new List<DataModel.Tag>();
+                    List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
 
                     var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
-                                       where keywordsString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null
+                                       where keywordsString.Contains(dbTags.title.ToUpper()) ||
+                                       dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
+                                       rubirquesString.Contains(dbTags.title.ToUpper())
                                        select new { dbTags.identifier, dbTags.title };
 
                     activity.OccurencesToSend = activity.Occurences.Except(activity.Occurences.Where(oc => oc.jour < now &&  till > oc.jour)).ToList();
@@ -638,12 +641,12 @@ namespace TchillrREST
             return UserActivity(usernameID, activityID, 1);
         }
 
-        public Message UserActivityLike(string usernameID, string activityID)
+        public Message UserActivityGoing(string usernameID, string activityID)
         {
             return UserActivity(usernameID, activityID, 2);
         }
 
-        public Message UserActivityWent(string usernameID, string activityID)
+        public Message UserActivityAttending(string usernameID, string activityID)
         {
             return UserActivity(usernameID, activityID, 3);
         }
