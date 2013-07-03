@@ -101,6 +101,7 @@ namespace TchillrREST
             var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
                                     from occ in TchillrREST.Utilities.TchillrContext.Occurences
                                     where acti.identifier == occ.ActivityID && occ.jour > DateTime.Now && occ.jour < till
+                                    && acti.latitude > 0 && acti.longitude > 0
                                     select acti;
 
             tchill.SetData(activitiesForDays.ToList());
