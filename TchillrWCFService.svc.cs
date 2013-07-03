@@ -698,6 +698,7 @@ namespace TchillrREST
                 DataModel.User newUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == usrGuid);
                 if (newUser == null)
                 {
+                    newUser = new DataModel.User();
                     newUser.identifier = usrGuid;
                     newUser.name = "User " + TchillrREST.Utilities.TchillrContext.Users.Count() + 1;
                     TchillrREST.Utilities.TchillrContext.Users.AddObject(newUser);
