@@ -104,9 +104,12 @@ namespace TchillrREST
                                     && acti.latitude > 0 && acti.longitude > 0
                                     select acti;
 
+            foreach (DataModel.Activity activity in activitiesForDays)
+                activity.tags = new List<DataModel.ContextualTag>();
+
             tchill.SetData(activitiesForDays.ToList());
             tchill.success = true;
-            //tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+
             return tchill.GetResponseMessage();
         }
 
