@@ -251,26 +251,12 @@ namespace TchillrREST
                     List<DataModel.Keyword> keywords = activity.Keywords.ToList();
                     List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
                     List<DataModel.Tag> acitivityTags = new List<DataModel.Tag>();
-                    //select * from Tags, WordClouds where Tags.identifier = WordClouds.tagID AND 
-                    //    (Tags.title in (select Keywords.title from Activities, Keywords where Activities.identifier = Keywords.activityID and Activities.identifier = 57226) or WordClouds.title in (select Keywords.title from Activities, Keywords where Activities.identifier = Keywords.activityID and Activities.identifier = 57226) )
-
-                    //foreach (DataModel.Tag tag in allTags)
-                    //{
-                    //    if (keywordsString.Contains(tag.title.ToUpper()))
-                    //    {
-                    //        acitivityTags.Add(tag);
-                    //        continue;
-                    //    }
-                    //    else
-                    //        foreach (DataModel.WordCloud wd in tag.WordClouds)
-                    //        {
-                    //            if(wd.title.ToUpper()
-                    //        }
-                    //}
 
                     var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
                                        where keywordsString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title };
+
+                    activity.OccurencesToSend = activity.Occurences.Except(activity.Occurences.Where(oc => oc.jour < now &&  till > oc.jour)).ToList();
 
                     activity.tags = new List<DataModel.ContextualTag>();
                     foreach (var element in activityTags)
