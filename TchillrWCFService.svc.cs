@@ -256,7 +256,7 @@ namespace TchillrREST
                     var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
                                        where keywordsString.Contains(dbTags.title.ToUpper()) ||
                                        dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
-                                       rubirquesString.Contains(dbTags.title.ToUpper())
+                                       rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title };
 
                     activity.OccurencesToSend = activity.Occurences.Except(activity.Occurences.Where(oc => oc.jour < now &&  till > oc.jour)).ToList();
