@@ -208,7 +208,9 @@ namespace TchillrREST
                 DateTime start = DateTime.Now;
                 TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-                Guid userNameID = Guid.Parse(usernameid);
+                Guid userNameID = Guid.Empty;
+                Guid.TryParse(usernameid, out userNameID);
+
                 List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
 
                 List<string> tags = new List<string>();
@@ -218,6 +220,11 @@ namespace TchillrREST
                 foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
                     if (userTags.Contains(tag.identifier))
                         tags.Add(tag.title);
+
+                if (tags.Count == 0)
+                {
+                    return GetActivitiesForDays(nbDays);
+                }
 
                 tagWordsCloud = TchillrREST.Utilities.TchillrContext.WordClouds.Where(wordCloud => userTags.Contains(wordCloud.tagID)).Select(wordCloud => wordCloud.title).ToList();
 
