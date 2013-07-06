@@ -70,22 +70,26 @@ namespace TchillrREST
 
         public Message GetInterests(string usernameid)
         {
-            DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-
-            Guid userNameID = Guid.Parse(usernameid);
-            List<DataModel.Tag> results = new List<DataModel.Tag>();
-            foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
+            try
             {
-                DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
-                if (tag != null)
-                    results.Add(tag);
+                Guid userNameID = Guid.Parse(usernameid);
+                List<DataModel.Tag> results = new List<DataModel.Tag>();
+                foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
+                {
+                    DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
+                    if (tag != null)
+                        results.Add(tag);
+                }
+                tchill.SetData(results);
+                tchill.success = true;
+                //return tchill;
             }
-            tchill.SetData(results);
-            tchill.success = true;
-            tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
-            //return tchill;
-
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.SetData(exp.Message);
+            }
             string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
             return WebOperationContext.Current.CreateTextResponse(myResponseBody,
                         "application/json; charset=utf-8",
@@ -108,25 +112,25 @@ namespace TchillrREST
             foreach (DataModel.Activity activity in activitiesForDays)
             {
                 
-                List<DataModel.Keyword> keywords = activity.Keywords.ToList();
-                List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
-                List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
+                //List<DataModel.Keyword> keywords = activity.Keywords.ToList();
+                //List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
+                //List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
 
-                activity.tags = new List<DataModel.ContextualTag>();
+                //activity.tags = new List<DataModel.ContextualTag>();
 
-                var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
-                                   where keywordsString.Contains(dbTags.title.ToUpper()) ||
-                                   dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
-                                   rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
-                                   select new { dbTags.identifier, dbTags.title };
+                //var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
+                //                   where keywordsString.Contains(dbTags.title.ToUpper()) ||
+                //                   dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
+                //                   rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
+                //                   select new { dbTags.identifier, dbTags.title };
                 
-                foreach (var element in activityTags)
-                {
-                    DataModel.ContextualTag ct = new DataModel.ContextualTag();
-                    ct.identifier = element.identifier;
-                    ct.title = element.title;
-                    activity.tags.Add(ct);
-                }
+                //foreach (var element in activityTags)
+                //{
+                //    DataModel.ContextualTag ct = new DataModel.ContextualTag();
+                //    ct.identifier = element.identifier;
+                //    ct.title = element.title;
+                //    activity.tags.Add(ct);
+                //}
 
                 activity.OccurencesToSend = activity.Occurences.Where(oc => oc.jour >= now && oc.jour <= till).ToList();
             }
