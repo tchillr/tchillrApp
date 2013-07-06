@@ -132,10 +132,10 @@ namespace TchillrREST
                 //    activity.tags.Add(ct);
                 //}
 
-                activity.OccurencesToSend = activity.Occurences.Where(oc => oc.jour >= now && oc.jour <= till).ToList();
+                activity.OccurencesToSend = activity.Occurences.Where(oc => oc.jour >= now && oc.jour <= till).ToList<DataModel.Occurence>();
             }
 
-            tchill.SetData(activitiesForDays.ToList());
+            tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
             tchill.success = true;
 
             return tchill.GetResponseMessage();
