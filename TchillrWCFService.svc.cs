@@ -110,7 +110,7 @@ namespace TchillrREST
             //                        && acti.latitude > 0 && acti.longitude > 0
             //                        select acti;
 
-            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(occ => occ.jour >= now && occ.jour <= till) > 0 &&
+            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0   
                                                                                           );
 
