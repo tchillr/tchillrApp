@@ -11,6 +11,7 @@ namespace TchillrREST
     {
         #region CONST
         public const short RUBRIQUE_WEIGHT = 6;
+        public const string DATE_TIME_FORMAT = "yyyyMMddHHmmss";
         #endregion
 
         private static TchillrREST.DataModel.Entities context = null;

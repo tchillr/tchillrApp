@@ -15,6 +15,7 @@ using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 using System.Data.Objects.DataClasses;
 using System.Web;
+using System.Globalization;
 
 namespace TchillrREST
 {
@@ -96,22 +97,46 @@ namespace TchillrREST
                         Encoding.UTF8);
         }
 
-        public Message GetActivitiesForDays(string nbDays)
+        public Message GetActivitiesForDays(string fromDate, string toDate)
         {
-            //DateTime start = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-            DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
-            DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
-            TimeSpan time = new TimeSpan(DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
+            DateTime now;
+            try
+            {
+                now = DateTime.ParseExact(fromDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+            catch(FormatException frmExp)
+            {
+                tchill.success = false;
+                tchill.data = "Could not parse " + fromDate + " ";
+                return tchill.GetResponseMessage();
+            }
+            DateTime till;
+            try
+            {
+                till = DateTime.ParseExact(toDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException frmExp)
+            {
+                tchill.success = false;
+                tchill.data = "Could not parse " + toDate + " ";
+                return tchill.GetResponseMessage();
+            }
+
+            TimeSpan fromTime = now.TimeOfDay;
+            TimeSpan tillTime = till.TimeOfDay;
+
+            now = now.Date;
+            till = till.Date;
             //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
             //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
             //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
             //                        && acti.latitude > 0 && acti.longitude > 0
             //                        select acti;
 
-            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
-                                                                                                 act.latitude > 0 && act.longitude > 0   
+            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
+                                                                                                 act.latitude > 0 && act.longitude > 0
                                                                                           );
 
             foreach (DataModel.Activity activity in activitiesForDays)
@@ -137,7 +162,7 @@ namespace TchillrREST
                     activity.tags.Add(ct);
                 }
 
-                activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end ) || ( oc.jour > now && oc.jour <= till) ).ToList<DataModel.Occurence>();
+                activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
             }
 
             tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
@@ -238,11 +263,10 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
-        public Message GetUserActivitiesForDays(string usernameid, string nbDays)
+        public Message GetUserActivitiesForDays(string usernameid, string fromDate, string toDate)
         {
             try
             {
-                DateTime start = DateTime.Now;
                 TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
                 Guid userNameID = Guid.Empty;
@@ -260,7 +284,30 @@ namespace TchillrREST
 
                 if (tags.Count == 0)
                 {
-                    return GetActivitiesForDays(nbDays);
+                    return GetActivitiesForDays(fromDate,toDate);
+                }
+
+                DateTime now;
+                try
+                {
+                    now = DateTime.ParseExact(fromDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException frmExp)
+                {
+                    tchill.success = false;
+                    tchill.data = "Could not parse " + fromDate + " ";
+                    return tchill.GetResponseMessage();
+                }
+                DateTime till;
+                try
+                {
+                    till = DateTime.ParseExact(toDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException frmExp)
+                {
+                    tchill.success = false;
+                    tchill.data = "Could not parse " + toDate + " ";
+                    return tchill.GetResponseMessage();
                 }
 
                 tagWordsCloud = TchillrREST.Utilities.TchillrContext.WordClouds.Where(wordCloud => userTags.Contains(wordCloud.tagID)).Select(wordCloud => wordCloud.title).ToList();
@@ -268,16 +315,17 @@ namespace TchillrREST
                 tags = tags.ConvertAll(d => d.ToUpper());
                 tagWordsCloud = tagWordsCloud.ConvertAll(d => d.ToUpper());
 
-                DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
+                TimeSpan fromTime = now.TimeOfDay;
+                TimeSpan tillTime = till.TimeOfDay;
 
-                DateTime till = now.AddDays(double.Parse(nbDays));
-                TimeSpan time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                now = now.Date;
+                till = till.Date;
                 //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
                 //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
                 //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
                 //                        && acti.latitude > 0 && acti.longitude > 0
                 //                        select acti;
-                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
+                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0
                                                                                           );
 
@@ -296,7 +344,7 @@ namespace TchillrREST
                                        rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title };
 
-                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
+                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
 
                     activity.tags = new List<DataModel.ContextualTag>();
                     foreach (var element in activityTags)
@@ -351,14 +399,10 @@ namespace TchillrREST
 
                 tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList<DataModel.Activity>());
                 tchill.success = true;
-                tchill.responseTime = (DateTime.Now - start).TotalMilliseconds;
+
                 //return tchill;
 
-                string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-                return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                            "application/json; charset=utf-8",
-                            Encoding.UTF8);
-
+                return tchill.GetResponseMessage();
             }
             catch (Exception exp) { }
             return null;
@@ -721,7 +765,7 @@ namespace TchillrREST
         public Message AddUser(string userGUID)
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            
+
             Guid usrGuid = Guid.Empty;
             if (Guid.TryParse(userGUID, out usrGuid))
             {
