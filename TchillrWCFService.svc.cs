@@ -103,6 +103,7 @@ namespace TchillrREST
 
             DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
             DateTime till = DateTime.Now.AddDays(double.Parse(nbDays));
+            TimeSpan time = new TimeSpan(DateTime.Now.Hour,DateTime.Now.Minute,DateTime.Now.Second);
             //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
             //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
             //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
@@ -115,28 +116,28 @@ namespace TchillrREST
 
             foreach (DataModel.Activity activity in activitiesForDays)
             {
-                
-                //List<DataModel.Keyword> keywords = activity.Keywords.ToList();
-                //List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
-                //List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
 
-                //activity.tags = new List<DataModel.ContextualTag>();
+                List<DataModel.Keyword> keywords = activity.Keywords.ToList();
+                List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
+                List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
 
-                //var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
-                //                   where keywordsString.Contains(dbTags.title.ToUpper()) ||
-                //                   dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
-                //                   rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
-                //                   select new { dbTags.identifier, dbTags.title };
-                
-                //foreach (var element in activityTags)
-                //{
-                //    DataModel.ContextualTag ct = new DataModel.ContextualTag();
-                //    ct.identifier = element.identifier;
-                //    ct.title = element.title;
-                //    activity.tags.Add(ct);
-                //}
+                activity.tags = new List<DataModel.ContextualTag>();
 
-                activity.OccurencesToSend = activity.Occurences.Where(oc => oc.jour >= now && oc.jour <= till).ToList<DataModel.Occurence>();
+                var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
+                                   where keywordsString.Contains(dbTags.title.ToUpper()) ||
+                                   dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
+                                   rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
+                                   select new { dbTags.identifier, dbTags.title };
+
+                foreach (var element in activityTags)
+                {
+                    DataModel.ContextualTag ct = new DataModel.ContextualTag();
+                    ct.identifier = element.identifier;
+                    ct.title = element.title;
+                    activity.tags.Add(ct);
+                }
+
+                activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end ) || ( oc.jour > now && oc.jour <= till) ).ToList<DataModel.Occurence>();
             }
 
             tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
