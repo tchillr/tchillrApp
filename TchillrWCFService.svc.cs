@@ -271,12 +271,13 @@ namespace TchillrREST
                 DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
 
                 DateTime till = now.AddDays(double.Parse(nbDays));
+                TimeSpan time = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
                 //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
                 //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
                 //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
                 //                        && acti.latitude > 0 && acti.longitude > 0
                 //                        select acti;
-                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(occ => occ.jour >= now && occ.jour <= till) > 0 &&
+                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0
                                                                                           );
 
@@ -295,7 +296,7 @@ namespace TchillrREST
                                        rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title };
 
-                    activity.OccurencesToSend = activity.Occurences.Where(oc => oc.jour >= now && oc.jour <= till).ToList();
+                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && time >= oc.hour_start && time <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
 
                     activity.tags = new List<DataModel.ContextualTag>();
                     foreach (var element in activityTags)
