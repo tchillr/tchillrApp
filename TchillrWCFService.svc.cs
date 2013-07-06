@@ -270,11 +270,14 @@ namespace TchillrREST
                 DateTime now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0, 0);
 
                 DateTime till = now.AddDays(double.Parse(nbDays));
-                var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
-                                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
-                                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
-                                        && acti.latitude > 0 && acti.longitude > 0
-                                        select acti;
+                //var activitiesForDays = from acti in TchillrREST.Utilities.TchillrContext.Activities
+                //                        from occ in TchillrREST.Utilities.TchillrContext.Occurences
+                //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
+                //                        && acti.latitude > 0 && acti.longitude > 0
+                //                        select acti;
+                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(occ => occ.jour >= now && occ.jour <= till) > 0 &&
+                                                                                                 act.latitude > 0 && act.longitude > 0
+                                                                                          );
 
                 foreach (DataModel.Activity activity in activitiesForDays)
                 {
