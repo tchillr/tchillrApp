@@ -147,7 +147,7 @@ namespace TchillrREST
 
             var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0
-                                                                                          );
+                                                                                          ).OrderBy(act => act.Occurences.FirstOrDefault().jour).ThenBy(act => act.Occurences.FirstOrDefault().hour_start);
 
             foreach (DataModel.Activity activity in activitiesForDays)
             {
@@ -175,9 +175,13 @@ namespace TchillrREST
                 activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
             }
 
-            tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
-            tchill.success = true;
-
+            try
+            {
+                tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
+                tchill.success = true;
+            }
+            catch(Exception exp){
+                }
             return tchill.GetResponseMessage();
         }
 
