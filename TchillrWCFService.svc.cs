@@ -64,7 +64,7 @@ namespace TchillrREST
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             //List<DataModel.Tag> tags = new List<DataModel.Tag>();
-            
+
             //DataModel.Theme thm = TchillrREST.Utilities.TchillrContext.Themes.FirstOrDefault(th => th.title == theme);
             //if(thm != null){
             //    foreach (DataModel.Tag tag in thm.Tags)
@@ -180,8 +180,9 @@ namespace TchillrREST
                 tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
                 tchill.success = true;
             }
-            catch(Exception exp){
-                }
+            catch (Exception exp)
+            {
+            }
             return tchill.GetResponseMessage();
         }
 
@@ -820,7 +821,7 @@ namespace TchillrREST
 
         public Message fixDescription()
         {
-            
+
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             try
             {
@@ -946,36 +947,33 @@ namespace TchillrREST
         public Message PostInterests(string usernameid, Stream content)
         {
 
-            Guid userNameID = Guid.Parse(usernameid);
+            Guid userNameID;
+            Guid.TryParse(usernameid, out userNameID);
             // convert Stream Data to StreamReader
             StreamReader reader = new StreamReader(content);
 
             string result = reader.ReadToEnd();
 
-            //int tagID = int.Parse(result.Split('=')[1]);
-            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.success = true;
-            tchill.data = result;
-
-            return tchill.GetResponseMessage();
-
-            /*
-            TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
-            if (ut == null || ut.UserID == Guid.Empty)
+            foreach (string tagLine in result.Split('&'))
             {
-                ut = new TchillrREST.DataModel.UserTag();
-                ut.UserID = userNameID;
-                ut.TagID = tagID;
-                TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
+                int tagID = int.Parse(tagLine.Split('=')[1]);
+
+                TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
+                if (ut == null || ut.UserID == Guid.Empty)
+                {
+                    ut = new TchillrREST.DataModel.UserTag();
+                    ut.UserID = userNameID;
+                    ut.TagID = tagID;
+                    TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
+                }
+                else
+                    TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(ut);
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+
             }
-            else
-                TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(ut);
-
-            TchillrREST.Utilities.TchillrContext.SaveChanges();
-
-
             return GetInterests(usernameid);
-            */
+
         }
 
         #endregion
