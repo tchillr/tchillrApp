@@ -9,6 +9,9 @@ namespace TchillrREST
 {
     public static class Utilities
     {
+
+#warning jsonignore Occurences in Activity, Theme in Tags
+
         #region CONST
         public const short RUBRIQUE_WEIGHT = 6;
         public const string DATE_TIME_FORMAT = "yyyyMMddHHmmss";

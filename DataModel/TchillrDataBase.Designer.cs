@@ -1942,6 +1942,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_01", "Theme")]
+        [JsonIgnore]
         public Theme Theme
         {
             get
