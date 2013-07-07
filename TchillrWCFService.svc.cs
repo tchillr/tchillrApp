@@ -953,7 +953,13 @@ namespace TchillrREST
             string result = reader.ReadToEnd();
 
             int tagID = int.Parse(result.Split('=')[1]);
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            tchill.success = true;
+            tchill.data = tagID;
 
+            return tchill.GetResponseMessage();
+
+            /*
             TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
             if (ut == null || ut.UserID == Guid.Empty)
             {
@@ -969,7 +975,7 @@ namespace TchillrREST
 
 
             return GetInterests(usernameid);
-
+            */
         }
 
         #endregion
