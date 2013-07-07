@@ -919,6 +919,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Keywords_0", "Keywords")]
+        [JsonIgnore]
         public EntityCollection<Keyword> Keywords
         {
             get
@@ -964,6 +965,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Rubriques_0", "Rubriques")]
+        [JsonIgnore]
         public EntityCollection<Rubrique> Rubriques
         {
             get
