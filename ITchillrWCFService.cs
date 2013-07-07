@@ -113,6 +113,12 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "fixDesc")]
         Message fixDescription();
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "fixActivities")]
+        Message fixCharactersInActivities();
 
         [OperationContract]
         [WebInvoke(Method = "GET",

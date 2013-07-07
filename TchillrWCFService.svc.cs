@@ -716,6 +716,94 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
+        public Message fixCharactersInActivities()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            try
+            {
+                foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities)
+                {
+                    //if (act.name.Contains("&"))
+                    //{
+                    //     act.name = System.Web.HttpUtility.HtmlDecode(act.name);
+                    //}
+
+                    //if (act.description.Contains("&"))
+                    //{
+                    //    act.description = System.Web.HttpUtility.HtmlDecode(act.description);
+                    //}
+
+                    //if (act.shortDescription.Contains("&"))
+                    //{
+                    //    act.shortDescription = System.Web.HttpUtility.HtmlDecode(act.shortDescription);
+                    //}
+
+                    //if (act.place.Contains("&"))
+                    //{
+                    //    act.place = System.Web.HttpUtility.HtmlDecode(act.place);
+                    //}
+
+                    if (act.adress.Contains("&"))
+                    {
+                        act.adress = System.Web.HttpUtility.HtmlDecode(act.adress);
+                    }
+
+                    if (act.city.Contains("&"))
+                    {
+                        act.city = System.Web.HttpUtility.HtmlDecode(act.city);
+                    }
+
+                    if (act.accessType.Contains("&"))
+                    {
+                        act.accessType = System.Web.HttpUtility.HtmlDecode(act.accessType);
+                    }
+
+                    if (act.price.Contains("&"))
+                    {
+                        act.price = System.Web.HttpUtility.HtmlDecode(act.price);
+                    }
+
+                    if (act.metro.Contains("&"))
+                    {
+                        act.metro = System.Web.HttpUtility.HtmlDecode(act.metro);
+                    }
+
+                    if (act.velib.Contains("&"))
+                    {
+                        act.velib = System.Web.HttpUtility.HtmlDecode(act.velib);
+                    }
+
+                    if (act.bus.Contains("&"))
+                    {
+                        act.bus = System.Web.HttpUtility.HtmlDecode(act.bus);
+                    }
+
+                    if (act.organisateur != null && act.organisateur.Contains("&"))
+                    {
+                        act.organisateur = System.Web.HttpUtility.HtmlDecode(act.organisateur);
+                    }
+
+                    if (act.hasFee.Contains("&"))
+                    {
+                        act.hasFee = System.Web.HttpUtility.HtmlDecode(act.hasFee);
+                    }
+                }
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+            }
+
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+
+            tchill.success = true;
+            tchill.data = "done";
+
+            return tchill.GetResponseMessage();
+        }
+
         public Message fixDescription()
         {
             
