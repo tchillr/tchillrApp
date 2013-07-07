@@ -952,10 +952,10 @@ namespace TchillrREST
 
             string result = reader.ReadToEnd();
 
-            int tagID = int.Parse(result.Split('=')[1]);
+            //int tagID = int.Parse(result.Split('=')[1]);
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             tchill.success = true;
-            tchill.data = tagID;
+            tchill.data = result;
 
             return tchill.GetResponseMessage();
 
