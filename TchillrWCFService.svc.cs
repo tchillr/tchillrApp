@@ -135,7 +135,7 @@ namespace TchillrREST
             //                        && acti.latitude > 0 && acti.longitude > 0
             //                        select acti;
 
-            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
+            var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0
                                                                                           );
 
@@ -162,7 +162,7 @@ namespace TchillrREST
                     activity.tags.Add(ct);
                 }
 
-                activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
+                activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
             }
 
             tchill.SetData(activitiesForDays.ToList<DataModel.Activity>());
@@ -325,7 +325,7 @@ namespace TchillrREST
                 //                        where acti.identifier == occ.ActivityID && occ.jour >= now && occ.jour <= till
                 //                        && acti.latitude > 0 && acti.longitude > 0
                 //                        select acti;
-                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)) > 0 &&
+                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)) > 0 &&
                                                                                                  act.latitude > 0 && act.longitude > 0
                                                                                           );
 
@@ -344,7 +344,7 @@ namespace TchillrREST
                                        rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title };
 
-                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
+                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
 
                     activity.tags = new List<DataModel.ContextualTag>();
                     foreach (var element in activityTags)
