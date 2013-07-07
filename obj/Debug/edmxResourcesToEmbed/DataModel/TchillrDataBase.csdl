@@ -23,10 +23,6 @@
       <End Role="Activities" EntitySet="Activities" />
       <End Role="Rubriques" EntitySet="Rubriques" />
     </AssociationSet>
-    <AssociationSet Name="FK_Tags_0" Association="TchillrDataBaseModel.FK_Tags_0">
-      <End Role="Themes" EntitySet="Themes" />
-      <End Role="Tags" EntitySet="Tags" />
-    </AssociationSet>
     <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.FK_WordClouds_0">
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
@@ -37,6 +33,10 @@
       <End Role="Medium" EntitySet="Media" />
     </AssociationSet>
     <EntitySet Name="UserActivities" EntityType="TchillrDataBaseModel.UserActivity" />
+    <AssociationSet Name="FK_Tags_01" Association="TchillrDataBaseModel.FK_Tags_01">
+      <End Role="Theme" EntitySet="Themes" />
+      <End Role="Tag" EntitySet="Tags" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Activity">
     <Key>
@@ -116,8 +116,8 @@
     <Property Name="title" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <Property Name="weight" Type="Int32" Nullable="false" />
     <Property Name="themeID" Type="Int32" />
-    <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Tags" ToRole="Themes" />
     <NavigationProperty Name="WordClouds" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
+    <NavigationProperty Name="Theme_1" Relationship="TchillrDataBaseModel.FK_Tags_01" FromRole="Tag" ToRole="Theme" />
   </EntityType>
   <EntityType Name="Theme">
     <Key>
@@ -125,7 +125,7 @@
     </Key>
     <Property Name="identifier" Type="Int32" Nullable="false" />
     <Property Name="title" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.FK_Tags_0" FromRole="Themes" ToRole="Tags" />
+    <NavigationProperty Name="Tags" Relationship="TchillrDataBaseModel.FK_Tags_01" FromRole="Theme" ToRole="Tag" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -193,20 +193,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Tags_0">
-    <End Role="Themes" Type="TchillrDataBaseModel.Theme" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="Themes">
-        <PropertyRef Name="identifier" />
-      </Principal>
-      <Dependent Role="Tags">
-        <PropertyRef Name="identifier" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_WordClouds_0">
     <End Role="Tags" Type="TchillrDataBaseModel.Tag" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -264,4 +250,16 @@
     <Property Type="Time" Name="occurence_hour_end" Nullable="false" />
     <Property Type="Int32" Name="status" />
   </EntityType>
+  <Association Name="FK_Tags_01">
+    <End Type="TchillrDataBaseModel.Theme" Role="Theme" Multiplicity="0..1" />
+    <End Type="TchillrDataBaseModel.Tag" Role="Tag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Theme">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Tag">
+        <PropertyRef Name="themeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

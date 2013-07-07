@@ -14,7 +14,6 @@ using System.Data.EntityClient;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -22,9 +21,9 @@ using Newtonsoft.Json;
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Keywords_0", "Activities", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Keywords", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Keyword), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Occurences_0", "Activities", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Occurences", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Occurence), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Rubriques_0", "Activities", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Rubriques", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Rubrique), true)]
-[assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Tags_0", "Themes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Theme), "Tags", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(TchillrREST.DataModel.Tag), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_WordClouds_0", "Tags", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Tag), "WordClouds", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.WordCloud), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Media_0", "Activity", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Medium", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Medium), true)]
+[assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Tags_01", "Theme", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(TchillrREST.DataModel.Theme), "Tag", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Tag), true)]
 
 #endregion
 
@@ -941,7 +940,6 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Occurences_0", "Occurences")]
-        [JsonIgnore]
         public EntityCollection<Occurence> Occurences
         {
             get
@@ -1919,44 +1917,6 @@ namespace TchillrREST.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_0", "Themes")]
-        public Theme Theme
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_0", "Themes").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_0", "Themes").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Theme> ThemeReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_0", "Themes");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_0", "Themes", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_WordClouds_0", "WordClouds")]
         public EntityCollection<WordCloud> WordClouds
         {
@@ -1969,6 +1929,44 @@ namespace TchillrREST.DataModel
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<WordCloud>("TchillrDataBaseModel.FK_WordClouds_0", "WordClouds", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_01", "Theme")]
+        public Theme Theme_1
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_01", "Theme").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_01", "Theme").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Theme> Theme_1Reference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_01", "Theme");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Theme>("TchillrDataBaseModel.FK_Tags_01", "Theme", value);
                 }
             }
         }
@@ -2063,34 +2061,18 @@ namespace TchillrREST.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_0", "Tags")]
-        public Tag Tag
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_01", "Tag")]
+        public EntityCollection<Tag> Tags
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_Tags_0", "Tags").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_Tags_0", "Tags").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Tag> TagReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_Tags_0", "Tags");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Tag>("TchillrDataBaseModel.FK_Tags_01", "Tag");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Tag>("TchillrDataBaseModel.FK_Tags_0", "Tags", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Tag>("TchillrDataBaseModel.FK_Tags_01", "Tag", value);
                 }
             }
         }

@@ -29,6 +29,10 @@
       <End Role="Activities" EntitySet="Activities" />
       <End Role="Rubriques" EntitySet="Rubriques" />
     </AssociationSet>
+    <AssociationSet Name="FK_Tags_0" Association="TchillrDataBaseModel.Store.FK_Tags_0">
+      <End Role="Themes" EntitySet="Themes" />
+      <End Role="Tags" EntitySet="Tags" />
+    </AssociationSet>
     <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.Store.FK_WordClouds_0">
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
@@ -219,6 +223,20 @@
       </Principal>
       <Dependent Role="Rubriques">
         <PropertyRef Name="activityID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tags_0">
+    <End Role="Themes" Type="TchillrDataBaseModel.Store.Themes" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Themes">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="Tags">
+        <PropertyRef Name="themeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
