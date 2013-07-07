@@ -766,32 +766,40 @@ namespace TchillrREST
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
-            Guid usrGuid = Guid.Empty;
-            if (Guid.TryParse(userGUID, out usrGuid))
+            try
             {
-                DataModel.User newUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == usrGuid);
-                if (newUser == null)
+                Guid usrGuid = Guid.Empty;
+                if (Guid.TryParse(userGUID, out usrGuid))
                 {
-                    newUser = new DataModel.User();
-                    newUser.identifier = usrGuid;
-                    newUser.name = "User " + TchillrREST.Utilities.TchillrContext.Users.Count() + 1;
-                    TchillrREST.Utilities.TchillrContext.Users.AddObject(newUser);
-                    TchillrREST.Utilities.TchillrContext.SaveChanges();
-                    tchill.data = "user identifier:" + newUser.identifier + " name:" + newUser.name + " created.";
-                    tchill.success = true;
+                    DataModel.User newUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == usrGuid);
+                    if (newUser == null)
+                    {
+                        newUser = new DataModel.User();
+                        newUser.identifier = usrGuid;
+                        newUser.name = "User " + TchillrREST.Utilities.TchillrContext.Users.Count() + 1;
+                        TchillrREST.Utilities.TchillrContext.Users.AddObject(newUser);
+                        TchillrREST.Utilities.TchillrContext.SaveChanges();
+                        tchill.data = "user identifier:" + newUser.identifier + " name:" + newUser.name + " created.";
+                        tchill.success = true;
+                    }
+                    else
+                    {
+                        tchill.data = "userGUID " + userGUID + " already exists.";
+                        tchill.success = false;
+                    }
                 }
                 else
                 {
-                    tchill.data = "userGUID " + userGUID + " already exists.";
+                    tchill.data = "userGUID " + userGUID + " could not be parse as a valid Guid.";
                     tchill.success = false;
                 }
-            }
-            else
-            {
-                tchill.data = "userGUID " + userGUID + " could not be parse as a valid Guid.";
-                tchill.success = false;
-            }
 
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
             return tchill.GetResponseMessage();
         }
 
