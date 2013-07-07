@@ -10,7 +10,7 @@ namespace TchillrREST
     public static class Utilities
     {
 
-#warning jsonignore Occurences-Rubriques-Keywords in Activity, Theme in Tags
+#warning jsonignore Occurences-Rubriques-Keywords in Activity, Theme-WordClouds in Tags
 
         #region CONST
         public const short RUBRIQUE_WEIGHT = 6;

@@ -1922,6 +1922,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_WordClouds_0", "WordClouds")]
+        [JsonIgnore]
         public EntityCollection<WordCloud> WordClouds
         {
             get
