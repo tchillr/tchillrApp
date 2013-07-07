@@ -106,7 +106,7 @@ namespace TchillrREST
             {
                 now = DateTime.ParseExact(fromDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
             }
-            catch(FormatException frmExp)
+            catch (FormatException frmExp)
             {
                 tchill.success = false;
                 tchill.data = "Could not parse " + fromDate + " ";
@@ -284,7 +284,7 @@ namespace TchillrREST
 
                 if (tags.Count == 0)
                 {
-                    return GetActivitiesForDays(fromDate,toDate);
+                    return GetActivitiesForDays(fromDate, toDate);
                 }
 
                 DateTime now;
@@ -715,6 +715,40 @@ namespace TchillrREST
             tchill.data = "done";
             return tchill.GetResponseMessage();
         }
+
+        public Message fixDescription()
+        {
+            
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            try
+            {
+                foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.name == act.description))
+                {
+                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&id=" + act.identifier);
+                    HttpWebResponse resp2 = req2.GetResponse() as HttpWebResponse;
+                    using (Stream respStream2 = resp2.GetResponseStream())
+                    {
+                        StreamReader reader2 = new StreamReader(respStream2, Encoding.UTF8);
+                        JObject jsonActivities2 = JObject.Parse(reader2.ReadToEnd());
+                        foreach (JObject activity2 in jsonActivities2["data"])
+                        {
+                            act.description = StripHTML(WebUtility.HtmlDecode(activity2["description"].ToString()));
+                        }
+                    }
+                }
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+            tchill.data = "done";
+            tchill.success = true;
+
+            return tchill.GetResponseMessage();
+        }
+
 
         //UriTemplate = "users/{usernameid}/activities/{activityID}/went")]
         public Message UserActivityDontLike(string usernameID, string activityID)
