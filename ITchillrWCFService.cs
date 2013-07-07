@@ -160,5 +160,16 @@ namespace TchillrREST
         Message PostInterests(string usernameid, Stream content);
 
         #endregion
+
+        #region PUT
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/interests")]
+        Message PutInterests(string usernameid, Stream content);
+
+        #endregion
     }
 }

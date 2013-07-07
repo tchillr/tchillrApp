@@ -978,5 +978,37 @@ namespace TchillrREST
 
         #endregion
 
+        #region PUT
+
+        public Message PutInterests(string usernameid, Stream content)
+        {
+
+            Guid userNameID;
+            Guid.TryParse(usernameid, out userNameID);
+
+            StreamReader reader = new StreamReader(content);
+
+            string result = reader.ReadToEnd();
+
+            foreach (string tagLine in result.Split('&'))
+            {
+                int tagID = int.Parse(tagLine.Split('=')[1]);
+
+                TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
+                if (ut == null || ut.UserID == Guid.Empty)
+                {
+                    ut = new TchillrREST.DataModel.UserTag();
+                    ut.UserID = userNameID;
+                    ut.TagID = tagID;
+                    TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
+                }
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            }
+            return GetInterests(usernameid);
+
+        }
+
+        #endregion
     }
 }
