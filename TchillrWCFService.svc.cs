@@ -61,11 +61,21 @@ namespace TchillrREST
 
         public Message GetTags(string theme)
         {
-            //DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-            tchill.SetData(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme_1.title == theme).ToList<DataModel.Tag>());
+
+            //List<DataModel.Tag> tags = new List<DataModel.Tag>();
+            
+            //DataModel.Theme thm = TchillrREST.Utilities.TchillrContext.Themes.FirstOrDefault(th => th.title == theme);
+            //if(thm != null){
+            //    foreach (DataModel.Tag tag in thm.Tags)
+            //        tags.Add(tag);
+            //}
+
+            //tchill.SetData(tags);
+
+            tchill.SetData(TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tg.Theme.title == theme).ToList<DataModel.Tag>());
+
             tchill.success = true;
-            //tchill.responseTime = (DateTime.Now - now).TotalMilliseconds;
             return tchill.GetResponseMessage();
         }
 

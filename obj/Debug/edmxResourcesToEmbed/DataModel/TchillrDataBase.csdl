@@ -117,7 +117,7 @@
     <Property Name="weight" Type="Int32" Nullable="false" />
     <Property Name="themeID" Type="Int32" />
     <NavigationProperty Name="WordClouds" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
-    <NavigationProperty Name="Theme_1" Relationship="TchillrDataBaseModel.FK_Tags_01" FromRole="Tag" ToRole="Theme" />
+    <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_01" FromRole="Tag" ToRole="Theme" />
   </EntityType>
   <EntityType Name="Theme">
     <Key>

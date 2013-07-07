@@ -14,6 +14,7 @@ using System.Data.EntityClient;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -940,6 +941,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Occurences_0", "Occurences")]
+        [JsonIgnore]
         public EntityCollection<Occurence> Occurences
         {
             get
@@ -1940,7 +1942,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Tags_01", "Theme")]
-        public Theme Theme_1
+        public Theme Theme
         {
             get
             {
@@ -1956,7 +1958,7 @@ namespace TchillrREST.DataModel
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<Theme> Theme_1Reference
+        public EntityReference<Theme> ThemeReference
         {
             get
             {

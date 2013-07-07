@@ -12,6 +12,7 @@ namespace TchillrREST.Contract
         public ContractResolver()
         {
         }
+
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
