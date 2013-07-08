@@ -982,29 +982,52 @@ namespace TchillrREST
 
         public Message PutInterests(string usernameid, Stream content)
         {
-
-            Guid userNameID;
-            Guid.TryParse(usernameid, out userNameID);
-
-            StreamReader reader = new StreamReader(content);
-
-            string result = reader.ReadToEnd();
-
-            foreach (string tagLine in result.Split('&'))
+            try
             {
-                int tagID = int.Parse(tagLine.Split('=')[1]);
+                Guid userNameID;
+                List<int> sentTagIDs = new List<int>();
+                Guid.TryParse(usernameid, out userNameID);
 
-                TchillrREST.DataModel.UserTag ut = TchillrREST.Utilities.TchillrContext.UserTags.FirstOrDefault(userTag => userTag.TagID == tagID && userTag.UserID == userNameID);
-                if (ut == null || ut.UserID == Guid.Empty)
+                StreamReader reader = new StreamReader(content);
+
+                string result = reader.ReadToEnd();
+
+                foreach (string tagLine in result.Split('&'))
                 {
-                    ut = new TchillrREST.DataModel.UserTag();
-                    ut.UserID = userNameID;
-                    ut.TagID = tagID;
-                    TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
-                }
-                TchillrREST.Utilities.TchillrContext.SaveChanges();
+                    int tagID = int.Parse(tagLine.Split('=')[1]);
 
+                    sentTagIDs.Add(tagID);
+                }
+
+                List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
+
+                foreach (int tgID in sentTagIDs)
+                {
+                    DataModel.UserTag ut = userTags.FirstOrDefault(userTag => userTag.identifier == tgID);
+                    if (ut == null || ut.UserID == Guid.Empty)
+                    {
+                        ut = new TchillrREST.DataModel.UserTag();
+                        ut.UserID = userNameID;
+                        ut.TagID = tgID;
+                        TchillrREST.Utilities.TchillrContext.UserTags.AddObject(ut);
+                    }
+                }
+
+                foreach (DataModel.UserTag userTag in userTags.Where(userTag => !sentTagIDs.Contains(userTag.identifier)))
+                {
+                    TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(userTag);
+                }
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
             }
+
+            catch (Exception exp)
+            {
+                TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+                tchill.data = exp.Message;
+                tchill.success = false;
+            }
+
             return GetInterests(usernameid);
 
         }
