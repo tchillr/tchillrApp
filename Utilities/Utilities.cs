@@ -17,13 +17,26 @@ namespace TchillrREST
         public const string DATE_TIME_FORMAT = "yyyyMMddHHmmss";
         #endregion
 
+        #region struct
+        //public struct Colors
+        //{
+        //    public static string Musique = "";
+        //    public static string Activités = "";
+        //    public static string Evenements = "";
+        //    public static string Nature = "";
+        //    public static string Culture = "";
+        //    public static string Spectacles = "";
+        //}
+        #endregion
+
         private static TchillrREST.DataModel.Entities context = null;
 
         public static TchillrREST.DataModel.Entities TchillrContext
         {
             get
             {
-                if( context == null){
+                if (context == null)
+                {
                     context = new TchillrREST.DataModel.Entities(ConfigurationManager.ConnectionStrings["TchillrDataBaseEntities"].ConnectionString);
                     context.ContextOptions.ProxyCreationEnabled = false;
                 }
@@ -37,7 +50,7 @@ namespace TchillrREST
             List<TchillrREST.DataModel.Keyword> keywords = new List<TchillrREST.DataModel.Keyword>();
             const int MAX_KEYWORDS_RETURNED = 8;
 
-            
+
             //this.ActivityContextualTags = new List<string>();
 
             const int NAME_WEIGHT = 5;
@@ -96,7 +109,8 @@ namespace TchillrREST
         }
 
 
-        public static TchillrREST.DataModel.User GetUserByID(Guid userID){
+        public static TchillrREST.DataModel.User GetUserByID(Guid userID)
+        {
             return TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(user => user.identifier == userID);
         }
 

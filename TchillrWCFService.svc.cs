@@ -172,6 +172,17 @@ namespace TchillrREST
                     activity.tags.Add(ct);
                 }
 
+                // identify the color of the activity
+                if (string.IsNullOrEmpty(activity.color))
+                {
+                    if (activity.tags.Count > 0)
+                    {
+                        DataModel.ContextualTag ct = activity.tags.FirstOrDefault();
+                        if (ct != null)
+                            activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == ct.identifier).Theme.title;
+                    }
+                }
+
                 activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
             }
 
@@ -368,7 +379,21 @@ namespace TchillrREST
                         ct.identifier = element.identifier;
                         ct.title = element.title;
                         activity.tags.Add(ct);
+                        if (string.IsNullOrEmpty(activity.color) && userTags.Contains(element.identifier))
+                            activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == element.identifier).Theme.title;
                     }
+
+                    // identify the color of the activity
+                    if (string.IsNullOrEmpty(activity.color))
+                    {
+                        if (activity.tags.Count > 0)
+                        {
+                            DataModel.ContextualTag ct = activity.tags.FirstOrDefault();
+                            if (ct != null)
+                                activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == ct.identifier).Theme.title;
+                        }
+                    }
+
 
                     activity.score = 0;
                     foreach (DataModel.Keyword keyword in keywords)
@@ -998,6 +1023,8 @@ namespace TchillrREST
 
                     sentTagIDs.Add(tagID);
                 }
+
+
 
                 List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
 

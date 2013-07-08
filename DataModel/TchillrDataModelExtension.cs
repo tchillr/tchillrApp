@@ -14,6 +14,9 @@ namespace TchillrREST.DataModel
         [DataMemberAttribute()]
         public int score { get; set; }
 
+        [DataMemberAttribute()]
+        public string color { get; set; }
+
         [DataMemberAttribute(Name = "Occurences")]
         public List<DataModel.Occurence>  OccurencesToSend{ get; set; }
     }
