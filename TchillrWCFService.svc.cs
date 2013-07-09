@@ -731,6 +731,30 @@ namespace TchillrREST
 
         }
 
+        public Message fixActivity(string activityID)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            int actId = int.Parse(activityID);
+
+            foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.shortDescription.StartsWith("\n")))
+            {
+                try
+                {
+                    act.shortDescription = act.shortDescription;
+                }
+                catch (Exception exp)
+                {
+
+                }
+            }
+
+            TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            tchill.success = true;
+            tchill.data = "done";
+            return tchill.GetResponseMessage();
+        }
+
         public Message fixLatLon()
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
