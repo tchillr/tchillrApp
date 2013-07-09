@@ -162,13 +162,14 @@ namespace TchillrREST
                                    where keywordsString.Contains(dbTags.title.ToUpper()) ||
                                    dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
                                    rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
-                                   select new { dbTags.identifier, dbTags.title };
+                                   select new { dbTags.identifier, dbTags.title, dbTags.themeID };
 
                 foreach (var element in activityTags)
                 {
                     DataModel.ContextualTag ct = new DataModel.ContextualTag();
                     ct.identifier = element.identifier;
                     ct.title = element.title;
+                    ct.themeID = element.themeID.Value;
                     activity.tags.Add(ct);
                 }
 
@@ -368,7 +369,7 @@ namespace TchillrREST
                                        where keywordsString.Contains(dbTags.title.ToUpper()) ||
                                        dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
                                        rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
-                                       select new { dbTags.identifier, dbTags.title };
+                                       select new { dbTags.identifier, dbTags.title, dbTags.themeID };
 
                     activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
 
@@ -378,6 +379,7 @@ namespace TchillrREST
                         DataModel.ContextualTag ct = new DataModel.ContextualTag();
                         ct.identifier = element.identifier;
                         ct.title = element.title;
+                        ct.themeID = element.themeID.Value;
                         activity.tags.Add(ct);
                         if (string.IsNullOrEmpty(activity.color) && userTags.Contains(element.identifier))
                             activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == element.identifier).Theme.title;

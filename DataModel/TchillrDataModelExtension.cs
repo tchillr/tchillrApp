@@ -30,5 +30,8 @@ namespace TchillrREST.DataModel
 
         [DataMemberAttribute()]
         public string title { get; set; }
+
+        [DataMemberAttribute()]
+        public int themeID { get; set; }
     }
 }
