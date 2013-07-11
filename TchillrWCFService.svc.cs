@@ -533,7 +533,7 @@ namespace TchillrREST
 
 
         const string HTML_TAG_PATTERN = @"<[^>]*>";
-        const string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=70f38523e129a2a9c0aa0a08f26b569ffe0d64cc438386fd94b19652d92c67d840cafd2914e4bb2f4decbc1d566769e2&created=0";
+        const string BASE_URL = @"https://api.paris.fr:3000/data/1.1/QueFaire/get_activities/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&created=0";
         //const string LIMIT = "58";
 
         static string StripHTML(string inputString)
@@ -591,6 +591,8 @@ namespace TchillrREST
                                         DataModel.Occurence occurence = new DataModel.Occurence();
                                         occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(occ["jour"].ToString());
                                         occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
+                                        if (occurence.hour_start.TotalHours == 24)
+                                            occurence.hour_start = TimeSpan.Parse("23:59:59");
                                         occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
                                         if (occurence.hour_end.TotalHours == 24)
                                             occurence.hour_end = TimeSpan.Parse("23:59:59");
@@ -633,7 +635,7 @@ namespace TchillrREST
                                         act.Rubriques.Add(rubrique);
                                     }
 
-                                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=70f38523e129a2a9c0aa0a08f26b569ffe0d64cc438386fd94b19652d92c67d840cafd2914e4bb2f4decbc1d566769e2&id=" + activity["idactivites"]);
+                                    WebRequest req2 = WebRequest.Create(@"https://api.paris.fr:3000/data/1.0/QueFaire/get_activity/?token=30539e0d4d810782e992a154e4dfa37bedb33652c6baf3fcbf7e6fd431482b23bbd8f892318ac3b58c45527e7aba721d&id=" + activity["idactivites"]);
                                     HttpWebResponse resp2 = req2.GetResponse() as HttpWebResponse;
                                     using (Stream respStream2 = resp2.GetResponseStream())
                                     {
@@ -733,6 +735,34 @@ namespace TchillrREST
 
         }
 
+        public Message cleanOccurences()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+            List<DataModel.Occurence> obsoleteOccurences = new List<DataModel.Occurence>();
+            
+            try
+            {
+                DateTime yesturday = DateTime.Now.AddDays(-1);
+                
+                obsoleteOccurences = TchillrREST.Utilities.TchillrContext.Occurences.Where(occ => occ.jour < yesturday).ToList();
+                
+                foreach (DataModel.Occurence occ in obsoleteOccurences)
+                    TchillrREST.Utilities.TchillrContext.Occurences.DeleteObject(occ);
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+
+            tchill.success = true;
+            tchill.data = obsoleteOccurences.Count;
+
+            return tchill.GetResponseMessage();
+        }
+
         public Message fixActivity(string activityID)
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
@@ -789,25 +819,25 @@ namespace TchillrREST
             {
                 foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities)
                 {
-                    //if (act.name.Contains("&"))
-                    //{
-                    //     act.name = System.Web.HttpUtility.HtmlDecode(act.name);
-                    //}
+                    if (act.name.Contains("&"))
+                    {
+                        act.name = System.Web.HttpUtility.HtmlDecode(act.name);
+                    }
 
-                    //if (act.description.Contains("&"))
-                    //{
-                    //    act.description = System.Web.HttpUtility.HtmlDecode(act.description);
-                    //}
+                    if (act.description.Contains("&"))
+                    {
+                        act.description = System.Web.HttpUtility.HtmlDecode(act.description);
+                    }
 
-                    //if (act.shortDescription.Contains("&"))
-                    //{
-                    //    act.shortDescription = System.Web.HttpUtility.HtmlDecode(act.shortDescription);
-                    //}
+                    if (act.shortDescription.Contains("&"))
+                    {
+                        act.shortDescription = System.Web.HttpUtility.HtmlDecode(act.shortDescription);
+                    }
 
-                    //if (act.place.Contains("&"))
-                    //{
-                    //    act.place = System.Web.HttpUtility.HtmlDecode(act.place);
-                    //}
+                    if (act.place.Contains("&"))
+                    {
+                        act.place = System.Web.HttpUtility.HtmlDecode(act.place);
+                    }
 
                     if (act.adress.Contains("&"))
                     {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Data.Objects.DataClasses;
+using System.Text.RegularExpressions;
 
 namespace TchillrREST
 {
@@ -84,7 +85,9 @@ namespace TchillrREST
 
             if (!string.IsNullOrEmpty(text))
             {
-                List<string> words = text.Split(' ').ToList<string>().Select(x => x.ToLower()).ToList<string>();
+                //List<string> words = text.Split(' ').ToList<string>().Select(x => x.ToLower()).ToList<string>();
+                List<string> words = GetWords(text).Select(x => x.ToLower()).ToList<string>();
+
                 foreach (string word in words)
                 {
                     if (bannedWords.Contains(word) || word.Length <= 2)
@@ -114,13 +117,28 @@ namespace TchillrREST
             return TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(user => user.identifier == userID);
         }
 
-        public static EntityCollection<T> ToEntityCollection<T>(this List<T> source) where T : class, IEntityWithRelationships
+        public static List<string> GetWords(string input)
         {
+            MatchCollection matches = Regex.Matches(input, @"\b[\w]*\b");
 
-            EntityCollection<T> collection = new EntityCollection<T>();
-            foreach (var item in source)
-                collection.Add(item);
-            return collection;
+            var words = from m in matches.Cast<Match>()
+                        where !string.IsNullOrEmpty(m.Value)
+                        select TrimSuffix(m.Value);
+
+            return words.ToList();
+
+        }
+
+        public static string TrimSuffix(string word)
+        {
+            int apostrapheLocation = word.IndexOf('\'');
+            if (apostrapheLocation != -1)
+            {
+                word = word.Substring(0, apostrapheLocation);
+
+            }
+
+            return word;
         }
     }
 }

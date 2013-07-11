@@ -104,6 +104,13 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "cleanOccs")]
+        Message cleanOccurences();
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "fixLatLon")]
         Message fixLatLon();
 

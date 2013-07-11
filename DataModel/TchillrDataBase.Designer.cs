@@ -1602,6 +1602,7 @@ namespace TchillrREST.DataModel
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_Occurences_0", "Activities")]
+        [JsonIgnore]
         public Activity Activity
         {
             get
