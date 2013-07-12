@@ -663,7 +663,7 @@ namespace TchillrREST
                                         }
                                     }
 
-                                    TchillrREST.Utilities.SetKeywords(act, context.Tags.Select(tg => tg.title).ToList<string>());
+                                    TchillrREST.Utilities.SetKeywords(act);
 
                                     Console.WriteLine("Adding acitivity # " + counter + " with id " + act.identifier);
                                     if (insert)
@@ -784,6 +784,21 @@ namespace TchillrREST
 
             tchill.success = true;
             tchill.data = "done";
+            return tchill.GetResponseMessage();
+        }
+
+        public Message fixKeywords()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities)
+            {
+                TchillrREST.Utilities.SetKeywords(act);
+                break;
+            }
+
+            TchillrREST.Utilities.TchillrContext.SaveChanges();
+
             return tchill.GetResponseMessage();
         }
 

@@ -46,7 +46,7 @@ namespace TchillrREST
             }
         }
 
-        public static bool SetKeywords(TchillrREST.DataModel.Activity activity, List<string> tags)
+        public static bool SetKeywords(TchillrREST.DataModel.Activity activity)
         {
             List<TchillrREST.DataModel.Keyword> keywords = new List<TchillrREST.DataModel.Keyword>();
             const int MAX_KEYWORDS_RETURNED = 8;
@@ -58,22 +58,27 @@ namespace TchillrREST
             const int SHORT_DESCRIPTION_WEIGHT = 3;
             const int DESCRIPTION_WEIGHT = 1;
 
-            GetWordsOccurences(activity.name, NAME_WEIGHT, tags, keywords);
-            GetWordsOccurences(activity.shortDescription, SHORT_DESCRIPTION_WEIGHT, tags, keywords);
-            GetWordsOccurences(activity.description, DESCRIPTION_WEIGHT, tags, keywords);
+            GetWordsOccurences(activity.name, NAME_WEIGHT, keywords);
+            GetWordsOccurences(activity.shortDescription, SHORT_DESCRIPTION_WEIGHT, keywords);
+            GetWordsOccurences(activity.description, DESCRIPTION_WEIGHT, keywords);
 
             //var sortedDict = (from entry in keywords orderby entry.Value descending select entry).Take(MAX_KEYWORDS_RETURNED).ToDictionary(pair => pair.Key, pair => pair.Value);
 
             //wordCount.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             //return this.Keywords.OrderByDescending(x => x.Hits).Take(MAX_KEYWORDS_RETURNED).ToList<Keyword>();
+            if (activity.Keywords.Count > 0)
+            {
+                activity.Keywords.ToList().ForEach(keyword => TchillrContext.Keywords.DeleteObject(keyword));
+            }
+            
             foreach (TchillrREST.DataModel.Keyword keyword in keywords.OrderByDescending(key => key.hits).Take(MAX_KEYWORDS_RETURNED).ToList<TchillrREST.DataModel.Keyword>())
                 activity.Keywords.Add(keyword);
 
             return true;
         }
 
-        private static List<TchillrREST.DataModel.Keyword> GetWordsOccurences(string text, int weight, List<string> tags, List<TchillrREST.DataModel.Keyword> keywords)
+        private static List<TchillrREST.DataModel.Keyword> GetWordsOccurences(string text, int weight, List<TchillrREST.DataModel.Keyword> keywords)
         {
 
             List<string> bannedWords = new List<string>();
@@ -100,7 +105,7 @@ namespace TchillrREST
                     else
                     {
                         TchillrREST.DataModel.Keyword keyword = new TchillrREST.DataModel.Keyword();
-                        keyword.title = word;
+                        keyword.title = word.ToLower();
                         keyword.hits = weight;
 
                         keywords.Add(keyword);
