@@ -790,14 +790,23 @@ namespace TchillrREST
         public Message fixKeywords()
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
-
-            foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities)
+            try
             {
-                TchillrREST.Utilities.SetKeywords(act);
-                break;
+                foreach (DataModel.Activity act in TchillrREST.Utilities.TchillrContext.Activities)
+                {
+                    TchillrREST.Utilities.SetKeywords(act);
+                }
+
+                TchillrREST.Utilities.TchillrContext.SaveChanges();
+            }
+            catch (Exception exp)
+            {
+                tchill.data = exp.Message;
+                tchill.success = false;
             }
 
-            TchillrREST.Utilities.TchillrContext.SaveChanges();
+            tchill.data = "done";
+            tchill.success = true;
 
             return tchill.GetResponseMessage();
         }
