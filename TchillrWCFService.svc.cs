@@ -590,12 +590,28 @@ namespace TchillrREST
                                     {
                                         DataModel.Occurence occurence = new DataModel.Occurence();
                                         occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(occ["jour"].ToString());
-                                        occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
-                                        if (occurence.hour_start.TotalHours == 24)
-                                            occurence.hour_start = TimeSpan.Parse("23:59:59");
-                                        occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
-                                        if (occurence.hour_end.TotalHours == 24)
-                                            occurence.hour_end = TimeSpan.Parse("23:59:59");
+
+                                        TimeSpan tsTemp = TimeSpan.Zero;
+
+                                        if (!TimeSpan.TryParse(occ["hour_start"].ToString(), out tsTemp))
+                                            TimeSpan.TryParse("00:00:00", out tsTemp);
+
+                                        occurence.hour_start = tsTemp;
+
+                                        tsTemp = TimeSpan.Zero;
+
+                                        if (!TimeSpan.TryParse(occ["hour_end"].ToString(), out tsTemp))
+                                            TimeSpan.TryParse("23:59:59", out tsTemp);
+
+                                        occurence.hour_end = tsTemp;
+
+                                        //occurence.hour_start = TimeSpan.Parse(occ["hour_start"].ToString());
+                                        //if (occurence.hour_start.TotalHours == 24)
+                                        //    occurence.hour_start = TimeSpan.Parse("23:59:59");
+                                        //occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
+                                        //if (occurence.hour_end.TotalHours == 24)
+                                        //    occurence.hour_end = TimeSpan.Parse("23:59:59");
+                                        
                                         if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
                                             occurences.Add(occurence);
                                     }
@@ -621,12 +637,25 @@ namespace TchillrREST
                                     act.shortDescription = string.Empty;
 
                                     float temp = 0;
-                                    if (float.TryParse(activity["lat"].ToString().Replace('.', ','), out temp))
-                                        act.latitude = temp;
+                                    try
+                                    {
+                                        temp = float.Parse(activity["lat"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
+                                    }
+                                    catch (FormatException frmExp)
+                                    {
+                                        temp = float.Parse(activity["lat"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                    }
+                                    act.latitude = temp;
                                     temp = 0;
-                                    if (float.TryParse(activity["lon"].ToString().Replace('.', ','), out temp))
-                                        act.longitude = temp;
-
+                                    try
+                                    {
+                                        temp = float.Parse(activity["lon"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
+                                    }
+                                    catch (FormatException frmExp)
+                                    {
+                                        temp = float.Parse(activity["lon"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                    }
+                                    act.longitude = temp;
 
                                     foreach (JObject rub in activity["rubriques"])
                                     {
@@ -739,13 +768,13 @@ namespace TchillrREST
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             List<DataModel.Occurence> obsoleteOccurences = new List<DataModel.Occurence>();
-            
+
             try
             {
                 DateTime yesturday = DateTime.Now.AddDays(-1);
-                
+
                 obsoleteOccurences = TchillrREST.Utilities.TchillrContext.Occurences.Where(occ => occ.jour < yesturday).ToList();
-                
+
                 foreach (DataModel.Occurence occ in obsoleteOccurences)
                     TchillrREST.Utilities.TchillrContext.Occurences.DeleteObject(occ);
 

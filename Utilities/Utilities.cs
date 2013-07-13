@@ -5,6 +5,7 @@ using System.Text;
 using System.Configuration;
 using System.Data.Objects.DataClasses;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace TchillrREST
 {
@@ -16,6 +17,8 @@ namespace TchillrREST
         #region CONST
         public const short RUBRIQUE_WEIGHT = 6;
         public const string DATE_TIME_FORMAT = "yyyyMMddHHmmss";
+        public static CultureInfo FRENCH_CULTURE = new CultureInfo("fr-FR");
+        public static CultureInfo ENGLISH_CULTURE = new CultureInfo("en-US");
         #endregion
 
         #region struct
@@ -48,6 +51,8 @@ namespace TchillrREST
 
         public static bool SetKeywords(TchillrREST.DataModel.Activity activity)
         {
+            activity.cleanActivity();
+
             List<TchillrREST.DataModel.Keyword> keywords = new List<TchillrREST.DataModel.Keyword>();
             const int MAX_KEYWORDS_RETURNED = 8;
 
@@ -115,7 +120,6 @@ namespace TchillrREST
             keywords.ForEach(keyword => keyword.title.ToUpper());
             return keywords;
         }
-
 
         public static TchillrREST.DataModel.User GetUserByID(Guid userID)
         {
