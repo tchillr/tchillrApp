@@ -25,6 +25,8 @@ using Newtonsoft.Json;
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_WordClouds_0", "Tags", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Tag), "WordClouds", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.WordCloud), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Media_0", "Activity", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Activity), "Medium", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Medium), true)]
 [assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_Tags_01", "Theme", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(TchillrREST.DataModel.Theme), "Tag", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.Tag), true)]
+[assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_UserTags_1", "Tag", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.Tag), "UserTag", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.UserTag), true)]
+[assembly: EdmRelationshipAttribute("TchillrDataBaseModel", "FK_UserTags_0", "User", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(TchillrREST.DataModel.User), "UserTag", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(TchillrREST.DataModel.UserTag), true)]
 
 #endregion
 
@@ -1977,6 +1979,29 @@ namespace TchillrREST.DataModel
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_UserTags_1", "UserTag")]
+        [JsonIgnore]
+        public EntityCollection<UserTag> UserTags
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<UserTag>("TchillrDataBaseModel.FK_UserTags_1", "UserTag");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<UserTag>("TchillrDataBaseModel.FK_UserTags_1", "UserTag", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -2166,6 +2191,31 @@ namespace TchillrREST.DataModel
 
         #endregion
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_UserTags_0", "UserTag")]
+        public EntityCollection<UserTag> UserTags
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<UserTag>("TchillrDataBaseModel.FK_UserTags_0", "UserTag");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<UserTag>("TchillrDataBaseModel.FK_UserTags_0", "UserTag", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>
@@ -2538,6 +2588,85 @@ namespace TchillrREST.DataModel
 
         #endregion
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_UserTags_1", "Tag")]
+        public Tag Tag
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_UserTags_1", "Tag").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_UserTags_1", "Tag").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Tag> TagReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Tag>("TchillrDataBaseModel.FK_UserTags_1", "Tag");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Tag>("TchillrDataBaseModel.FK_UserTags_1", "Tag", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("TchillrDataBaseModel", "FK_UserTags_0", "User")]
+        public User User
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("TchillrDataBaseModel.FK_UserTags_0", "User").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("TchillrDataBaseModel.FK_UserTags_0", "User").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<User> UserReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("TchillrDataBaseModel.FK_UserTags_0", "User");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<User>("TchillrDataBaseModel.FK_UserTags_0", "User", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>

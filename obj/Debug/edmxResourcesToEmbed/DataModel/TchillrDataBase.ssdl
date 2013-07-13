@@ -33,6 +33,14 @@
       <End Role="Themes" EntitySet="Themes" />
       <End Role="Tags" EntitySet="Tags" />
     </AssociationSet>
+    <AssociationSet Name="FK_UserTags_0" Association="TchillrDataBaseModel.Store.FK_UserTags_0">
+      <End Role="User" EntitySet="User" />
+      <End Role="UserTags" EntitySet="UserTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserTags_1" Association="TchillrDataBaseModel.Store.FK_UserTags_1">
+      <End Role="Tags" EntitySet="Tags" />
+      <End Role="UserTags" EntitySet="UserTags" />
+    </AssociationSet>
     <AssociationSet Name="FK_WordClouds_0" Association="TchillrDataBaseModel.Store.FK_WordClouds_0">
       <End Role="Tags" EntitySet="Tags" />
       <End Role="WordClouds" EntitySet="WordClouds" />
@@ -237,6 +245,32 @@
       </Principal>
       <Dependent Role="Tags">
         <PropertyRef Name="themeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTags_0">
+    <End Role="User" Type="TchillrDataBaseModel.Store.User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="UserTags" Type="TchillrDataBaseModel.Store.UserTags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="UserTags">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTags_1">
+    <End Role="Tags" Type="TchillrDataBaseModel.Store.Tags" Multiplicity="1" />
+    <End Role="UserTags" Type="TchillrDataBaseModel.Store.UserTags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tags">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="UserTags">
+        <PropertyRef Name="TagID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

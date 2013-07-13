@@ -37,6 +37,14 @@
       <End Role="Theme" EntitySet="Themes" />
       <End Role="Tag" EntitySet="Tags" />
     </AssociationSet>
+    <AssociationSet Name="FK_UserTags_1" Association="TchillrDataBaseModel.FK_UserTags_1">
+      <End Role="Tag" EntitySet="Tags" />
+      <End Role="UserTag" EntitySet="UserTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserTags_0" Association="TchillrDataBaseModel.FK_UserTags_0">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserTag" EntitySet="UserTags" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Activity">
     <Key>
@@ -118,6 +126,7 @@
     <Property Name="themeID" Type="Int32" />
     <NavigationProperty Name="WordClouds" Relationship="TchillrDataBaseModel.FK_WordClouds_0" FromRole="Tags" ToRole="WordClouds" />
     <NavigationProperty Name="Theme" Relationship="TchillrDataBaseModel.FK_Tags_01" FromRole="Tag" ToRole="Theme" />
+    <NavigationProperty Name="UserTags" Relationship="TchillrDataBaseModel.FK_UserTags_1" FromRole="Tag" ToRole="UserTag" />
   </EntityType>
   <EntityType Name="Theme">
     <Key>
@@ -133,6 +142,7 @@
     </Key>
     <Property Name="identifier" Type="Guid" Nullable="false" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="UserTags" Relationship="TchillrDataBaseModel.FK_UserTags_0" FromRole="User" ToRole="UserTag" />
   </EntityType>
   <EntityType Name="UserTag">
     <Key>
@@ -141,6 +151,8 @@
     <Property Name="identifier" Type="Int32" Nullable="false" />
     <Property Name="UserID" Type="Guid" Nullable="false" />
     <Property Name="TagID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Tag" Relationship="TchillrDataBaseModel.FK_UserTags_1" FromRole="UserTag" ToRole="Tag" />
+    <NavigationProperty Name="User" Relationship="TchillrDataBaseModel.FK_UserTags_0" FromRole="UserTag" ToRole="User" />
   </EntityType>
   <EntityType Name="WordCloud">
     <Key>
@@ -259,6 +271,30 @@
       </Principal>
       <Dependent Role="Tag">
         <PropertyRef Name="themeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTags_1">
+    <End Type="TchillrDataBaseModel.Tag" Role="Tag" Multiplicity="1" />
+    <End Type="TchillrDataBaseModel.UserTag" Role="UserTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tag">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="UserTag">
+        <PropertyRef Name="TagID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTags_0">
+    <End Type="TchillrDataBaseModel.User" Role="User" Multiplicity="1" />
+    <End Type="TchillrDataBaseModel.UserTag" Role="UserTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="identifier" />
+      </Principal>
+      <Dependent Role="UserTag">
+        <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

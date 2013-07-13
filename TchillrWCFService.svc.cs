@@ -86,26 +86,30 @@ namespace TchillrREST
             try
             {
                 Guid userNameID = Guid.Parse(usernameid);
+                DataModel.User currenUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == userNameID);
+
                 List<DataModel.Tag> results = new List<DataModel.Tag>();
-                foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
+
+                if (currenUser != null)
                 {
-                    DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
-                    if (tag != null)
-                        results.Add(tag);
+                    results = currenUser.UserTags.Select(usrTags => usrTags.Tag).ToList();
                 }
+                //foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
+                //{
+                //    DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
+                //    if (tag != null)
+                //        results.Add(tag);
+                //}
                 tchill.SetData(results);
                 tchill.success = true;
-                //return tchill;
             }
             catch (Exception exp)
             {
                 tchill.success = false;
                 tchill.SetData(exp.Message);
             }
-            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                        "application/json; charset=utf-8",
-                        Encoding.UTF8);
+
+            return tchill.GetResponseMessage();
         }
 
         public Message GetActivitiesForDays(string fromDate, string toDate)
@@ -293,9 +297,10 @@ namespace TchillrREST
 
         public Message GetUserActivitiesForDays(string usernameid, string fromDate, string toDate)
         {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
             try
             {
-                TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
                 Guid userNameID = Guid.Empty;
                 Guid.TryParse(usernameid, out userNameID);
@@ -306,9 +311,15 @@ namespace TchillrREST
                 List<string> tagWordsCloud = new List<string>();
 
                 List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
-                foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
-                    if (userTags.Contains(tag.identifier))
-                        tags.Add(tag.title);
+                //foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
+                //    if (userTags.Contains(tag.identifier))
+                //        tags.Add(tag.title);
+                DataModel.User currenUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == userNameID);
+
+                if(currenUser == null)
+                    return GetActivitiesForDays(fromDate, toDate);
+
+                tags = currenUser.UserTags.Select(usrTags => usrTags.Tag.title).ToList();
 
                 if (tags.Count == 0)
                 {
@@ -397,7 +408,6 @@ namespace TchillrREST
                         }
                     }
 
-
                     activity.score = 0;
                     foreach (DataModel.Keyword keyword in keywords)
                     {
@@ -428,28 +438,20 @@ namespace TchillrREST
                     }
                 }
 
-                //List<int> activitiesID = activitiesScrore.Where(item => item.Value > 0).Select(item => item.Key).ToList();
-
-                //var activitiesForUser = from acti in TchillrREST.Utilities.TchillrContext.Activities
-                //                        where activitiesID.Contains(acti.identifier)
-                //                        select acti;
-
-                //var activitiesForUser = from acti in userActivities
-                //                        orderby descending acti.score
-                //                        select acti;
-
-                //activitiesScrore.OrderBy(item => item.Value);
-
                 tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList<DataModel.Activity>());
                 tchill.success = true;
-
-                //return tchill;
-
-                return tchill.GetResponseMessage();
             }
-            catch (Exception exp) { }
-            return null;
-            //return JsonConvert.SerializeObject(.ToList());
+            catch (System.InvalidOperationException invOpExp)
+            {
+                return GetActivitiesForDays(fromDate, toDate);
+            }
+            catch (Exception exp)
+            {
+                tchill.success = false;
+                tchill.data = exp.Message;
+            }
+
+            return tchill.GetResponseMessage();
         }
 
         public Message TestParisAPI(string offset, string limit)
@@ -596,14 +598,14 @@ namespace TchillrREST
 
                                         TimeSpan tsTemp = TimeSpan.Zero;
 
-                                        if (!TimeSpan.TryParse(occ["hour_start"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0 )
+                                        if (!TimeSpan.TryParse(occ["hour_start"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0)
                                             TimeSpan.TryParse("00:00:00", out tsTemp);
 
                                         occurence.hour_start = tsTemp;
 
                                         tsTemp = TimeSpan.Zero;
 
-                                        if (!TimeSpan.TryParse(occ["hour_end"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0 )
+                                        if (!TimeSpan.TryParse(occ["hour_end"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0)
                                             TimeSpan.TryParse("23:59:59", out tsTemp);
 
                                         occurence.hour_end = tsTemp;
@@ -615,7 +617,7 @@ namespace TchillrREST
                                         //if (occurence.hour_end.TotalHours == 24)
                                         //    occurence.hour_end = TimeSpan.Parse("23:59:59");
 
-                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0 )
+                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
                                             occurences.Add(occurence);
                                     }
 
@@ -624,7 +626,7 @@ namespace TchillrREST
                                         act.Occurences.Add(occ);
 
                                     // we do not add an activity in the database if it is already obsolete or if there is no Occurences
-                                    if (act.Occurences.Count == 0 || (act.Occurences.Count > 0 && act.Occurences.Last().jour < yesturday) )
+                                    if (act.Occurences.Count == 0 || (act.Occurences.Count > 0 && act.Occurences.Last().jour < yesturday))
                                         continue;
 
                                     act.name = WebUtility.HtmlDecode(activity["nom"].ToString());
