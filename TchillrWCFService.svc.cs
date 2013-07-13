@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Data.Objects.DataClasses;
 using System.Web;
 using System.Globalization;
+using System.Data;
 
 namespace TchillrREST
 {
@@ -590,17 +591,19 @@ namespace TchillrREST
                                     {
                                         DataModel.Occurence occurence = new DataModel.Occurence();
                                         occurence.jour = occ["jour"] == null || occ["jour"].ToString() == string.Empty ? System.Data.SqlTypes.SqlDateTime.MinValue.Value : DateTime.Parse(occ["jour"].ToString());
+                                        if (occurence.jour < yesturday)
+                                            continue;
 
                                         TimeSpan tsTemp = TimeSpan.Zero;
 
-                                        if (!TimeSpan.TryParse(occ["hour_start"].ToString(), out tsTemp))
+                                        if (!TimeSpan.TryParse(occ["hour_start"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0 )
                                             TimeSpan.TryParse("00:00:00", out tsTemp);
 
                                         occurence.hour_start = tsTemp;
 
                                         tsTemp = TimeSpan.Zero;
 
-                                        if (!TimeSpan.TryParse(occ["hour_end"].ToString(), out tsTemp))
+                                        if (!TimeSpan.TryParse(occ["hour_end"].ToString(), out tsTemp) || tsTemp.TotalHours > 23 || tsTemp.TotalHours < 0 )
                                             TimeSpan.TryParse("23:59:59", out tsTemp);
 
                                         occurence.hour_end = tsTemp;
@@ -611,16 +614,17 @@ namespace TchillrREST
                                         //occurence.hour_end = TimeSpan.Parse(occ["hour_end"].ToString());
                                         //if (occurence.hour_end.TotalHours == 24)
                                         //    occurence.hour_end = TimeSpan.Parse("23:59:59");
-                                        
-                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0)
+
+                                        if (occurences.Where(occu => occu.jour == occurence.jour && occu.hour_start == occurence.hour_start && occu.hour_end == occurence.hour_end).Count() == 0 )
                                             occurences.Add(occurence);
                                     }
+
 
                                     foreach (DataModel.Occurence occ in occurences.OrderBy(occ => occ.jour).ThenBy(occ => occ.hour_start).ThenBy(occ => occ.hour_end))
                                         act.Occurences.Add(occ);
 
-                                    // we do not add an activity in the database if it is already obsolete
-                                    if (act.Occurences.Count > 0 && act.Occurences.Last().jour < yesturday)
+                                    // we do not add an activity in the database if it is already obsolete or if there is no Occurences
+                                    if (act.Occurences.Count == 0 || (act.Occurences.Count > 0 && act.Occurences.Last().jour < yesturday) )
                                         continue;
 
                                     act.name = WebUtility.HtmlDecode(activity["nom"].ToString());
@@ -711,7 +715,6 @@ namespace TchillrREST
                 }
 
                 context.SaveChanges();
-
                 tchill.success = true;
                 tchill.data = "done added " + counter + " activities";
 
