@@ -68,6 +68,7 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="LogReader.aspx" />
     <Content Include="staticActivy2.txt" />
     <Content Include="staticActivy3.txt" />
     <Content Include="TchillrService.svc" />
@@ -91,6 +92,13 @@
     <Compile Include="DataModel\TchillrDataModelExtension.cs" />
     <Compile Include="DataModel\TchillrResponse.cs" />
     <Compile Include="ITchillrWCFService.cs" />
+    <Compile Include="LogReader.aspx.cs">
+      <DependentUpon>LogReader.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LogReader.aspx.designer.cs">
+      <DependentUpon>LogReader.aspx</DependentUpon>
+    </Compile>
     <Compile Include="TchillrWCFService.svc.cs">
       <DependentUpon>TchillrWCFService.svc</DependentUpon>
     </Compile>
