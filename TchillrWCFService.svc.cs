@@ -382,6 +382,7 @@ namespace TchillrREST
                 foreach (DataModel.Activity activity in activitiesForDays)
                 {
                     //activitiesScrore[activity.identifier] = 0;
+                    activity.color = string.Empty;
 
                     List<DataModel.Keyword> keywords = activity.Keywords.ToList();
                     List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
