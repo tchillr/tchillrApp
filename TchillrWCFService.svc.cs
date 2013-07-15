@@ -97,8 +97,11 @@ namespace TchillrREST
 
                 if (currenUser != null)
                 {
+                    log.Debug("currentUser name" + currenUser.name);
                     results = currenUser.UserTags.Select(usrTags => usrTags.Tag).ToList();
                 }
+                else
+                    log.Debug("username id does not exists");
                 //foreach (DataModel.UserTag userTag in TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID))
                 //{
                 //    DataModel.Tag tag = TchillrREST.Utilities.TchillrContext.Tags.FirstOrDefault(tg => tg.identifier == userTag.TagID);
@@ -110,7 +113,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
-                log.Error("Exp message "+ exp.Message);
+                log.Error("Exp message "+ exp.Message + " stacktrace " +exp.StackTrace);
                 tchill.success = false;
                 tchill.SetData(exp.Message);
             }
@@ -454,7 +457,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
-                log.Error("Exp message " + exp.Message);
+                log.Error("Exp message " + exp.Message + " stacktrace " + exp.StackTrace);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
