@@ -17,6 +17,7 @@ using System.Data.Objects.DataClasses;
 using System.Web;
 using System.Globalization;
 using System.Data;
+using log4net;
 
 namespace TchillrREST
 {
@@ -25,6 +26,9 @@ namespace TchillrREST
     (RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TchillrWCFService : ITchillrWCFService
     {
+        #region Log4Net
+        protected static readonly ILog log = LogManager.GetLogger(typeof(TchillrWCFService));
+        #endregion
 
         #region TokenID
 
@@ -82,6 +86,7 @@ namespace TchillrREST
 
         public Message GetInterests(string usernameid)
         {
+            log.Debug("Calling with "+ usernameid);
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             try
             {
@@ -105,6 +110,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message "+ exp.Message);
                 tchill.success = false;
                 tchill.SetData(exp.Message);
             }
@@ -199,12 +205,16 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
+                tchill.data = exp.Message;
+                tchill.success = false;
             }
             return tchill.GetResponseMessage();
         }
 
         public Message GetThemes()
         {
+            log.Debug("Calling");
             //DateTime now = DateTime.Now;
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             tchill.SetData(TchillrREST.Utilities.TchillrContext.Themes.ToList<DataModel.Theme>());
@@ -310,13 +320,9 @@ namespace TchillrREST
                 List<string> tags = new List<string>();
                 List<string> tagWordsCloud = new List<string>();
 
-                List<int> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(user => user.UserID == userNameID).Select(userTag => userTag.TagID).ToList();
-                //foreach (DataModel.Tag tag in TchillrREST.Utilities.TchillrContext.Tags)
-                //    if (userTags.Contains(tag.identifier))
-                //        tags.Add(tag.title);
                 DataModel.User currenUser = TchillrREST.Utilities.TchillrContext.Users.FirstOrDefault(usr => usr.identifier == userNameID);
 
-                if(currenUser == null)
+                if (currenUser == null)
                     return GetActivitiesForDays(fromDate, toDate);
 
                 tags = currenUser.UserTags.Select(usrTags => usrTags.Tag.title).ToList();
@@ -325,6 +331,8 @@ namespace TchillrREST
                 {
                     return GetActivitiesForDays(fromDate, toDate);
                 }
+
+                List<int> userTags = currenUser.UserTags.Select(userTag => userTag.TagID).ToList();
 
                 DateTime now;
                 try
@@ -374,7 +382,6 @@ namespace TchillrREST
 
                     List<DataModel.Keyword> keywords = activity.Keywords.ToList();
                     List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
-                    List<DataModel.Tag> acitivityTags = new List<DataModel.Tag>();
                     List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
 
                     var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
@@ -447,6 +454,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
@@ -478,14 +486,12 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
 
-            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
-            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
-                        "application/json; charset=utf-8",
-                        Encoding.UTF8);
+            return tchill.GetResponseMessage();
         }
 
         public Message UpdateMedia(string skip)
@@ -727,6 +733,8 @@ namespace TchillrREST
                 tchill.data = exp.Message;
                 if (exp.InnerException != null)
                     tchill.data += " " + exp.InnerException.Message;
+
+                log.Error("Exp message " + tchill.data);
             }
 
             return tchill.GetResponseMessage();
@@ -762,6 +770,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.SetData(exp.Message);
             }
@@ -787,6 +796,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
@@ -810,7 +820,7 @@ namespace TchillrREST
                 }
                 catch (Exception exp)
                 {
-
+                    log.Error("Exp message " + exp.Message);
                 }
             }
 
@@ -835,6 +845,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.data = exp.Message;
                 tchill.success = false;
             }
@@ -859,7 +870,7 @@ namespace TchillrREST
                 }
                 catch (Exception exp)
                 {
-
+                    log.Error("Exp message " + exp.Message);
                 }
             }
 
@@ -948,6 +959,7 @@ namespace TchillrREST
 
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
@@ -982,6 +994,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
@@ -1052,7 +1065,7 @@ namespace TchillrREST
                     {
                         newUser = new DataModel.User();
                         newUser.identifier = usrGuid;
-                        newUser.name = "User " + TchillrREST.Utilities.TchillrContext.Users.Count() + 1;
+                        newUser.name = "User " + (TchillrREST.Utilities.TchillrContext.Users.Count() + 1);
                         TchillrREST.Utilities.TchillrContext.Users.AddObject(newUser);
                         TchillrREST.Utilities.TchillrContext.SaveChanges();
                         tchill.data = "user identifier:" + newUser.identifier + " name:" + newUser.name + " created.";
@@ -1073,6 +1086,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
@@ -1138,8 +1152,6 @@ namespace TchillrREST
                     sentTagIDs.Add(tagID);
                 }
 
-
-
                 List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
 
                 foreach (int tgID in sentTagIDs)
@@ -1164,6 +1176,7 @@ namespace TchillrREST
 
             catch (Exception exp)
             {
+                log.Error("Exp message " + exp.Message);
                 TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
                 tchill.data = exp.Message;
                 tchill.success = false;
