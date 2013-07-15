@@ -11,21 +11,22 @@ namespace TchillrREST
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
-            {
-                string line;
-                // Read the file and display it line by line.
-                System.IO.StreamReader file = new System.IO.StreamReader(@"C:\TchillrLog\Log.txt");
-                while ((line = file.ReadLine()) != null)
-                {
-                    divLog.InnerHtml += line + "<br>";
-                }
-                file.Close();
-            }
-            catch (Exception exp)
-            {
-                divLog.InnerHtml += exp.Message;
-            }
+            divLog.InnerHtml = Server.MapPath("~/TchillrLog/Log.txt");
+            //try
+            //{
+            //    string line;
+            //    // Read the file and display it line by line.
+            //    System.IO.StreamReader file = new System.IO.StreamReader(@"C:\TchillrLog\Log.txt");
+            //    while ((line = file.ReadLine()) != null)
+            //    {
+            //        divLog.InnerHtml += line + "<br>";
+            //    }
+            //    file.Close();
+            //}
+            //catch (Exception exp)
+            //{
+            //    divLog.InnerHtml += exp.Message;
+            //}
         }
     }
 }
