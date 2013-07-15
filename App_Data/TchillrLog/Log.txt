@@ -1,0 +1,8 @@
+DEBUG 2013-07-15 21:47:05,992   127ms Global                 Application_Start  - Tchillr started
+\nDEBUG 2013-07-15 21:47:24,179 18313ms Global                 Application_End    - Tchillr ended
+\nDEBUG 2013-07-15 21:49:58,939   116ms Global                 Application_Start  - Tchillr started
+DEBUG 2013-07-15 21:50:33,272 34448ms Global                 Application_End    - Tchillr ended
+DEBUG 2013-07-15 21:50:50,687   117ms Global                 Application_Start  - Tchillr started
+DEBUG 2013-07-15 21:51:24,887 34316ms Global                 Application_End    - Tchillr ended
+DEBUG 2013-07-15 21:51:26,973    75ms Global                 Application_Start  - Tchillr started
+DEBUG 2013-07-15 21:52:05,217 38318ms Global                 Application_End    - Tchillr ended

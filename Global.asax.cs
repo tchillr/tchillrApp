@@ -8,15 +8,17 @@ using System.Web.Routing;
 using System.ServiceModel.Activation;
 using Newtonsoft.Json;
 using TchillrREST.Contract;
+using log4net;
 
 namespace TchillrREST
 {
     public class Global : System.Web.HttpApplication
     {
-
+        protected static readonly ILog log = LogManager.GetLogger(typeof(Global));
         protected void Application_Start(object sender, EventArgs e)
         {
-            log4net.Config.XmlConfigurator.Configure();   
+            log4net.Config.XmlConfigurator.Configure();
+            log.Debug("Tchillr started");
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -74,7 +76,7 @@ namespace TchillrREST
 
         protected void Application_End(object sender, EventArgs e)
         {
-
+            log.Debug("Tchillr ended");
         }
 
     }
