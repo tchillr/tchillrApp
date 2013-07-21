@@ -65,6 +65,8 @@ namespace TchillrREST
             Response.Write("Return to the <a href='Default.aspx'>" +
                 "Default Page</a>\n");
 
+            log.Fatal(exc.Message);
+
             // Clear the error from the server
             Server.ClearError();
         }
