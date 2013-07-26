@@ -1175,7 +1175,7 @@ namespace TchillrREST
                 foreach (string tagLine in result.Split('&'))
                 {
                     string[] lineSplit = tagLine.Split('=');
-                    if (lineSplit.Length > 0)
+                    if (lineSplit.Length > 1)
                     {
                         int tagID = int.Parse(lineSplit[1]);
                         if (!sentTagIDs.Contains(tagID))
