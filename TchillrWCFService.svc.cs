@@ -803,6 +803,9 @@ namespace TchillrREST
                     TchillrREST.Utilities.TchillrContext.Occurences.DeleteObject(occ);
 
                 TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+                tchill.success = true;
+                tchill.data = obsoleteOccurences.Count;
             }
             catch (Exception exp)
             {
@@ -810,9 +813,6 @@ namespace TchillrREST
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
-
-            tchill.success = true;
-            tchill.data = obsoleteOccurences.Count;
 
             return tchill.GetResponseMessage();
         }
@@ -852,6 +852,9 @@ namespace TchillrREST
                 }
 
                 TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+                tchill.data = "done";
+                tchill.success = true;
             }
             catch (Exception exp)
             {
@@ -860,8 +863,6 @@ namespace TchillrREST
                 tchill.success = false;
             }
 
-            tchill.data = "done";
-            tchill.success = true;
 
             return tchill.GetResponseMessage();
         }
@@ -965,6 +966,9 @@ namespace TchillrREST
                 }
 
                 TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+                tchill.success = true;
+                tchill.data = "done";
             }
 
             catch (Exception exp)
@@ -973,9 +977,6 @@ namespace TchillrREST
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
-
-            tchill.success = true;
-            tchill.data = "done";
 
             return tchill.GetResponseMessage();
         }
@@ -1001,6 +1002,9 @@ namespace TchillrREST
                     }
                 }
                 TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+                tchill.data = "done";
+                tchill.success = true;
             }
             catch (Exception exp)
             {
@@ -1008,8 +1012,6 @@ namespace TchillrREST
                 tchill.success = false;
                 tchill.data = exp.Message;
             }
-            tchill.data = "done";
-            tchill.success = true;
 
             return tchill.GetResponseMessage();
         }
@@ -1116,8 +1118,6 @@ namespace TchillrREST
             return WebOperationContext.Current.CreateTextResponse(myResponseBody,
                         "application/json; charset=utf-8",
                         Encoding.UTF8);
-            //Message returnMessage = tchill.GetResponseMessage();
-            //return returnMessage;
         }
 
         #endregion
