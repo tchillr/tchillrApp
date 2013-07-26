@@ -1193,9 +1193,19 @@ namespace TchillrREST
                     }
                 }
 
-                foreach (DataModel.UserTag userTag in userTags.Where(userTag => !sentTagIDs.Contains(userTag.identifier)))
+                if (sentTagIDs.Count > 0)
                 {
-                    TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(userTag);
+                    foreach (DataModel.UserTag userTag in userTags.Where(userTag => !sentTagIDs.Contains(userTag.identifier)))
+                    {
+                        TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(userTag);
+                    }
+                }
+                else
+                {
+                    foreach (DataModel.UserTag userTag in userTags)
+                    {
+                        TchillrREST.Utilities.TchillrContext.UserTags.DeleteObject(userTag);
+                    }
                 }
 
                 TchillrREST.Utilities.TchillrContext.SaveChanges();
