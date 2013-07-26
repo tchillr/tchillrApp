@@ -39,7 +39,7 @@ namespace TchillrREST.DataModel
 
             string myResponseBody = JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
 
-            TchillrREST.Utilities.TchillrContext.Connection.Close();
+            //TchillrREST.Utilities.TchillrContext.Connection.Close();
 
             return WebOperationContext.Current.CreateTextResponse(myResponseBody,
                         "application/json; charset=utf-8",
