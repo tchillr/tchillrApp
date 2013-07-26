@@ -168,7 +168,14 @@ namespace TchillrREST
             BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "login/adduser/{userguid}")]
         Message AddUser(string userguid);
-        
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "fault")]
+        Message Fault();
+
         #endregion
 
         #region POST

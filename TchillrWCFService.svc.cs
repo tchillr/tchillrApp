@@ -86,7 +86,7 @@ namespace TchillrREST
 
         public Message GetInterests(string usernameid)
         {
-            log.Debug("Calling with "+ usernameid);
+            log.Debug("Calling with " + usernameid);
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
             try
             {
@@ -113,7 +113,7 @@ namespace TchillrREST
             }
             catch (Exception exp)
             {
-                log.Error("Exp message "+ exp.Message + " stacktrace " +exp.StackTrace);
+                log.Error("Exp message " + exp.Message + " stacktrace " + exp.StackTrace);
                 tchill.success = false;
                 tchill.SetData(exp.Message);
             }
@@ -653,23 +653,29 @@ namespace TchillrREST
                                     act.shortDescription = string.Empty;
 
                                     float temp = 0;
-                                    try
+                                    if (!string.IsNullOrEmpty(activity["lat"].ToString()))
                                     {
-                                        temp = float.Parse(activity["lat"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
-                                    }
-                                    catch (FormatException frmExp)
-                                    {
-                                        temp = float.Parse(activity["lat"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                        try
+                                        {
+                                            temp = float.Parse(activity["lat"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
+                                        }
+                                        catch (FormatException frmExp)
+                                        {
+                                            temp = float.Parse(activity["lat"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                        }
                                     }
                                     act.latitude = temp;
                                     temp = 0;
-                                    try
+                                    if (!string.IsNullOrEmpty(activity["lat"].ToString()))
                                     {
-                                        temp = float.Parse(activity["lon"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
-                                    }
-                                    catch (FormatException frmExp)
-                                    {
-                                        temp = float.Parse(activity["lon"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                        try
+                                        {
+                                            temp = float.Parse(activity["lon"].ToString(), Utilities.FRENCH_CULTURE.NumberFormat);
+                                        }
+                                        catch (FormatException frmExp)
+                                        {
+                                            temp = float.Parse(activity["lon"].ToString(), Utilities.ENGLISH_CULTURE.NumberFormat);
+                                        }
                                     }
                                     act.longitude = temp;
 
@@ -1097,6 +1103,23 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
+        public Message Fault()
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            tchill.success = false;
+
+            tchill.data = "faulted response";
+
+            WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.InternalServerError;
+            string myResponseBody = JsonConvert.SerializeObject(tchill, Formatting.None, new JsonSerializerSettings { ContractResolver = new TchillrREST.Contract.ContractResolver() });
+            return WebOperationContext.Current.CreateTextResponse(myResponseBody,
+                        "application/json; charset=utf-8",
+                        Encoding.UTF8);
+            //Message returnMessage = tchill.GetResponseMessage();
+            //return returnMessage;
+        }
+
         #endregion
 
         #region POST
@@ -1152,8 +1175,8 @@ namespace TchillrREST
                 foreach (string tagLine in result.Split('&'))
                 {
                     int tagID = int.Parse(tagLine.Split('=')[1]);
-
-                    sentTagIDs.Add(tagID);
+                    if (!sentTagIDs.Contains(tagID))
+                        sentTagIDs.Add(tagID);
                 }
 
                 List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
