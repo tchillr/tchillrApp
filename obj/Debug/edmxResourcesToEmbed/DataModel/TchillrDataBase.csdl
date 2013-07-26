@@ -256,7 +256,7 @@
     <Property Type="Int32" Name="activityID" Nullable="false" />
     <Property Type="String" Name="keywords" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Type="String" Name="transport_mode" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Type="Int32" Name="userID" Nullable="false" />
+    <Property Type="Guid" Name="userID" Nullable="false" />
     <Property Type="DateTime" Name="occurence_jour" Nullable="false" />
     <Property Type="Time" Name="occurence_hour_start" Nullable="false" />
     <Property Type="Time" Name="occurence_hour_end" Nullable="false" />

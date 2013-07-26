@@ -2238,7 +2238,7 @@ namespace TchillrREST.DataModel
         /// <param name="occurence_jour">Initial value of the occurence_jour property.</param>
         /// <param name="occurence_hour_start">Initial value of the occurence_hour_start property.</param>
         /// <param name="occurence_hour_end">Initial value of the occurence_hour_end property.</param>
-        public static UserActivity CreateUserActivity(global::System.Int32 identifier, global::System.Int32 activityID, global::System.String keywords, global::System.Int32 userID, global::System.DateTime occurence_jour, global::System.TimeSpan occurence_hour_start, global::System.TimeSpan occurence_hour_end)
+        public static UserActivity CreateUserActivity(global::System.Int32 identifier, global::System.Int32 activityID, global::System.String keywords, global::System.Guid userID, global::System.DateTime occurence_jour, global::System.TimeSpan occurence_hour_start, global::System.TimeSpan occurence_hour_end)
         {
             UserActivity userActivity = new UserActivity();
             userActivity.identifier = identifier;
@@ -2361,7 +2361,7 @@ namespace TchillrREST.DataModel
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 userID
+        public global::System.Guid userID
         {
             get
             {
@@ -2379,8 +2379,8 @@ namespace TchillrREST.DataModel
                 }
             }
         }
-        private global::System.Int32 _userID;
-        partial void OnuserIDChanging(global::System.Int32 value);
+        private global::System.Guid _userID;
+        partial void OnuserIDChanging(global::System.Guid value);
         partial void OnuserIDChanged();
     
         /// <summary>

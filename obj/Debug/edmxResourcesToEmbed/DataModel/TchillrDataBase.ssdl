@@ -156,11 +156,11 @@
     <Property Name="activityID" Type="int" Nullable="false" />
     <Property Name="keywords" Type="nvarchar(max)" Nullable="false" />
     <Property Name="transport_mode" Type="nvarchar(max)" />
-    <Property Name="userID" Type="int" Nullable="false" />
-    <Property Name="occurence_jour" Type="datetime" Nullable="false" />
-    <Property Name="occurence_hour_start" Type="time" Nullable="false" />
-    <Property Name="occurence_hour_end" Type="time" Nullable="false" />
+    <Property Name="occurence_jour" Type="datetime" />
+    <Property Name="occurence_hour_start" Type="time" />
+    <Property Name="occurence_hour_end" Type="time" />
     <Property Name="status" Type="int" />
+    <Property Name="userID" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
   <EntityType Name="UserTags">
     <Key>

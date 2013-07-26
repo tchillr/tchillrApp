@@ -145,15 +145,22 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "users/{usernameid}/activities/{activityID}/attending")]
-        Message UserActivityAttending(string usernameID, string activityID);
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/maybe")]
+        Message UserActivityMaybe(string usernameID, string activityID);
 
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "users/{usernameid}/activities/{activityID}/going")]
-        Message UserActivityGoing(string usernameID, string activityID);
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/no")]
+        Message UserActivityNo(string usernameID, string activityID);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/activities/{activityID}/yes")]
+        Message UserActivityYes(string usernameID, string activityID);
 
         //[OperationContract]
         //[WebInvoke(Method = "GET",

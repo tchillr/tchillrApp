@@ -17,6 +17,9 @@ namespace TchillrREST.DataModel
         [DataMemberAttribute()]
         public string color { get; set; }
 
+        [DataMemberAttribute()]
+        public Attendance attendance { get; set; }
+
         [DataMemberAttribute(Name = "Occurences")]
         public List<DataModel.Occurence> OccurencesToSend { get; set; }
 
@@ -103,5 +106,19 @@ namespace TchillrREST.DataModel
 
         [DataMemberAttribute()]
         public int themeID { get; set; }
+    }
+
+    [Serializable()]
+    [DataContractAttribute(IsReference = true)]
+    public struct Attendance
+    {
+        [DataMemberAttribute()]
+        public int yes { get; set; }
+
+        [DataMemberAttribute()]
+        public int no { get; set; }
+
+        [DataMemberAttribute()]
+        public int maybe { get; set; }
     }
 }

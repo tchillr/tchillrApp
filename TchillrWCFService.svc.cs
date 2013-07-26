@@ -198,6 +198,19 @@ namespace TchillrREST
                     }
                 }
 
+                DataModel.Attendance activityAttendance = new DataModel.Attendance();
+                foreach (DataModel.UserActivity userActivity in TchillrREST.Utilities.TchillrContext.UserActivities.Where(usrAct => usrAct.activityID == activity.identifier))
+                {
+                    switch (userActivity.status)
+                    {
+                        case 0: activityAttendance.maybe++; break;
+                        case 1: activityAttendance.no++; break;
+                        case 2: activityAttendance.yes++; break;
+                        default: break;
+                    }
+                }
+                activity.attendance = activityAttendance;
+
                 activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
             }
 
@@ -393,6 +406,19 @@ namespace TchillrREST
                                        dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
                                        rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
                                        select new { dbTags.identifier, dbTags.title, dbTags.themeID };
+
+                    DataModel.Attendance activityAttendance = new DataModel.Attendance();
+                    foreach (DataModel.UserActivity userActivity in TchillrREST.Utilities.TchillrContext.UserActivities.Where(usrAct => usrAct.activityID == activity.identifier))
+                    {
+                        switch (userActivity.status)
+                        {
+                            case 0: activityAttendance.maybe++; break;
+                            case 1: activityAttendance.no++; break;
+                            case 2: activityAttendance.yes++; break;
+                            default: break;
+                        }
+                    }
+                    activity.attendance = activityAttendance;
 
                     activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
 
@@ -1016,26 +1042,27 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
-
-        //UriTemplate = "users/{usernameid}/activities/{activityID}/went")]
-        public Message UserActivityDontLike(string usernameID, string activityID)
-        {
-            return UserActivity(usernameID, activityID, 1);
-        }
-
-        public Message UserActivityGoing(string usernameID, string activityID)
+        //UriTemplate = "users/{usernameid}/activities/{activityID}/yes")]
+        //UriTemplate = "users/{usernameid}/activities/{activityID}/no")]
+        //UriTemplate = "users/{usernameid}/activities/{activityID}/maybe")]
+        public Message UserActivityYes(string usernameID, string activityID)
         {
             return UserActivity(usernameID, activityID, 2);
         }
 
-        public Message UserActivityAttending(string usernameID, string activityID)
+        public Message UserActivityNo(string usernameID, string activityID)
         {
-            return UserActivity(usernameID, activityID, 3);
+            return UserActivity(usernameID, activityID, 1);
+        }
+
+        public Message UserActivityMaybe(string usernameID, string activityID)
+        {
+            return UserActivity(usernameID, activityID, 0);
         }
 
         private Message UserActivity(string usernameID, string activityID, int status)
         {
-            int uID = int.Parse(usernameID);
+            Guid uID = Guid.Parse(usernameID);
             int actID = int.Parse(activityID);
 
             DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
@@ -1053,12 +1080,19 @@ namespace TchillrREST
                 {
                     userActi.keywords = String.Join("###", act.Keywords.Select(key => key.title).ToList());
                 }
+
                 userActi.status = status;
                 userActi.userID = uID;
+                userActi.occurence_jour = System.Data.SqlTypes.SqlDateTime.MinValue.Value;
+                userActi.occurence_hour_start = TimeSpan.Parse("00:00:00");
+                userActi.occurence_hour_end = TimeSpan.Parse("23:59:00");
                 TchillrREST.Utilities.TchillrContext.UserActivities.AddObject(userActi);
             }
 
             TchillrREST.Utilities.TchillrContext.SaveChanges();
+
+            tchill.success = true;
+            tchill.data = "done";
 
             return tchill.GetResponseMessage();
         }
