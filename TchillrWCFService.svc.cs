@@ -1174,12 +1174,16 @@ namespace TchillrREST
 
                 foreach (string tagLine in result.Split('&'))
                 {
-                    int tagID = int.Parse(tagLine.Split('=')[1]);
-                    if (!sentTagIDs.Contains(tagID))
-                        sentTagIDs.Add(tagID);
+                    string[] lineSplit = tagLine.Split('=');
+                    if (lineSplit.Length > 0)
+                    {
+                        int tagID = int.Parse(lineSplit[1]);
+                        if (!sentTagIDs.Contains(tagID))
+                            sentTagIDs.Add(tagID);
+                    }
                 }
 
-                log.Info("usernameid " + userNameID +" sent " +string.Join(",",sentTagIDs));
+                log.Info("usernameid " + userNameID + " sent " + string.Join(",", sentTagIDs));
 
                 List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
 
