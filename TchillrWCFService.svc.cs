@@ -1179,6 +1179,8 @@ namespace TchillrREST
                         sentTagIDs.Add(tagID);
                 }
 
+                log.Info("usernameid " + userNameID +" sent " +string.Join(",",sentTagIDs));
+
                 List<DataModel.UserTag> userTags = TchillrREST.Utilities.TchillrContext.UserTags.Where(userTag => userTag.UserID == userNameID).ToList();
 
                 foreach (int tgID in sentTagIDs)
