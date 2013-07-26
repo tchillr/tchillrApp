@@ -692,7 +692,7 @@ namespace TchillrREST
                                     }
                                     act.latitude = temp;
                                     temp = 0;
-                                    if (!string.IsNullOrEmpty(activity["lat"].ToString()))
+                                    if (!string.IsNullOrEmpty(activity["lon"].ToString()))
                                     {
                                         try
                                         {
