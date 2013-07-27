@@ -66,11 +66,13 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="crossdomain.xml" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="LogReader.aspx" />
     <Content Include="staticActivy2.txt" />
     <Content Include="staticActivy3.txt" />
+    <Content Include="static\activities.txt" />
     <Content Include="TchillrService.svc" />
     <Content Include="TchillrWCFService.svc" />
     <Content Include="Web.config">

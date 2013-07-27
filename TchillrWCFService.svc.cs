@@ -84,6 +84,28 @@ namespace TchillrREST
             return tchill.GetResponseMessage();
         }
 
+        public Message GetUserAttendance(string usernameid)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            DataModel.UserAttendance userAttendance = new DataModel.UserAttendance();
+            Guid userNameID = Guid.Parse(usernameid);
+            foreach (DataModel.UserActivity userActivity in TchillrREST.Utilities.TchillrContext.UserActivities.Where(usrAct => usrAct.userID == userNameID))
+            {
+                switch (userActivity.status)
+                {
+                    case 0: userAttendance.maybe.Add(userActivity.activityID); break;
+                    case 1: userAttendance.no.Add(userActivity.activityID); break;
+                    case 2: userAttendance.yes.Add(userActivity.activityID); break;
+                    default: break;
+                }
+            }
+            tchill.SetData(userAttendance);
+            tchill.success = true;
+
+            return tchill.GetResponseMessage();
+        }
+
         public Message GetInterests(string usernameid)
         {
             log.Debug("Calling with " + usernameid);
@@ -116,6 +138,172 @@ namespace TchillrREST
                 log.Error("Exp message " + exp.Message + " stacktrace " + exp.StackTrace);
                 tchill.success = false;
                 tchill.SetData(exp.Message);
+            }
+
+            return tchill.GetResponseMessage();
+        }
+
+        public Message GetActivitiesForTagsDays(string fromDate, string toDate, string tagids)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            List<int> tagIDs = new List<int>();
+            foreach (string tagid in tagids.Split(','))
+            {
+                int tgID = int.Parse(tagid);
+                if (!tagIDs.Contains(tgID))
+                    tagIDs.Add(tgID);
+            }
+
+            try
+            {
+                List<DataModel.Activity> userActivities = new List<DataModel.Activity>();
+
+                List<string> tags = new List<string>();
+                List<string> tagWordsCloud = new List<string>();
+
+                DateTime now;
+                try
+                {
+                    now = DateTime.ParseExact(fromDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException frmExp)
+                {
+                    tchill.success = false;
+                    tchill.data = "Could not parse " + fromDate + " ";
+                    return tchill.GetResponseMessage();
+                }
+                DateTime till;
+                try
+                {
+                    till = DateTime.ParseExact(toDate, TchillrREST.Utilities.DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException frmExp)
+                {
+                    tchill.success = false;
+                    tchill.data = "Could not parse " + toDate + " ";
+                    return tchill.GetResponseMessage();
+                }
+
+                TimeSpan fromTime = now.TimeOfDay;
+                TimeSpan tillTime = till.TimeOfDay;
+
+                now = now.Date;
+                till = till.Date;
+
+                tags = TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tagIDs.Contains(tg.identifier)).Select(tg => tg.title).ToList();
+
+                if (tags.Count == 0)
+                {
+                    return GetActivitiesForDays(fromDate, toDate);
+                }
+
+                List<int> userTags = TchillrREST.Utilities.TchillrContext.Tags.Where(tg => tagIDs.Contains(tg.identifier)).Select(userTag => userTag.identifier).ToList();
+
+                tagWordsCloud = TchillrREST.Utilities.TchillrContext.WordClouds.Where(wordCloud => userTags.Contains(wordCloud.tagID)).Select(wordCloud => wordCloud.title).ToList();
+
+                tags = tags.ConvertAll(d => d.ToUpper());
+                tagWordsCloud = tagWordsCloud.ConvertAll(d => d.ToUpper());
+
+                var activitiesForDays = TchillrREST.Utilities.TchillrContext.Activities.Where(act => act.Occurences.Count(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)) > 0 &&
+                                                                                                 act.latitude > 0 && act.longitude > 0
+                                                                                          );
+
+                foreach (DataModel.Activity activity in activitiesForDays)
+                {
+                    //activitiesScrore[activity.identifier] = 0;
+                    activity.color = string.Empty;
+
+                    List<DataModel.Keyword> keywords = activity.Keywords.ToList();
+                    List<string> keywordsString = keywords.Select(keyword => keyword.title).ToList().ConvertAll(d => d.ToUpper());
+                    List<string> rubirquesString = activity.Rubriques.Select(rub => rub.name).ToList().ConvertAll(d => d.ToUpper());
+
+                    var activityTags = from dbTags in TchillrREST.Utilities.TchillrContext.Tags
+                                       where keywordsString.Contains(dbTags.title.ToUpper()) ||
+                                       dbTags.WordClouds.FirstOrDefault(wd => keywordsString.Contains(wd.title.ToUpper())) != null ||
+                                       rubirquesString.Contains(dbTags.title.ToUpper()) || dbTags.WordClouds.FirstOrDefault(wd => rubirquesString.Contains(wd.title.ToUpper())) != null
+                                       select new { dbTags.identifier, dbTags.title, dbTags.themeID };
+
+                    DataModel.Attendance activityAttendance = new DataModel.Attendance();
+                    foreach (DataModel.UserActivity userActivity in TchillrREST.Utilities.TchillrContext.UserActivities.Where(usrAct => usrAct.activityID == activity.identifier))
+                    {
+                        switch (userActivity.status)
+                        {
+                            case 0: activityAttendance.maybe++; break;
+                            case 1: activityAttendance.no++; break;
+                            case 2: activityAttendance.yes++; break;
+                            default: break;
+                        }
+                    }
+                    activity.attendance = activityAttendance;
+
+                    activity.OccurencesToSend = activity.Occurences.Where(oc => (oc.jour == now && fromTime >= oc.hour_start && fromTime <= oc.hour_end) || (oc.jour == now && fromTime <= oc.hour_start) || (oc.jour > now && oc.jour <= till)).ToList<DataModel.Occurence>();
+
+                    activity.tags = new List<DataModel.ContextualTag>();
+                    foreach (var element in activityTags)
+                    {
+                        DataModel.ContextualTag ct = new DataModel.ContextualTag();
+                        ct.identifier = element.identifier;
+                        ct.title = element.title;
+                        ct.themeID = element.themeID.Value;
+                        activity.tags.Add(ct);
+                        if (string.IsNullOrEmpty(activity.color) && userTags.Contains(element.identifier))
+                            activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == element.identifier).Theme.title;
+                    }
+
+                    // identify the color of the activity
+                    if (string.IsNullOrEmpty(activity.color))
+                    {
+                        if (activity.tags.Count > 0)
+                        {
+                            DataModel.ContextualTag ct = activity.tags.FirstOrDefault();
+                            if (ct != null)
+                                activity.color = TchillrREST.Utilities.TchillrContext.Tags.First(tg => tg.identifier == ct.identifier).Theme.title;
+                        }
+                    }
+
+                    activity.score = 0;
+                    foreach (DataModel.Keyword keyword in keywords)
+                    {
+                        string upperTitle = keyword.title.ToUpper();
+                        if (tags.Contains(upperTitle))
+                            //activitiesScrore[activity.identifier] += keyword.hits;
+                            activity.score += keyword.hits;
+                        if (tagWordsCloud.Contains(upperTitle))
+                            //activitiesScrore[activity.identifier] += 1;
+                            activity.score += 1;
+                    }
+
+                    foreach (DataModel.Rubrique rubrique in activity.Rubriques)
+                    {
+                        string upperName = rubrique.name.ToUpper();
+                        if (tags.Contains(upperName))
+                            //activitiesScrore[activity.identifier] += Utilities.RUBRIQUE_WEIGHT;
+                            activity.score += Utilities.RUBRIQUE_WEIGHT;
+                        if (tagWordsCloud.Contains(upperName))
+                            //activitiesScrore[activity.identifier] += 1;
+                            activity.score += 1;
+                    }
+
+                    if (activity.score > 0)
+                    {
+                        if (!userActivities.Contains(activity))
+                            userActivities.Add(activity);
+                    }
+                }
+
+                tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList<DataModel.Activity>());
+                tchill.success = true;
+            }
+            catch (System.InvalidOperationException invOpExp)
+            {
+                return GetActivitiesForDays(fromDate, toDate);
+            }
+            catch (Exception exp)
+            {
+                log.Error("Exp message " + exp.Message + " stacktrace " + exp.StackTrace);
+                tchill.success = false;
+                tchill.data = exp.Message;
             }
 
             return tchill.GetResponseMessage();

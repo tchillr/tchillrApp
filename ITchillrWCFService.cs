@@ -41,8 +41,22 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "users/{usernameid}/attendance")]
+        Message GetUserAttendance(string usernameid);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
                   UriTemplate = "activities/from/{from}/to/{to}")]
         Message GetActivitiesForDays(string from, string to);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "activities/from/{from}/to/{to}/{tagids}")]
+        Message GetActivitiesForTagsDays(string from, string to, string tagids);
 
         [OperationContract]
         [WebInvoke(Method = "GET",

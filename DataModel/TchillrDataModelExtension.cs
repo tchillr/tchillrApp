@@ -121,4 +121,25 @@ namespace TchillrREST.DataModel
         [DataMemberAttribute()]
         public int maybe { get; set; }
     }
+
+    [Serializable()]
+    [DataContractAttribute(IsReference = true)]
+    public class UserAttendance
+    {
+        [DataMemberAttribute()]
+        public List<int> yes { get; set; }
+
+        [DataMemberAttribute()]
+        public List<int> no { get; set; }
+
+        [DataMemberAttribute()]
+        public List<int> maybe { get; set; }
+
+        public UserAttendance()
+        {
+            yes = new List<int>();
+            no = new List<int>();
+            maybe = new List<int>();
+        }
+    }
 }
