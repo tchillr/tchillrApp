@@ -1279,10 +1279,8 @@ namespace TchillrREST
 
             TchillrREST.Utilities.TchillrContext.SaveChanges();
 
-            tchill.success = true;
-            tchill.data = "done";
 
-            return tchill.GetResponseMessage();
+            return GetUserAttendance(usernameID);
         }
 
         public Message AddUser(string userGUID)
