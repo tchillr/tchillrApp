@@ -197,6 +197,12 @@ namespace TchillrREST
                   UriTemplate = "fault")]
         Message Fault();
 
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+                  UriTemplate = "transport/{originLat}/{originLon}/{destinationLat}/{destinationLon}/{datetime}/{excludeTranportMode}")]
+        Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTranportMode);
         #endregion
 
         #region POST

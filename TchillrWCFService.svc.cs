@@ -1340,6 +1340,99 @@ namespace TchillrREST
                         Encoding.UTF8);
         }
 
+        public Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTransportMode)
+        {
+            return GetItinerary("coord:" + originLat.Replace(",", ".") + ":" + originLon.Replace(",", "."), "coord:" + destinationLat.Replace(",", ".") + ":" + destinationLon.Replace(",", "."), datetime, excludeTransportMode, "");
+        }
+
+        public Message GetItinerary(string originUri, string destinationUri, string datetime, string excludeTransportMode, string maxWalkingDist)
+        {
+            TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
+
+            string urlToRequest = string.Empty;
+            if (string.IsNullOrEmpty(maxWalkingDist))
+                urlToRequest = string.Format(Utilities.TRANSPORT_BASE_URL, originUri, destinationUri, datetime) + Utilities.GetForbidenUrls(excludeTransportMode);
+            else
+                urlToRequest = string.Format(Utilities.TRANSPORT_BASE_URL, originUri, destinationUri, datetime) + Utilities.GetForbidenUrls(excludeTransportMode) + "&walking_distance=" + maxWalkingDist;
+
+            WebRequest req = WebRequest.Create(urlToRequest);
+
+            req.Method = "GET";
+            try
+            {
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        JObject itinerary = JObject.Parse(reader.ReadToEnd());
+                        if (itinerary["response_type"].ToString() == "NO_SOLUTION" && string.IsNullOrEmpty(maxWalkingDist))
+                            return GetItinerary(originUri, destinationUri, datetime, excludeTransportMode, "10000");
+                        else
+                            if (itinerary["response_type"].ToString() == "NO_DESTINATION_POINT")
+                            {
+                                string destinationPlaceNearBy = GetFirstPointNearBy(destinationUri);
+                                return GetItinerary(originUri, destinationPlaceNearBy, datetime, excludeTransportMode, maxWalkingDist);
+                            }
+                            else
+                                if (itinerary["response_type"].ToString() == "NO_ORIGIN_POINT")
+                                {
+                                    string originPlaceNearBy = GetFirstPointNearBy(destinationUri);
+                                    return GetItinerary(originUri, originPlaceNearBy, datetime, excludeTransportMode, maxWalkingDist);
+                                }
+
+                        tchill.SetData(itinerary["journeys"].ToString());
+                        tchill.success = true;
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                tchill.SetData(exp.Message);
+                tchill.success = false;
+            }
+
+
+            return tchill.GetResponseMessage();
+        }
+
+        private string GetFirstPointNearBy(string coord)
+        {
+            string urlToRequest = string.Empty;
+            string[] latLon = coord.Split(':');
+            urlToRequest = string.Format(Utilities.NEARBY_PLACE_BASE_URL, latLon[1] + ":" + latLon[2]);
+
+            WebRequest req = WebRequest.Create(urlToRequest);
+
+            req.Method = "GET";
+            try
+            {
+                HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    using (Stream respStream = resp.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
+                        JObject placesNearBy = JObject.Parse(reader.ReadToEnd());
+                        foreach (JObject placeNearBy in placesNearBy["places_nearby"])
+                        {
+                            return placeNearBy["uri"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                return string.Empty;
+            }
+
+            return string.Empty;
+        }
+
+
+
         #endregion
 
         #region POST

@@ -19,6 +19,8 @@ namespace TchillrREST
         public const string DATE_TIME_FORMAT = "yyyyMMddHHmmss";
         public static CultureInfo FRENCH_CULTURE = new CultureInfo("fr-FR");
         public static CultureInfo ENGLISH_CULTURE = new CultureInfo("en-US");
+        public const string TRANSPORT_BASE_URL = "http://api.navitia.io/v0/paris/journeys.json?origin={0}&destination={1}&datetime={2}";
+        public const string NEARBY_PLACE_BASE_URL = "http://api.navitia.io/v0/paris/places_nearby.json?uri=coord:{0}&count=1";
         #endregion
 
         #region struct
@@ -148,6 +150,22 @@ namespace TchillrREST
             }
 
             return word;
+        }
+
+        public static string GetForbidenUrls(string excludeTransportMode)
+        {
+            string result = string.Empty;
+            int transportMode = int.Parse(excludeTransportMode);
+            if ((transportMode >> 0)  % 2 == 1)
+                result += "&forbidden_uris[]=commercial_mode:0x3";
+            if ((transportMode >> 1) % 2 == 1)
+                result += "&forbidden_uris[]=commercial_mode:0x1";
+            if ((transportMode >> 2) % 2 == 1)
+                result += "&forbidden_uris[]=commercial_mode:0x0";
+            if ((transportMode >> 3) % 2 == 1)
+                result += "&forbidden_uris[]=commercial_mode:0x2";
+
+            return result;
         }
     }
 }

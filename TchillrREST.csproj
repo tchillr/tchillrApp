@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\..\Downloads\log4net-1.2.11-bin-newkey\log4net-1.2.11\bin\net\4.0\release\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\..\Downloads\log4net-1.2.11-bin-newkey (1)\log4net-1.2.11\bin\net\4.0\release\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
@@ -73,6 +73,7 @@
     <Content Include="staticActivy2.txt" />
     <Content Include="staticActivy3.txt" />
     <Content Include="static\activities.txt" />
+    <Content Include="static\themes.txt" />
     <Content Include="TchillrService.svc" />
     <Content Include="TchillrWCFService.svc" />
     <Content Include="Web.config">
@@ -145,11 +146,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="categories.txt" />
-    <Content Include="packages.config" />
     <EntityDeploy Include="DataModel\TchillrDataBase.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TchillrDataBase.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="packages.config" />
     <None Include="static\staticActivy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
