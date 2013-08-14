@@ -156,12 +156,20 @@ namespace TchillrREST
         {
             string result = string.Empty;
             int transportMode = int.Parse(excludeTransportMode);
+
+            // bus
             if ((transportMode >> 0)  % 2 == 1)
                 result += "&forbidden_uris[]=commercial_mode:0x3";
+            
+            // Metro
             if ((transportMode >> 1) % 2 == 1)
                 result += "&forbidden_uris[]=commercial_mode:0x1";
+
+            // Tram
             if ((transportMode >> 2) % 2 == 1)
                 result += "&forbidden_uris[]=commercial_mode:0x0";
+            
+            // Rail
             if ((transportMode >> 3) % 2 == 1)
                 result += "&forbidden_uris[]=commercial_mode:0x2";
 

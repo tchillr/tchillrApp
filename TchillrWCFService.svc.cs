@@ -1340,12 +1340,12 @@ namespace TchillrREST
                         Encoding.UTF8);
         }
 
-        public Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTransportMode)
+        public Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTransportMode, string vlibAutoLib)
         {
-            return GetItinerary("coord:" + originLat.Replace(",", ".") + ":" + originLon.Replace(",", "."), "coord:" + destinationLat.Replace(",", ".") + ":" + destinationLon.Replace(",", "."), datetime, excludeTransportMode, "");
+            return GetItinerary("coord:" + originLat.Replace(",", ".") + ":" + originLon.Replace(",", "."), "coord:" + destinationLat.Replace(",", ".") + ":" + destinationLon.Replace(",", "."), datetime, excludeTransportMode, "", vlibAutoLib);
         }
 
-        public Message GetItinerary(string originUri, string destinationUri, string datetime, string excludeTransportMode, string maxWalkingDist)
+        public Message GetItinerary(string originUri, string destinationUri, string datetime, string excludeTransportMode, string maxWalkingDist, string vlibAutoLib)
         {
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
@@ -1355,9 +1355,23 @@ namespace TchillrREST
             else
                 urlToRequest = string.Format(Utilities.TRANSPORT_BASE_URL, originUri, destinationUri, datetime) + Utilities.GetForbidenUrls(excludeTransportMode) + "&walking_distance=" + maxWalkingDist;
 
+            if(!string.IsNullOrEmpty(vlibAutoLib)){
+                if (vlibAutoLib == "vlib")
+                    urlToRequest += "&bike_distance=1000000&origin_mode=bike&destination_mode=bike";
+                else
+                    if(vlibAutoLib == "autolib")
+                        urlToRequest += "&car_distance=1000000&origin_mode=car&destination_mode=car";
+            }
+
             WebRequest req = WebRequest.Create(urlToRequest);
 
             req.Method = "GET";
+            //WebProxy webProxy = new WebProxy("www-cache.aql.fr:3128", true)
+            //{
+            //    Credentials = new NetworkCredential("bwnf5748", "FTbial_1")
+            //};
+
+            //req.Proxy = webProxy;
             try
             {
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;
@@ -1369,21 +1383,21 @@ namespace TchillrREST
                         StreamReader reader = new StreamReader(respStream, Encoding.UTF8);
                         JObject itinerary = JObject.Parse(reader.ReadToEnd());
                         if (itinerary["response_type"].ToString() == "NO_SOLUTION" && string.IsNullOrEmpty(maxWalkingDist))
-                            return GetItinerary(originUri, destinationUri, datetime, excludeTransportMode, "10000");
+                            return GetItinerary(originUri, destinationUri, datetime, excludeTransportMode, "1000000", vlibAutoLib);
                         else
                             if (itinerary["response_type"].ToString() == "NO_DESTINATION_POINT")
                             {
                                 string destinationPlaceNearBy = GetFirstPointNearBy(destinationUri);
-                                return GetItinerary(originUri, destinationPlaceNearBy, datetime, excludeTransportMode, maxWalkingDist);
+                                return GetItinerary(originUri, destinationPlaceNearBy, datetime, excludeTransportMode, maxWalkingDist,vlibAutoLib);
                             }
                             else
                                 if (itinerary["response_type"].ToString() == "NO_ORIGIN_POINT")
                                 {
                                     string originPlaceNearBy = GetFirstPointNearBy(destinationUri);
-                                    return GetItinerary(originUri, originPlaceNearBy, datetime, excludeTransportMode, maxWalkingDist);
+                                    return GetItinerary(originPlaceNearBy, destinationUri, datetime, excludeTransportMode, maxWalkingDist,vlibAutoLib);
                                 }
 
-                        tchill.SetData(itinerary["journeys"].ToString());
+                        tchill.SetData(itinerary);
                         tchill.success = true;
                     }
                 }
@@ -1407,6 +1421,12 @@ namespace TchillrREST
             WebRequest req = WebRequest.Create(urlToRequest);
 
             req.Method = "GET";
+            WebProxy webProxy = new WebProxy("www-cache.aql.fr:3128", true)
+            {
+                Credentials = new NetworkCredential("bwnf5748", "FTbial_1")
+            };
+
+            req.Proxy = webProxy;
             try
             {
                 HttpWebResponse resp = req.GetResponse() as HttpWebResponse;

@@ -201,8 +201,8 @@ namespace TchillrREST
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped,
-                  UriTemplate = "transport/{originLat}/{originLon}/{destinationLat}/{destinationLon}/{datetime}/{excludeTranportMode}")]
-        Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTranportMode);
+                  UriTemplate = "transport/{originLat}/{originLon}/{destinationLat}/{destinationLon}/{datetime}/{excludeTranportMode}/{vlibAutoLib}")]
+        Message GetItinerary(string originLat, string originLon, string destinationLat, string destinationLon, string datetime, string excludeTranportMode, string vlibAutoLib);
         #endregion
 
         #region POST
