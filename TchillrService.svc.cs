@@ -174,7 +174,7 @@ namespace TchillrREST
 
         public List<Data.Theme> GetThemes()
         {
-            TchillrDBContext context = new TchillrDBContext("Server=tcp:myuc6ta27d.database.windows.net,1433;Database=TchillrDB;User ID=TchillrSGBD@myuc6ta27d;Password=Tch1llrInTown;Trusted_Connection=False;Encrypt=True;Connection Timeout=30;");
+            TchillrDBContext context = new TchillrDBContext(TchillrREST.Utilities.CONNEXION_STRING);
 
             context.Configuration.ProxyCreationEnabled = false;
 

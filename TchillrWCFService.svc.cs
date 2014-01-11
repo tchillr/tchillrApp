@@ -511,6 +511,7 @@ namespace TchillrREST
 
         public Message GetUserActivitiesForDays(string usernameid, string fromDate, string toDate)
         {
+            log.Debug("Getting activities for unsernaeid=" + usernameid + " from " + fromDate + " to " + toDate);
             TchillrREST.DataModel.TchillrResponse tchill = new DataModel.TchillrResponse();
 
             try
@@ -665,6 +666,8 @@ namespace TchillrREST
 
                 tchill.SetData(userActivities.OrderByDescending(acti => acti.score).ToList<DataModel.Activity>());
                 tchill.success = true;
+
+                log.Debug("Done Getting activities for usernameid=" + usernameid + " from " + fromDate + " to " + toDate);
             }
             catch (System.InvalidOperationException invOpExp)
             {

@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace TchillrREST
 {
-    public static class Utilities
+    public class Utilities
     {
 
 #warning jsonignore Occurences-Rubriques-Keywords in Activity, Theme-WordClouds-UserTags in Tags, Activity in Occurence
@@ -21,6 +21,7 @@ namespace TchillrREST
         public static CultureInfo ENGLISH_CULTURE = new CultureInfo("en-US");
         public const string TRANSPORT_BASE_URL = "http://api.navitia.io/v0/paris/journeys.json?origin={0}&destination={1}&datetime={2}";
         public const string NEARBY_PLACE_BASE_URL = "http://api.navitia.io/v0/paris/places_nearby.json?uri=coord:{0}&count=1";
+        public const string CONNEXION_STRING = "Data Source=tcp:i8iid5vg42.database.windows.net,1433;Initial Catalog=TchillrDataBase;User ID=TchillrSGBD@i8iid5vg42;Password=Tch1llrInTown";
         #endregion
 
         #region struct
